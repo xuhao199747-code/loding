@@ -99,7 +99,7 @@ const LoaderRenderer = ({ config, width, height, isPlaying }) => {
         }
 
         if (layout === 'matrix') {
-            const charSet = '01アイウエオカキクケコサシスセソ◆◇▸▹♦';
+            const charSet = '01{}[]()<>=>!==&&||+-*/%#@$_.:;?^~const let var if else for while return function class import export async await';
             const fontSize = Math.max(8, Math.min(w, h) / Math.max(cols, rows) * 0.6);
             ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
             ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -287,7 +287,6 @@ const App = () => {
     const [draggingPageId, setDraggingPageId] = useState(null);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const [resizing, setResizing] = useState(null);
-    const [showPresets, setShowPresets] = useState(false);
     const [rightTab, setRightTab] = useState('design');
     const canvasRef = useRef(null);
     const viewStateRef = useRef(viewState);
@@ -416,7 +415,7 @@ const App = () => {
         const patterns = ['wave', 'scan', 'pulse', 'random', 'ripple', 'checkerboard', 'typing', 'waterfall', 'breathe', 'orbit'];
         const easings = ['linear', 'sine', 'sineInOut', 'elastic', 'bounce', 'expo', 'back'];
         const shapes = ['rect', 'circle', 'square', 'diamond'];
-        const colors = ['#6366f1', '#22c55e', '#ef4444', '#f59e0b', '#06b6d4', '#8b5cf6', '#ec4899', '#3b82f6', '#818cf8', '#34d399', '#fb923c', '#e2e8f0', '#a78bfa', '#fbbf24'];
+        const colors = ['#3A68FF', '#22c55e', '#ef4444', '#f59e0b', '#06b6d4', '#6B8FFF', '#ec4899', '#3b82f6', '#34d399', '#fb923c', '#e2e8f0', '#fbbf24'];
         const pick = arr => arr[Math.floor(Math.random() * arr.length)];
         const randInt = (min, max) => Math.floor(min + Math.random() * (max - min + 1));
         const randFloat = (min, max, dec = 1) => parseFloat((min + Math.random() * (max - min)).toFixed(dec));
@@ -484,7 +483,7 @@ const App = () => {
             return;
         }
 
-        if (!e.target.closest('.shape-element') && !e.target.closest('.float-bar') && !e.target.closest('.preset-bar')) {
+        if (!e.target.closest('.shape-element') && !e.target.closest('.float-bar')) {
             setSelectedPageId(null);
         }
     };
@@ -675,7 +674,7 @@ const App = () => {
             if ((e.key === 'Delete' || e.key === 'Backspace') && selectedPageId) deletePage(selectedPageId);
             if (e.key === 'v' || e.key === 'V') setActiveTool('move');
             if (e.key === 'f' || e.key === 'F') setActiveTool('frame');
-            if (e.key === 'Escape') { setActiveTool('move'); setShowPresets(false); }
+            if (e.key === 'Escape') { setActiveTool('move'); }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => { window.removeEventListener('keydown', handleKeyDown); };
@@ -687,7 +686,7 @@ const App = () => {
             {/* ====== 顶部栏 ====== */}
             <div className="top-bar">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 22, height: 22, borderRadius: 5, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: 22, height: 22, borderRadius: 5, background: 'linear-gradient(135deg, #3A68FF, #6B8FFF)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </div>
                     {editingCanvasName ? (
@@ -848,7 +847,7 @@ const App = () => {
                             <div style={{ position: 'absolute', top: -28, left: 0, fontSize: 11, color: '#737373', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 4 }}>
                                 <span>{page.name}</span>
                                 <div
-                                    style={{ width: 18, height: 18, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: page.isPlaying ? '#6366f1' : '#737373', background: page.isPlaying ? 'rgba(99,102,241,0.15)' : 'transparent', transition: 'all 0.15s' }}
+                                    style={{ width: 18, height: 18, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: page.isPlaying ? '#3A68FF' : '#737373', background: page.isPlaying ? 'rgba(58,104,255,0.15)' : 'transparent', transition: 'all 0.15s' }}
                                     onMouseDown={(e) => { e.stopPropagation(); togglePagePlay(page.id); }}
                                 >
                                     {page.isPlaying ? (
@@ -917,34 +916,6 @@ const App = () => {
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14"/></svg>
                         <span className="ftip">快速添加页面</span>
                     </button>
-                    <div style={{ width: 1, height: 20, background: '#333', margin: '0 2px' }} />
-                    <div
-                        style={{ position: 'relative', paddingBottom: showPresets ? 8 : 0, marginBottom: showPresets ? -8 : 0 }}
-                        onMouseLeave={() => setShowPresets(false)}
-                    >
-                        <button
-                            className={`float-btn ${showPresets ? 'active' : ''}`}
-                            onClick={() => setShowPresets(!showPresets)}
-                        >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: showPresets ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}><path d="M6 9l6 6 6-6"/></svg>
-                            {!showPresets && <span className="ftip">场景预设</span>}
-                        </button>
-                        {showPresets && (
-                            <div className="preset-bar">
-                                <div style={{ padding: '4px 12px 6px', fontSize: 11, color: '#525252', fontWeight: 500, borderBottom: '1px solid #2a2a2a', marginBottom: 2 }}>预设</div>
-                                {AI_PRESETS.map((preset, idx) => (
-                                    <button
-                                        key={idx}
-                                        className="preset-chip"
-                                        onClick={() => { applyPreset(preset); setShowPresets(false); }}
-                                    >
-                                        {preset.name}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </div>
                 </div>
             </div>
 
@@ -960,7 +931,7 @@ const App = () => {
                                     style={{
                                         flex: 1, padding: '10px 0', border: 'none', background: 'transparent',
                                         color: rightTab === tab ? '#e5e5e5' : '#525252', fontSize: 12, fontWeight: 500,
-                                        cursor: 'pointer', borderBottom: rightTab === tab ? '2px solid #6366f1' : '2px solid transparent',
+                                        cursor: 'pointer', borderBottom: rightTab === tab ? '2px solid #3A68FF' : '2px solid transparent',
                                         transition: 'all 0.15s', fontFamily: 'inherit'
                                     }}
                                 >
@@ -1191,6 +1162,9 @@ const App = () => {
                                     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                                         {['wave', 'scan', 'pulse', 'random', 'ripple', 'checkerboard', 'typing', 'waterfall', 'matrix', 'breathe', 'orbit'].map(p => (
                                             <button key={p} className={`preset-tag ${config.pattern === p ? 'active' : ''}`} onClick={() => updatePageConfig({ ...config, pattern: p })}>{CN[p]}</button>
+                                        ))}
+                                        {AI_PRESETS.map((preset, idx) => (
+                                            <button key={`p${idx}`} className="preset-tag" onClick={() => applyPreset(preset)}>{preset.name}</button>
                                         ))}
                                     </div>
                                 </div>

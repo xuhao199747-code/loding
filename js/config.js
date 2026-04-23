@@ -109,8 +109,8 @@ const PATTERNS = {
 const EMPTY_CONFIG = {
     layout: 'grid',
     shape: 'rect',
-    color: '#6366f1',
-    glowColor: '#818cf8',
+    color: '#3A68FF',
+    glowColor: '#6B8FFF',
     glowIntensity: 40,
     bgContrast: 95,
     speed: 1.0,
@@ -133,20 +133,20 @@ const EMPTY_CONFIG = {
 };
 
 const AI_PRESETS = [
-    { name: '思考中', layout: 'grid', pattern: 'wave', easing: 'sineInOut', speed: 0.6, color: '#6366f1', shape: 'rect', cols: 3, rows: 3, gap: 8, cornerRadius: 30 },
+    { name: '思考中', layout: 'grid', pattern: 'wave', easing: 'sineInOut', speed: 0.6, color: '#3A68FF', shape: 'rect', cols: 3, rows: 3, gap: 8, cornerRadius: 30 },
     { name: '加载条', layout: 'grid', pattern: 'scan', easing: 'linear', speed: 2.0, color: '#06b6d4', shape: 'rect', cols: 8, rows: 1, gap: 6, cornerRadius: 50 },
     { name: '脉冲圆', layout: 'grid', pattern: 'pulse', easing: 'elastic', speed: 1.2, color: '#f59e0b', shape: 'circle', cols: 5, rows: 5, gap: 8 },
     { name: '成功涟漪', layout: 'grid', pattern: 'ripple', easing: 'bounce', speed: 1.0, color: '#22c55e', shape: 'circle', cols: 5, rows: 5, gap: 10 },
     { name: '警报闪烁', layout: 'grid', pattern: 'random', easing: 'linear', speed: 2.5, color: '#ef4444', shape: 'square', cols: 4, rows: 3, gap: 6, glitchIntensity: 0.4 },
-    { name: '呼吸灯', layout: 'grid', pattern: 'breathe', easing: 'sine', speed: 0.5, color: '#8b5cf6', shape: 'circle', cols: 1, rows: 1, gap: 0, cornerRadius: 0 },
+    { name: '呼吸灯', layout: 'grid', pattern: 'breathe', easing: 'sine', speed: 0.5, color: '#3A68FF', shape: 'circle', cols: 1, rows: 1, gap: 0, cornerRadius: 0 },
     { name: '轨道环', layout: 'grid', pattern: 'orbit', easing: 'sineInOut', speed: 1.0, color: '#ec4899', shape: 'circle', cols: 8, rows: 8, gap: 4 },
     { name: '代码雨', layout: 'matrix', pattern: 'waterfall', easing: 'linear', speed: 1.8, color: '#22c55e', cols: 12, rows: 16, gap: 0 },
     { name: '矩阵风暴', layout: 'matrix', pattern: 'random', easing: 'expo', speed: 2.0, color: '#06b6d4', cols: 16, rows: 12, gap: 0, glitchIntensity: 0.5 },
     { name: '星空粒子', layout: 'particles', pattern: 'wave', easing: 'sine', speed: 0.8, color: '#e2e8f0', particleCount: 50 },
     { name: '萤火虫', layout: 'particles', pattern: 'random', easing: 'sineInOut', speed: 0.5, color: '#fbbf24', particleCount: 25 },
-    { name: '神经网络', layout: 'network', pattern: 'wave', easing: 'sineInOut', speed: 1.0, color: '#818cf8', particleCount: 25, connectionDist: 100 },
+    { name: '神经网络', layout: 'network', pattern: 'wave', easing: 'sineInOut', speed: 1.0, color: '#6B8FFF', particleCount: 25, connectionDist: 100 },
     { name: '星座连线', layout: 'network', pattern: 'breathe', easing: 'sine', speed: 0.6, color: '#94a3b8', particleCount: 15, connectionDist: 120 },
-    { name: '棋盘翻转', layout: 'grid', pattern: 'checkerboard', easing: 'back', speed: 1.5, color: '#a78bfa', shape: 'square', cols: 6, rows: 6, gap: 4 },
+    { name: '棋盘翻转', layout: 'grid', pattern: 'checkerboard', easing: 'back', speed: 1.5, color: '#6B8FFF', shape: 'square', cols: 6, rows: 6, gap: 4 },
     { name: '打字机', layout: 'grid', pattern: 'typing', easing: 'expo', speed: 1.2, color: '#34d399', shape: 'rect', cols: 10, rows: 1, gap: 6, cornerRadius: 50 },
     { name: '菱形波', layout: 'grid', pattern: 'wave', easing: 'elastic', speed: 0.8, color: '#fb923c', shape: 'diamond', cols: 5, rows: 5, gap: 10 },
 ];
