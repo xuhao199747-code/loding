@@ -8,14 +8,14 @@ body { font-family: 'Noto Sans SC', 'Inter', sans-serif; background: #0a0a0a; co
 .float-btn.active { background: #3A68FF; color: #fff; }
 .float-btn .ftip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #1a1a1a; border: 1px solid #333; padding: 4px 10px; border-radius: 6px; font-size: 11px; color: #e5e5e5; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 200; }
 .float-btn:hover .ftip { opacity: 1; }
-.pages-panel { background: #141414; border-right: 1px solid #2a2a2a; display: flex; flex-direction: column; overflow: hidden; }
+.pages-panel { background: #141414; border-right: 1px solid #2a2a2a; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 .panel-header { padding: 10px 12px; border-bottom: 1px solid #2a2a2a; display: flex; justify-content: space-between; align-items: center; }
 .panel-title { font-size: 11px; font-weight: 600; color: #737373; text-transform: uppercase; letter-spacing: 0.05em; }
 .page-item { padding: 8px 12px; margin: 2px 8px; border-radius: 6px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #a3a3a3; border: 1px solid transparent; }
 .page-item:hover { background: #1a1a1a; color: #e5e5e5; }
 .page-item.active { background: rgba(58, 104, 255, 0.1); color: #6B8FFF; border-color: rgba(58, 104, 255, 0.3); }
 .page-thumb { width: 28px; height: 28px; border-radius: 4px; background: #0a0a0a; border: 1px solid #333; flex-shrink: 0; overflow: hidden; }
-.canvas-area { position: relative; overflow: hidden; touch-action: none; }
+.canvas-area { position: relative; overflow: hidden; touch-action: none; min-height: 0; }
 .canvas-area.panning { cursor: grabbing; }
 .canvas-area.ready-to-draw { cursor: crosshair; }
 .infinite-grid { position: absolute; top: -10000px; left: -10000px; width: 20000px; height: 20000px; background-image: linear-gradient(rgba(61, 61, 61, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(61, 61, 61, 0.3) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
@@ -30,7 +30,7 @@ body { font-family: 'Noto Sans SC', 'Inter', sans-serif; background: #0a0a0a; co
 .resize-handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
 .resize-handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
 .resize-handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
-.right-panel { background: #141414; border-left: 1px solid #2a2a2a; overflow-y: auto; display: flex; flex-direction: column; }
+.right-panel { background: #141414; border-left: 1px solid #2a2a2a; overflow-y: auto; display: flex; flex-direction: column; min-height: 0; }
 .custom-scroll::-webkit-scrollbar { width: 5px; }
 .custom-scroll::-webkit-scrollbar-track { background: transparent; }
 .custom-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }

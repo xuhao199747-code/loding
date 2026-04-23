@@ -1,10 +1,13 @@
 const CN = {
-    wave: '波浪', scan: '扫描', pulse: '脉冲', random: '随机闪烁',
-    ripple: '涟漪', checkerboard: '棋盘', typing: '打字机',
-    waterfall: '瀑布流', matrix: '矩阵', breathe: '呼吸', orbit: '轨道',
-    linear: '线性', sine: '正弦', sineInOut: '平滑正弦',
-    elastic: '弹性', bounce: '弹跳', expo: '指数', back: '回弹',
-    grid: '网格', particles: '粒子', network: '网络',
+    wave: '波浪', scan: '扫描', pulse: '脉冲', random: '随机',
+    ripple: '涟漪', checkerboard: '棋盘', typing: '逐行',
+    waterfall: '瀑布', matrix: '字符流', breathe: '呼吸', orbit: '环绕',
+    zigzag: '折线', spiralScan: '螺旋扫描', rain: '雨滴', heartbeat: '心跳',
+    linear: '匀速', sine: '正弦', sineInOut: '渐入渐出',
+    elastic: '弹性', bounce: '弹跳', expo: '急速', back: '回弹',
+    cubic: '流畅', quart: '柔和', circ: '圆润', steps: '阶梯',
+    grid: '网格', particles: '粒子', network: '连线',
+    ring: '环形', spiral: '螺旋',
     rect: '圆角矩形', circle: '圆形', square: '矩形', diamond: '菱形',
     move: '移动', frame: '画框', rectangle: '矩形', ellipse: '椭圆',
     line: '线条', pen: '钢笔', text: '文字', hand: '抓手',
@@ -30,7 +33,11 @@ const EASINGS = {
     back: t => {
         const c1 = 1.70158, c3 = c1 + 1;
         return c3 * t * t * t - c1 * t * t;
-    }
+    },
+    cubic: t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+    quart: t => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2,
+    circ: t => t < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * t, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * t + 2, 2)) + 1) / 2,
+    steps: t => Math.floor(t * 5) / 5
 };
 
 const PATTERNS = {
@@ -103,6 +110,36 @@ const PATTERNS = {
         const angle = Math.atan2(j - cy, i - cx);
         const d = Math.sqrt((i-cx)**2 + (j-cy)**2);
         return (Math.sin(angle * 3 + time - d * 0.5) + 1) / 2;
+    },
+    zigzag: (i, j, cols, rows, time) => {
+        const row = j / (rows - 1 || 1);
+        const dir = j % 2 === 0 ? 1 : -1;
+        const progress = (i / (cols - 1 || 1)) * dir;
+        return (Math.sin(progress * Math.PI * 2 + row * Math.PI + time * 2) + 1) / 2;
+    },
+    spiralScan: (i, j, cols, rows, time) => {
+        const cx = (cols - 1) / 2, cy = (rows - 1) / 2;
+        const angle = Math.atan2(j - cy, i - cx);
+        const d = Math.sqrt((i - cx) ** 2 + (j - cy) ** 2);
+        const maxD = Math.sqrt(cx ** 2 + cy ** 2) || 1;
+        return (Math.sin(angle + d / maxD * Math.PI * 4 - time * 2) + 1) / 2;
+    },
+    rain: (i, j, cols, rows, time, phaseMap) => {
+        const key = `${i}`;
+        if (!phaseMap.current[key]) phaseMap.current[key] = Math.random() * rows * 2;
+        const drop = ((time * 2 + phaseMap.current[key]) % (rows + 3));
+        const diff = drop - j;
+        if (diff > 0 && diff < 1) return diff;
+        if (diff >= 1 && diff < 2) return 1;
+        if (diff >= 2 && diff < 3) return 3 - diff;
+        return 0.05;
+    },
+    heartbeat: (i, j, cols, rows, time) => {
+        const cx = (cols - 1) / 2, cy = (rows - 1) / 2;
+        const d = Math.sqrt((i - cx) ** 2 + (j - cy) ** 2);
+        const maxD = Math.sqrt(cx ** 2 + cy ** 2) || 1;
+        const beat = Math.abs(Math.sin(time * 3)) * Math.exp(-Math.abs(Math.sin(time * 3)) * 0.5);
+        return Math.max(0, 1 - d / maxD * 1.5) * beat + 0.05;
     }
 };
 

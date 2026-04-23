@@ -61,7 +61,8 @@ const LoaderRenderer = ({ config, width, height, isPlaying }) => {
                 ctx.save();
                 if (glowIntensity > 0) { ctx.shadowColor = `rgba(${gr},${gg},${gb},${gOpacity})`; ctx.shadowBlur = glowIntensity * val * 2; }
                 ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-                ctx.beginPath(); ctx.arc(p.x, p.y, sz, 0, Math.PI * 2); ctx.fill();
+                const radius = (cornerRadius / 100) * sz;
+                drawShape(ctx, shape, p.x - sz, p.y - sz, sz * 2, sz * 2, radius);
                 ctx.restore();
             });
             return;
@@ -92,9 +93,60 @@ const LoaderRenderer = ({ config, width, height, isPlaying }) => {
                 ctx.save();
                 if (glowIntensity > 0) { ctx.shadowColor = `rgba(${gr},${gg},${gb},${gOpacity})`; ctx.shadowBlur = glowIntensity * 0.8; }
                 ctx.fillStyle = `rgba(${r},${g},${b},${(0.5 + val * 0.5) * cOpacity})`;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size * 0.7, 0, Math.PI * 2); ctx.fill();
+                const sz = p.size * 0.7;
+                const radius = (cornerRadius / 100) * sz;
+                drawShape(ctx, shape, p.x - sz, p.y - sz, sz * 2, sz * 2, radius);
                 ctx.restore();
             });
+            return;
+        }
+
+        if (layout === 'ring') {
+            const ringCount = Math.max(2, Math.floor(Math.min(cols, rows) / 2) + 1);
+            const maxR = Math.min(w, h) * 0.42;
+            const cx = w / 2, cy = h / 2;
+            for (let ri = 0; ri < ringCount; ri++) {
+                const ringR = maxR * (ri + 1) / ringCount;
+                const dotCount = Math.max(4, Math.floor(ringR * 0.15));
+                for (let di = 0; di < dotCount; di++) {
+                    const angle = (di / dotCount) * Math.PI * 2 + ri * 0.3;
+                    let rawValue = patternFn(di, ri, dotCount, ringCount, time + phaseDelay * (ri + di), phaseMap);
+                    const val = easingFn(Math.max(0, Math.min(1, rawValue)));
+                    const px = cx + Math.cos(angle + time * 0.3 * (ri % 2 === 0 ? 1 : -1)) * ringR;
+                    const py = cy + Math.sin(angle + time * 0.3 * (ri % 2 === 0 ? 1 : -1)) * ringR;
+                    const dotSize = 2 + val * 4;
+                    ctx.save();
+                    if (glowIntensity > 0) { ctx.shadowColor = `rgba(${gr},${gg},${gb},${gOpacity})`; ctx.shadowBlur = glowIntensity * val * 2; }
+                    ctx.fillStyle = `rgba(${r},${g},${b},${(0.15 + val * 0.85) * cOpacity})`;
+                    const rad = (cornerRadius / 100) * dotSize;
+                    drawShape(ctx, shape, px - dotSize, py - dotSize, dotSize * 2, dotSize * 2, rad);
+                    ctx.restore();
+                }
+            }
+            return;
+        }
+
+        if (layout === 'spiral') {
+            const totalDots = Math.max(20, (particleCount || 0) > 0 ? particleCount : cols * rows);
+            const maxR = Math.min(w, h) * 0.42;
+            const cx = w / 2, cy = h / 2;
+            const turns = 3 + totalDots / 30;
+            for (let i = 0; i < totalDots; i++) {
+                const t2 = i / totalDots;
+                const angle = t2 * turns * Math.PI * 2 + time * 0.5;
+                const radius = t2 * maxR;
+                let rawValue = patternFn(i, 0, totalDots, 1, time + phaseDelay * i, phaseMap);
+                const val = easingFn(Math.max(0, Math.min(1, rawValue)));
+                const px = cx + Math.cos(angle) * radius;
+                const py = cy + Math.sin(angle) * radius;
+                const dotSize = 2 + val * (3 + t2 * 3);
+                ctx.save();
+                if (glowIntensity > 0) { ctx.shadowColor = `rgba(${gr},${gg},${gb},${gOpacity})`; ctx.shadowBlur = glowIntensity * val * 2; }
+                ctx.fillStyle = `rgba(${r},${g},${b},${(0.1 + val * 0.9) * cOpacity})`;
+                const rad = (cornerRadius / 100) * dotSize;
+                drawShape(ctx, shape, px - dotSize, py - dotSize, dotSize * 2, dotSize * 2, rad);
+                ctx.restore();
+            }
             return;
         }
 
@@ -288,6 +340,7 @@ const App = () => {
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const [resizing, setResizing] = useState(null);
     const [rightTab, setRightTab] = useState('design');
+    const [exportFormat, setExportFormat] = useState('png');
     const canvasRef = useRef(null);
     const viewStateRef = useRef(viewState);
     viewStateRef.current = viewState;
@@ -411,32 +464,59 @@ const App = () => {
 
     const randomizeAnimation = () => {
         if (!selectedPage) return;
-        const layouts = ['grid', 'matrix', 'particles', 'network'];
-        const patterns = ['wave', 'scan', 'pulse', 'random', 'ripple', 'checkerboard', 'typing', 'waterfall', 'breathe', 'orbit'];
-        const easings = ['linear', 'sine', 'sineInOut', 'elastic', 'bounce', 'expo', 'back'];
+        const layouts = ['grid', 'matrix', 'particles', 'network', 'ring', 'spiral'];
+        const patterns = ['wave', 'scan', 'pulse', 'random', 'ripple', 'checkerboard', 'typing', 'waterfall', 'breathe', 'orbit', 'zigzag', 'spiralScan', 'rain', 'heartbeat'];
+        const easings = ['linear', 'sine', 'sineInOut', 'elastic', 'bounce', 'expo', 'back', 'cubic', 'quart', 'circ', 'steps'];
         const shapes = ['rect', 'circle', 'square', 'diamond'];
-        const colors = ['#3A68FF', '#22c55e', '#ef4444', '#f59e0b', '#06b6d4', '#6B8FFF', '#ec4899', '#3b82f6', '#34d399', '#fb923c', '#e2e8f0', '#fbbf24'];
+        const colors = ['#3A68FF', '#22c55e', '#ef4444', '#f59e0b', '#06b6d4', '#6B8FFF', '#ec4899', '#3b82f6', '#34d399', '#fb923c', '#e2e8f0', '#fbbf24', '#f472b6', '#a3e635', '#38bdf8', '#facc15', '#fb7185', '#c084fc'];
         const pick = arr => arr[Math.floor(Math.random() * arr.length)];
         const randInt = (min, max) => Math.floor(min + Math.random() * (max - min + 1));
         const randFloat = (min, max, dec = 1) => parseFloat((min + Math.random() * (max - min)).toFixed(dec));
         const layout = pick(layouts);
+        const color = pick(colors);
+        const glowColor = Math.random() > 0.3 ? pick(colors) : color;
         const base = {
-            ...selectedPage.config,
             layout,
             pattern: pick(patterns),
             easing: pick(easings),
-            color: pick(colors),
+            shape: pick(shapes),
+            color,
+            glowColor,
+            glowIntensity: randInt(0, 80),
+            bgContrast: randInt(70, 100),
             speed: randFloat(0.3, 2.5, 1),
-            phaseDelay: randFloat(0, 0.8, 2)
+            phaseDelay: randFloat(0, 0.8, 2),
+            cornerRadius: randInt(0, 50),
+            rotation: pick([0, 0, 0, 15, 30, 45, 60, 90]),
+            glitchIntensity: Math.random() > 0.7 ? randFloat(0, 0.5, 2) : 0,
+            aspectRatio: 1,
+            cols: randInt(2, 8),
+            rows: randInt(2, 8),
+            gap: randInt(2, 16),
+            cellSize: randInt(50, 95),
+            particleCount: randInt(15, 60),
+            connectionDist: randInt(60, 140),
+            pageBg: selectedPage.config.pageBg || '#0a0a0a',
+            pageBgVisible: selectedPage.config.pageBgVisible,
+            pageBgOpacity: selectedPage.config.pageBgOpacity,
+            colorOpacity: randInt(60, 100),
+            glowOpacity: randInt(40, 100),
+            colorVisible: selectedPage.config.colorVisible,
+            glowVisible: selectedPage.config.glowVisible,
         };
-        if (layout === 'grid') {
-            Object.assign(base, { shape: pick(shapes), cols: randInt(2, 8), rows: randInt(2, 8), gap: randInt(2, 16), cellSize: randInt(50, 90), cornerRadius: randInt(0, 50), rotation: pick([0, 0, 0, 15, 30, 45]) });
-        } else if (layout === 'matrix') {
-            Object.assign(base, { cols: randInt(8, 20), rows: randInt(8, 20) });
+        if (layout === 'matrix') {
+            base.cols = randInt(8, 20);
+            base.rows = randInt(8, 20);
         } else if (layout === 'particles') {
-            Object.assign(base, { particleCount: randInt(15, 60) });
+            base.particleCount = randInt(15, 60);
         } else if (layout === 'network') {
-            Object.assign(base, { particleCount: randInt(10, 30), connectionDist: randInt(60, 140) });
+            base.particleCount = randInt(10, 35);
+            base.connectionDist = randInt(60, 150);
+        } else if (layout === 'ring') {
+            base.cols = randInt(3, 8);
+            base.rows = randInt(3, 8);
+        } else if (layout === 'spiral') {
+            base.particleCount = randInt(30, 90);
         }
         updatePageConfig(base);
     };
@@ -444,6 +524,178 @@ const App = () => {
     const applyPreset = (preset) => {
         if (!selectedPageId) return;
         updatePageConfig({ ...EMPTY_CONFIG, ...preset });
+    };
+
+    const exportPNG = (scale = 1) => {
+        if (!selectedPage) return;
+        const el = document.querySelector(`[data-page-id="${selectedPage.id}"] canvas`);
+        if (!el) return;
+        const c = document.createElement('canvas');
+        const w = selectedPage.width * scale;
+        const h = selectedPage.height * scale;
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        if (selectedPage.config.pageBgVisible !== false) {
+            const hex = (selectedPage.config.pageBg || '#0a0a0a').replace('#', '');
+            const r = parseInt(hex.substring(0, 2), 16) || 0;
+            const g = parseInt(hex.substring(2, 4), 16) || 0;
+            const b = parseInt(hex.substring(4, 6), 16) || 0;
+            const a = (selectedPage.config.pageBgOpacity ?? 100) / 100;
+            ctx.fillStyle = `rgba(${r},${g},${b},${a})`;
+            ctx.fillRect(0, 0, w, h);
+        }
+        ctx.drawImage(el, 0, 0, w, h);
+        c.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${selectedPage.name || 'export'}.png`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }, 'image/png');
+    };
+
+    const exportCode = () => {
+        if (!selectedPage) return;
+        const cfg = selectedPage.config;
+        const w = selectedPage.width;
+        const h = selectedPage.height;
+        const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${selectedPage.name || '光流动画'}</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.loader-container {
+  width: ${w}px; height: ${h}px; border-radius: 8px; overflow: hidden;
+  ${cfg.pageBgVisible !== false ? `background: ${cfg.pageBg || '#0a0a0a'};` : ''}
+}
+canvas { display: block; }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="loader-container">
+  <canvas id="c" width="${w}" height="${h}"></canvas>
+</div>
+<script>
+const config = ${JSON.stringify(cfg, null, 2)};
+
+const EASINGS = {
+  linear: t => t,
+  sine: t => (Math.sin(t * Math.PI - Math.PI / 2) + 1) / 2,
+  sineInOut: t => -(Math.cos(Math.PI * t) - 1) / 2,
+  elastic: t => { if (t === 0) return 0; if (t === 1) return 1; return -Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math.PI) + 1; },
+  bounce: t => { const n1 = 7.5625, d1 = 2.75; if (t < 1/d1) return n1*t*t; else if (t < 2/d1) return n1*(t-=1.5/d1)*t+0.75; else if (t < 2.5/d1) return n1*(t-=2.25/d1)*t+0.9375; return n1*(t-=2.625/d1)*t+0.984375; },
+  expo: t => t === 0 ? 0 : Math.pow(2, 10 * (t - 1)),
+  back: t => { const c1 = 1.70158, c3 = c1 + 1; return c3*t*t*t - c1*t*t; }
+};
+
+const PATTERNS = {
+  wave: (i,j,c,r,t) => Math.sin((i/(c-1||1)+j/(r-1||1))*Math.PI*2+t)*0.5+0.5,
+  scan: (i,j,c,r,t) => Math.sin(i/(c-1||1)*Math.PI*2+t)*0.5+0.5,
+  pulse: (i,j,c,r,t) => { const cx=(c-1)/2,cy=(r-1)/2,d=Math.sqrt((i-cx)**2+(j-cy)**2),m=Math.sqrt(cx**2+cy**2)||1; return Math.sin(d/m*Math.PI*2-t*2)*0.5+0.5; },
+  random: (i,j,c,r,t,pm) => { const k=i+'-'+j; if(!pm[k]) pm[k]=Math.random()*Math.PI*2; return Math.sin(t+pm[k])*0.5+0.5; },
+  ripple: (i,j,c,r,t) => { const cx=(c-1)/2,cy=(r-1)/2,d=Math.sqrt((i-cx)**2+(j-cy)**2); return Math.sin(d*0.8-t*3)*Math.exp(-d*0.15)*0.5+0.5; },
+  checkerboard: (i,j,c,r,t) => Math.sin(t+((i+j)%2===0?0:Math.PI))*0.5+0.5,
+  typing: (i,j,c,r,t) => { const idx=i+j*c,p=(t*0.5)%(c*r+4),d=p-idx; if(d>0&&d<1) return d; if(d>=1&&d<3) return 1; if(d>=3&&d<4) return 4-d; return 0.15; },
+  waterfall: (i,j,c,r,t) => { const rp=(t*0.8)%(r+2),d=rp-j; if(d>0&&d<0.5) return d*2; if(d>=0.5&&d<1.5) return 1; if(d>=1.5&&d<2) return (2-d)*2; return 0.1; },
+  matrix: (i,j,c,r,t) => { const cx=(c-1)/2,cy=(r-1)/2; if(i===Math.floor(cx)&&j===Math.floor(cy)) return Math.sin(t*2)*0.3+0.7; const a=Math.atan2(j-cy,i-cx),sa=(t*0.5)%(Math.PI*2); return Math.max(0,1-Math.abs(((a-sa+Math.PI*3)%(Math.PI*2))-Math.PI)*2)*0.8+0.1; },
+  breathe: (i,j,c,r,t) => (Math.sin(t+i*0.3+j*0.3)+1)/2,
+  orbit: (i,j,c,r,t) => { const cx=(c-1)/2,cy=(r-1)/2,a=Math.atan2(j-cy,i-cx),d=Math.sqrt((i-cx)**2+(j-cy)**2); return (Math.sin(a*3+t-d*0.5)+1)/2; }
+};
+
+function drawRoundedRect(ctx,x,y,w,h,r) { const rad=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+rad,y); ctx.lineTo(x+w-rad,y); ctx.quadraticCurveTo(x+w,y,x+w,y+rad); ctx.lineTo(x+w,y+h-rad); ctx.quadraticCurveTo(x+w,y+h,x+w-rad,y+h); ctx.lineTo(x+rad,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-rad); ctx.lineTo(x,y+rad); ctx.quadraticCurveTo(x,y,x+rad,y); ctx.closePath(); }
+function drawDiamond(ctx,x,y,w,h) { const cx=x+w/2,cy=y+h/2; ctx.beginPath(); ctx.moveTo(cx,y); ctx.lineTo(x+w,cy); ctx.lineTo(cx,y+h); ctx.lineTo(x,cy); ctx.closePath(); }
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const dpr = window.devicePixelRatio || 1;
+canvas.width = ${w} * dpr; canvas.height = ${h} * dpr;
+canvas.style.width = '${w}px'; canvas.style.height = '${h}px';
+ctx.scale(dpr, dpr);
+
+const phaseMap = {};
+let time = 0;
+let particles = null;
+
+if (['particles','network'].includes(config.layout)) {
+  const count = config.particleCount || (config.layout === 'network' ? 20 : 30);
+  particles = Array.from({length: count}, () => ({
+    x: Math.random()*${w}, y: Math.random()*${h},
+    vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2,
+    phase: Math.random()*Math.PI*2, size: 3+Math.random()*3
+  }));
+}
+
+function animate() {
+  time += config.speed * 0.02;
+  const w = ${w}, h = ${h};
+  const { layout, shape, color, glowColor, glowIntensity, bgContrast, easing, pattern, phaseDelay, cols, rows, gap, cellSize, aspectRatio, cornerRadius, rotation, glitchIntensity, colorOpacity, glowOpacity, pageBgVisible, colorVisible, glowVisible } = config;
+  const cOp = colorVisible === false ? 0 : (colorOpacity ?? 100) / 100;
+  const gOp = glowVisible === false ? 0 : (glowOpacity ?? 100) / 100;
+  const easingFn = EASINGS[easing] || EASINGS.linear;
+  const patternFn = PATTERNS[pattern] || PATTERNS.wave;
+  const r = parseInt(color.slice(1,3),16), g = parseInt(color.slice(3,5),16), b = parseInt(color.slice(5,7),16);
+  const gr = parseInt((glowColor||color).slice(1,3),16), gg = parseInt((glowColor||color).slice(3,5),16), gb = parseInt((glowColor||color).slice(5,7),16);
+
+  ctx.clearRect(0,0,w,h);
+  if (pageBgVisible !== false) { const bgL = Math.floor(255*(1-bgContrast/100)); ctx.fillStyle = 'rgba('+bgL*0.06+','+bgL*0.08+','+bgL*0.1+',0.3)'; ctx.fillRect(0,0,w,h); }
+
+  if (layout === 'particles' || layout === 'network') {
+    particles.forEach(p => { p.vx+=(Math.random()-0.5)*0.2; p.vy+=(Math.random()-0.5)*0.2; p.vx*=0.98; p.vy*=0.98; p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h) p.vy*=-1; });
+    if (layout === 'network') {
+      const dist = config.connectionDist || 80;
+      for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++) { const d=Math.sqrt((particles[i].x-particles[j].x)**2+(particles[i].y-particles[j].y)**2); if(d<dist){ ctx.strokeStyle='rgba('+r+','+g+','+b+','+(1-d/dist)*0.5*cOp+')'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.stroke(); }}
+    }
+    particles.forEach(p => { const val=(Math.sin(time*2+p.phase)+1)/2; ctx.save(); if(glowIntensity>0){ctx.shadowColor='rgba('+gr+','+gg+','+gb+','+gOp+')'; ctx.shadowBlur=glowIntensity*(layout==='network'?0.8:val*2);} ctx.fillStyle='rgba('+r+','+g+','+b+','+((layout==='network'?0.5+val*0.5:0.2+val*0.8)*cOp)+')'; ctx.beginPath(); ctx.arc(p.x,p.y,p.size*(layout==='network'?0.7:0.5+val*0.5),0,Math.PI*2); ctx.fill(); ctx.restore(); });
+    requestAnimationFrame(animate); return;
+  }
+  if (layout === 'matrix') {
+    const charSet = '01{}[]()<>=>!==&&||+-*/%#@$_.:;?^~const let var if else for while return function class import export async await';
+    const fontSize = Math.max(8, Math.min(w,h)/Math.max(cols,rows)*0.6);
+    ctx.font = fontSize+"px 'JetBrains Mono', monospace"; ctx.textAlign='center'; ctx.textBaseline='middle';
+    const cw=w/cols, ch=h/rows;
+    for(let i=0;i<cols;i++) for(let j=0;j<rows;j++) { let rv=patternFn(i,j,cols,rows,time+phaseDelay*(i+j),phaseMap); const val=easingFn(Math.max(0,Math.min(1,rv))); ctx.save(); if(glowIntensity>0){ctx.shadowColor='rgba('+gr+','+gg+','+gb+','+gOp+')'; ctx.shadowBlur=glowIntensity*val*2;} ctx.fillStyle='rgba('+r+','+g+','+b+','+(0.05+val*0.95)*cOp+')'; ctx.fillText(charSet[Math.floor((time*3+i*7+j*13)%charSet.length)],cw*i+cw/2,ch*j+ch/2); ctx.restore(); }
+    requestAnimationFrame(animate); return;
+  }
+  // grid
+  const totalGapX=(cols-1)*gap, totalGapY=(rows-1)*gap;
+  const baseCellW=((w-totalGapX)/cols)*(cellSize/100), baseCellH=((h-totalGapY)/rows)*(cellSize/100);
+  let cellW=aspectRatio>=1?baseCellW*Math.min(aspectRatio,3):baseCellW, cellH=aspectRatio<1?baseCellH/Math.max(aspectRatio,0.2):baseCellH;
+  cellW=Math.min(cellW,baseCellW*1.5); cellH=Math.min(cellH,baseCellH*1.5);
+  const offX=(w-(baseCellW*cols+totalGapX))/2+(baseCellW-cellW)/2, offY=(h-(baseCellH*rows+totalGapY))/2+(baseCellH-cellH)/2;
+  for(let i=0;i<cols;i++) for(let j=0;j<rows;j++) {
+    let rv=patternFn(i,j,cols,rows,time+phaseDelay*(i+j),phaseMap);
+    if(glitchIntensity>0&&Math.random()<glitchIntensity*0.05) rv=Math.random();
+    const ev=easingFn(Math.max(0,Math.min(1,rv))); const x=offX+i*(baseCellW+gap), y=offY+j*(baseCellH+gap);
+    ctx.save();
+    if(rotation!==0){const cx=x+cellW/2,cy=y+cellH/2; ctx.translate(cx,cy); ctx.rotate(rotation*Math.PI/180); ctx.translate(-cx,-cy);}
+    if(glowIntensity>0){ctx.shadowColor='rgba('+gr+','+gg+','+gb+','+gOp+')'; ctx.shadowBlur=glowIntensity*ev*3;}
+    ctx.fillStyle='rgba('+r+','+g+','+b+','+(0.15+ev*0.85)*cOp+')';
+    const rad=(cornerRadius/100)*Math.min(cellW,cellH)/2;
+    if(shape==='rect'){drawRoundedRect(ctx,x,y,cellW,cellH,rad*2); ctx.fill();}
+    else if(shape==='circle'){ctx.beginPath(); ctx.arc(x+cellW/2,y+cellH/2,Math.min(cellW,cellH)/2,0,Math.PI*2); ctx.fill();}
+    else if(shape==='square'){ctx.fillRect(x,y,cellW,cellH);}
+    else if(shape==='diamond'){drawDiamond(ctx,x,y,cellW,cellH); ctx.fill();}
+    ctx.restore();
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+<\/script>
+</body>
+</html>`;
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${selectedPage.name || 'loader'}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
     };
 
     const updatePageSize = (id, w, h) => {
@@ -718,14 +970,14 @@ const App = () => {
                 <div style={{ flex: 1 }} />
                 <button className="btn-icon" onClick={saveProject} title="保存项目">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M12 3v12M12 15l-4-4M12 15l4-4"/>
-                        <path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/>
+                        <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+                        <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/>
+                        <path d="M7 3v4a1 1 0 0 0 1 1h7"/>
                     </svg>
                 </button>
                 <button className="btn-icon" onClick={() => document.getElementById('load-file-input').click()} title="打开项目">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M4 4v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.342a2 2 0 0 0-.602-1.43l-4.44-4.342A2 2 0 0 0 13.56 2H6a2 2 0 0 0-2 2z"/>
-                        <path d="M9 13h6M9 17h6M14 2v4a2 2 0 0 0 2 2h4"/>
+                        <path d="M6 14l1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>
                     </svg>
                 </button>
                 <input id="load-file-input" type="file" accept=".glow,.json" style={{ display: 'none' }}
@@ -818,6 +1070,7 @@ const App = () => {
                     {pages.map(page => (
                         <div
                             key={page.id}
+                            data-page-id={page.id}
                             className={`shape-element ${selectedPageId === page.id ? 'selected' : ''}`}
                             style={{
                                 left: page.x, top: page.y,
@@ -962,40 +1215,62 @@ const App = () => {
                                 <div className="prop-section">
                                     <div className="prop-label">布局</div>
                                     <div className="segmented-control">
-                                        {['grid', 'matrix', 'particles', 'network'].map(l => (
+                                        {['grid', 'matrix', 'particles', 'network', 'ring', 'spiral'].map(l => (
                                             <button key={l} className={`segmented-btn ${config.layout === l ? 'active' : ''}`} onClick={() => updatePageConfig({ ...config, layout: l })}>{CN[l]}</button>
                                         ))}
                                     </div>
                                 </div>
 
-                                <div className="prop-section">
-                                    <div className="prop-label">形状</div>
-                                    <div className="segmented-control">
-                                        {['rect', 'circle', 'square', 'diamond'].map(s => (
-                                            <button key={s} className={`segmented-btn ${config.shape === s ? 'active' : ''}`} onClick={() => updatePageConfig({ ...config, shape: s })}>{CN[s]}</button>
-                                        ))}
+                                {config.layout !== 'matrix' && (
+                                    <div className="prop-section">
+                                        <div className="prop-label">形状</div>
+                                        <div className="segmented-control">
+                                            {['rect', 'circle', 'square', 'diamond'].map(s => (
+                                                <button key={s} className={`segmented-btn ${config.shape === s ? 'active' : ''}`} onClick={() => updatePageConfig({ ...config, shape: s })}>{CN[s]}</button>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
                                 <div className="prop-section">
-                                    <div className="prop-label">网格</div>
+                                    <div className="prop-label">网格参数</div>
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                                        <div>
-                                            <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>列</div>
-                                            <DragInput value={config.cols} min={1} onChange={v => updatePageConfig({ ...config, cols: v })} className="input-field" />
-                                        </div>
-                                        <div>
-                                            <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>行</div>
-                                            <DragInput value={config.rows} min={1} onChange={v => updatePageConfig({ ...config, rows: v })} className="input-field" />
-                                        </div>
-                                        <div>
-                                            <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>间距 (px)</div>
-                                            <DragInput value={config.gap} min={0} max={200} onChange={v => updatePageConfig({ ...config, gap: v })} className="input-field" />
-                                        </div>
-                                        <div>
-                                            <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>单元大小 (%)</div>
-                                            <DragInput value={config.cellSize} min={10} max={100} onChange={v => updatePageConfig({ ...config, cellSize: v })} className="input-field" />
-                                        </div>
+                                        {(config.layout === 'grid' || config.layout === 'matrix' || config.layout === 'ring') && (
+                                            <>
+                                                <div>
+                                                    <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>横排数</div>
+                                                    <DragInput value={config.cols} min={1} max={30} onChange={v => updatePageConfig({ ...config, cols: v })} className="input-field" />
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>竖排数</div>
+                                                    <DragInput value={config.rows} min={1} max={30} onChange={v => updatePageConfig({ ...config, rows: v })} className="input-field" />
+                                                </div>
+                                            </>
+                                        )}
+                                        {(config.layout === 'grid' || config.layout === 'matrix') && (
+                                            <>
+                                                <div>
+                                                    <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>间距 (px)</div>
+                                                    <DragInput value={config.gap} min={0} max={30} onChange={v => updatePageConfig({ ...config, gap: v })} className="input-field" />
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>单元格 (%)</div>
+                                                    <DragInput value={config.cellSize} min={10} max={100} onChange={v => updatePageConfig({ ...config, cellSize: v })} className="input-field" />
+                                                </div>
+                                            </>
+                                        )}
+                                        {(config.layout === 'particles' || config.layout === 'network' || config.layout === 'spiral') && (
+                                            <div>
+                                                <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>粒子数量</div>
+                                                <DragInput value={config.particleCount} min={5} max={100} onChange={v => updatePageConfig({ ...config, particleCount: v })} className="input-field" />
+                                            </div>
+                                        )}
+                                        {config.layout === 'network' && (
+                                            <div>
+                                                <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>连接距离</div>
+                                                <DragInput value={config.connectionDist} min={30} max={200} onChange={v => updatePageConfig({ ...config, connectionDist: v })} className="input-field" />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -1136,11 +1411,61 @@ const App = () => {
                                         </div>
                                     </div>
                                 </div>
+
+                                <div className="prop-section">
+                                    <div className="prop-label">导出</div>
+                                    <div style={{ display: 'flex', alignItems: 'center', height: 32, background: '#0a0a0a', borderRadius: 4, border: '1px solid #2a2a2a', padding: '0 4px 0 0' }}>
+                                        {exportFormat === 'png' && (
+                                            <select id="export-scale" defaultValue="1"
+                                                style={{ background: 'transparent', border: 'none', color: '#e5e5e5', fontSize: 11, cursor: 'pointer', outline: 'none', width: 42, padding: '0 0 0 8px', flexShrink: 0 }}>
+                                                <option value="0.5">0.5x</option>
+                                                <option value="1">1x</option>
+                                                <option value="2">2x</option>
+                                                <option value="3">3x</option>
+                                                <option value="4">4x</option>
+                                            </select>
+                                        )}
+                                        {exportFormat === 'png' && <div style={{ width: 1, height: 16, background: '#2a2a2a', flexShrink: 0 }} />}
+                                        <div style={{ flex: 1, fontSize: 11, color: '#737373', padding: '0 8px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedPage.name}</div>
+                                        <select value={exportFormat} onChange={e => setExportFormat(e.target.value)}
+                                            style={{ background: 'transparent', border: 'none', color: '#e5e5e5', fontSize: 11, fontWeight: 500, cursor: 'pointer', outline: 'none', width: 52, padding: 0, flexShrink: 0, textAlign: 'right' }}>
+                                            <option value="png">PNG</option>
+                                            <option value="html">HTML</option>
+                                        </select>
+                                        <div style={{ width: 1, height: 16, background: '#2a2a2a', flexShrink: 0 }} />
+                                        <div
+                                            onClick={() => exportFormat === 'html' ? exportCode() : exportPNG(Number(document.getElementById('export-scale')?.value || 1))}
+                                            style={{ width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderRadius: '0 4px 4px 0', transition: 'background 0.15s', flexShrink: 0 }}
+                                            onMouseEnter={e => e.currentTarget.style.background = '#262626'}
+                                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                                            title={`导出 ${exportFormat.toUpperCase()}`}>
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a3a3a3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M12 3v12M12 15l-4-4M12 15l4-4"/>
+                                                <path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
                             </>
                         )}
 
                         {rightTab === 'animate' && (
                             <>
+                                <div className="prop-section">
+                                    <div className="prop-label">场景模板</div>
+                                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                                        {AI_PRESETS.map((preset, idx) => (
+                                            <button
+                                                key={`p${idx}`}
+                                                className="preset-tag"
+                                                style={{ background: '#111', borderStyle: 'dashed' }}
+                                                onClick={() => { applyPreset(preset); }}
+                                                title={`${CN[preset.layout] || preset.layout} · ${CN[preset.pattern] || preset.pattern}`}
+                                            >{preset.name}</button>
+                                        ))}
+                                    </div>
+                                </div>
+
                                 <div className="prop-section">
                                     <button className="ai-btn" onClick={randomizeAnimation}>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1152,27 +1477,21 @@ const App = () => {
                                         </svg>
                                         随机动画
                                     </button>
-                                    <div style={{ fontSize: 11, color: '#404040', marginTop: 8, textAlign: 'center' }}>
-                                        随机生成模式、缓动、速度和相位差
-                                    </div>
                                 </div>
 
                                 <div className="prop-section">
-                                    <div className="prop-label">模式</div>
+                                    <div className="prop-label">动效</div>
                                     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                                        {['wave', 'scan', 'pulse', 'random', 'ripple', 'checkerboard', 'typing', 'waterfall', 'matrix', 'breathe', 'orbit'].map(p => (
+                                        {['wave', 'scan', 'pulse', 'random', 'ripple', 'checkerboard', 'typing', 'waterfall', 'matrix', 'breathe', 'orbit', 'zigzag', 'spiralScan', 'rain', 'heartbeat'].map(p => (
                                             <button key={p} className={`preset-tag ${config.pattern === p ? 'active' : ''}`} onClick={() => updatePageConfig({ ...config, pattern: p })}>{CN[p]}</button>
                                         ))}
-                                        {AI_PRESETS.map((preset, idx) => (
-                                            <button key={`p${idx}`} className="preset-tag" onClick={() => applyPreset(preset)}>{preset.name}</button>
-                                        ))}
                                     </div>
                                 </div>
 
                                 <div className="prop-section">
-                                    <div className="prop-label">缓动</div>
+                                    <div className="prop-label">缓动曲线</div>
                                     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                                        {['linear', 'sine', 'sineInOut', 'elastic', 'bounce', 'expo', 'back'].map(e => (
+                                        {['linear', 'sine', 'sineInOut', 'elastic', 'bounce', 'expo', 'back', 'cubic', 'quart', 'circ', 'steps'].map(e => (
                                             <button key={e} className={`preset-tag ${config.easing === e ? 'active' : ''}`} onClick={() => updatePageConfig({ ...config, easing: e })}>{CN[e]}</button>
                                         ))}
                                     </div>
