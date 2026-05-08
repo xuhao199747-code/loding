@@ -1,0 +1,216 @@
+/* liaison-app/features/page-overview/page-overview-panel.element.css */
+:host {
+  display: block;
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  z-index: 2147483647;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.panel {
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+.header-title svg { color: #888; }
+
+.header-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  color: #888;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.icon-btn:hover { background: #333; color: #e0e0e0; }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  padding: 0 12px;
+  border-bottom: 1px solid #252525;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tab.active { color: #e0e0e0; border-bottom-color: #6366f1; }
+.tab:hover { color: #888; }
+
+.tab-count {
+  background: #252525;
+  color: #666;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.tab.active .tab-count { background: rgba(99,102,241,0.15); color: #6366f1; }
+
+/* Body */
+.panel-body {
+  overflow-y: auto;
+  padding: 10px;
+  flex: 1;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #444;
+  font-size: 12px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.overview-row {
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: all 0.15s;
+  background: #1a1a1a;
+}
+.overview-row:hover { border-color: #333; }
+
+.row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.row-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+
+.row-path {
+  font-size: 10px;
+  color: #555;
+  font-family: "SF Mono", monospace;
+}
+
+.row-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.chip {
+  font-size: 10px;
+  padding: 2px 8px;
+  background: #252525;
+  color: #888;
+  border-radius: 4px;
+  font-family: "SF Mono", monospace;
+}
+
+.badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.badge.gradient {
+  background: linear-gradient(90deg, #6366f1, #ec4899);
+  color: #fff;
+}
+
+.comment-preview {
+  font-size: 11px;
+  color: #888;
+  padding: 3px 0;
+  border-bottom: 1px solid #1f1f1f;
+}
+.comment-preview:last-child { border-bottom: none; }
+
+.row-meta {
+  font-size: 10px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.row-actions {
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.overview-row:hover .row-actions { opacity: 1; }
+
+.action-btn {
+  font-size: 10px;
+  padding: 4px 10px;
+  border: 1px solid #333;
+  background: transparent;
+  border-radius: 4px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.action-btn:hover { border-color: #444; color: #a0a0a0; }
+.action-btn.primary { border-color: #6366f1; color: #6366f1; }
+.action-btn.primary:hover { background: rgba(99,102,241,0.1); }
+
+/* Scrollbar */
+.panel-body::-webkit-scrollbar { width: 5px; }
+.panel-body::-webkit-scrollbar-track { background: transparent; }
+.panel-body::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
