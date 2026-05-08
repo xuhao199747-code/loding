@@ -938,9 +938,11 @@ animate();
             {/* ====== 顶部栏 ====== */}
             <div className="top-bar">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 22, height: 22, borderRadius: 5, background: 'linear-gradient(135deg, #3A68FF, #6B8FFF)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    </div>
+                    <img
+                        src="assets/logo.png"
+                        alt="logo"
+                        style={{ width: 22, height: 22, display: 'block', objectFit: 'contain' }}
+                    />
                     {editingCanvasName ? (
                         <input
                             autoFocus
