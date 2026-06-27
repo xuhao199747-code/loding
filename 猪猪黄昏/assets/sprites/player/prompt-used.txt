@@ -1,0 +1,1 @@
+Provisional butcher sprite for local gameplay integration. Final sprite should be replaced by a generate2dsprite hero asset matching the slaughterhouse map style.

@@ -1,0 +1,1 @@
+Provisional pig king boss sprite for local gameplay integration. Final boss sprite should be replaced by a generate2dsprite output matching the slaughterhouse map style.

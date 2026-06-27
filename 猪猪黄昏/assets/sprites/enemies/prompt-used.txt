@@ -1,0 +1,1 @@
+Provisional pig enemy set for local gameplay integration. Final enemy sprites should be replaced by generate2dsprite outputs matching the slaughterhouse map style and each pig role.
