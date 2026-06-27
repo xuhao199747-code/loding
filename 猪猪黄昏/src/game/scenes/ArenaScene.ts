@@ -1,16 +1,18 @@
 import Phaser from "phaser";
 
+import { slaughterhouseMap } from "../data/mapScene";
+
 export class ArenaScene extends Phaser.Scene {
   constructor() {
     super("arena");
   }
 
   create(): void {
-    this.add.rectangle(800, 450, 1600, 900, 0x2f1812);
-    this.add.text(800, 450, "屠宰场施工中", {
-      color: "#f6ddae",
-      fontSize: "38px"
-    }).setOrigin(0.5);
+    this.add.image(800, 450, slaughterhouseMap.baseTextureKey).setDisplaySize(1600, 900);
+
+    for (const prop of slaughterhouseMap.props) {
+      this.add.image(prop.x, prop.y, prop.textureKey).setDepth(prop.depth);
+    }
 
     this.scene.launch("hud");
   }

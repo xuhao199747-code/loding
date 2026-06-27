@@ -1,0 +1,2 @@
+Temporary runtime base derived from the approved visual direction: top-down dusk slaughterhouse arena, muddy yard, rusty industrial edges, warm orange lighting, readable central combat space, darkly comic pig-farm atmosphere.
+Replace with final generate2dmap production asset in later art pass.

@@ -1,0 +1,7 @@
+[
+  {"id":"hook-rack","textureKey":"prop.hook-rack","texturePath":"assets/sprites/props/hook-rack.png","x":170,"y":360,"depth":360},
+  {"id":"feed-barrel","textureKey":"prop.feed-barrel","texturePath":"assets/sprites/props/feed-barrel.png","x":210,"y":745,"depth":745},
+  {"id":"warning-board","textureKey":"prop.warning-board","texturePath":"assets/sprites/props/warning-board.png","x":305,"y":520,"depth":520},
+  {"id":"neon-sign","textureKey":"prop.neon-sign","texturePath":"assets/sprites/props/neon-sign.png","x":1170,"y":300,"depth":300},
+  {"id":"rust-barrel","textureKey":"prop.rust-barrel","texturePath":"assets/sprites/props/rust-barrel.png","x":1250,"y":640,"depth":640}
+]
