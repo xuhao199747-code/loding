@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光流动画编辑器</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="hide-badge.css">
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+    (function() {
+        var findKimiContainer = function() {
+            var all = document.querySelectorAll('div, span, a, button, iframe');
+            for (var i = 0; i < all.length; i++) {
+                var text = all[i].textContent || '';
+                if (text.indexOf('Kimi Agent') !== -1 || text.indexOf('Kimi') !== -1) {
+                    return all[i];
+                }
+            }
+            return null;
+        };
+
+        // 方案1: hover 后点击关闭
+        var hoverAndClose = function() {
+            var container = findKimiContainer();
+            if (!container) return false;
+
+            // 模拟 hover 事件
+            ['mouseenter', 'mouseover', 'pointerenter'].forEach(function(name) {
+                container.dispatchEvent(new MouseEvent(name, { bubbles: true, cancelable: true }));
+            });
+
+            // 等待 hover 动画让关闭按钮显示
+            setTimeout(function() {
+                // 强制显示所有隐藏子元素
+                var children = container.querySelectorAll('*');
+                children.forEach(function(child) {
+                    var style = window.getComputedStyle(child);
+                    if (style.opacity === '0' || style.display === 'none' || style.visibility === 'hidden') {
+                        child.style.opacity = '1';
+                        child.style.display = 'block';
+                        child.style.visibility = 'visible';
+                    }
+                });
+
+                // 查找并点击关闭按钮
+                var candidates = container.querySelectorAll('button, div, span, svg, [role="button"]');
+                for (var i = 0; i < candidates.length; i++) {
+                    var el = candidates[i];
+                    var label = (el.getAttribute('aria-label') || '').toLowerCase();
+                    var cls = (el.className || '').toLowerCase();
+                    var d = '';
+                    try { d = el.querySelector('path').getAttribute('d') || ''; } catch(e) {}
+
+                    if (label.indexOf('close') !== -1 || label.indexOf('dismiss') !== -1 ||
+                        cls.indexOf('close') !== -1 || cls.indexOf('dismiss') !== -1 ||
+                        d.indexOf('M6 6l12 12') !== -1 || d.indexOf('M18 6L6 18') !== -1 ||
+                        el.textContent === '×' || el.textContent === '✕' || el.textContent === '✖') {
+                        el.click();
+                        return;
+                    }
+                }
+            }, 300);
+            return true;
+        };
+
+        // 方案2: 直接 JS 隐藏整个容器
+        var forceHide = function() {
+            var container = findKimiContainer();
+            if (!container) return false;
+            var target = container;
+            // 向上找到最外层 fixed/absolute 容器
+            for (var i = 0; i < 5 && target.parentElement; i++) {
+                var pos = window.getComputedStyle(target).position;
+                if (pos === 'fixed' || pos === 'absolute' || pos === 'sticky') break;
+                target = target.parentElement;
+            }
+            target.style.display = 'none';
+            target.style.visibility = 'hidden';
+            target.style.opacity = '0';
+            target.style.pointerEvents = 'none';
+            target.style.zIndex = '-9999';
+            return true;
+        };
+
+        // 执行关闭
+        var run = function() {
+            if (!hoverAndClose()) {
+                // hover 方案找不到元素，兜底强制隐藏
+                setTimeout(forceHide, 500);
+            }
+            // 多次尝试
+            setTimeout(function() { hoverAndClose() || forceHide(); }, 1500);
+            setTimeout(function() { hoverAndClose() || forceHide(); }, 3000);
+        };
+
+        if (document.readyState === 'complete') {
+            run();
+        } else {
+            window.addEventListener('load', run);
+        }
+
+        // DOM 变化时持续尝试
+        var observer = new MutationObserver(function() {
+            hoverAndClose() || forceHide();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    })();
+    </script>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script type="text/babel" src="js/app.jsx"></script>
+</body>
+</html>

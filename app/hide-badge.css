@@ -1,0 +1,15 @@
+/* 隐藏部署平台角标 - 只针对特定类名 */
+.kimi-agent-badge,
+.agent-badge,
+.kimi-badge,
+[class*="kimi-badge"],
+[class*="agent-badge"],
+iframe[src*="kimi"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}

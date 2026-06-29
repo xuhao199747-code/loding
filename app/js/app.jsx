@@ -468,7 +468,7 @@ const App = () => {
         const patterns = ['wave', 'scan', 'pulse', 'random', 'ripple', 'checkerboard', 'typing', 'waterfall', 'breathe', 'orbit', 'zigzag', 'spiralScan', 'rain', 'heartbeat'];
         const easings = ['linear', 'sine', 'sineInOut', 'elastic', 'bounce', 'expo', 'back', 'cubic', 'quart', 'circ', 'steps'];
         const shapes = ['rect', 'circle', 'square', 'diamond'];
-        const colors = ['#3A68FF', '#22c55e', '#ef4444', '#f59e0b', '#06b6d4', '#6B8FFF', '#ec4899', '#3b82f6', '#34d399', '#fb923c', '#e2e8f0', '#fbbf24', '#f472b6', '#a3e635', '#38bdf8', '#facc15', '#fb7185', '#c084fc'];
+        const colors = ['#FA5A0A', '#22c55e', '#ef4444', '#f59e0b', '#06b6d4', '#FF8C42', '#ec4899', '#3b82f6', '#34d399', '#fb923c', '#e2e8f0', '#fbbf24', '#f472b6', '#a3e635', '#38bdf8', '#facc15', '#fb7185', '#c084fc'];
         const pick = arr => arr[Math.floor(Math.random() * arr.length)];
         const randInt = (min, max) => Math.floor(min + Math.random() * (max - min + 1));
         const randFloat = (min, max, dec = 1) => parseFloat((min + Math.random() * (max - min)).toFixed(dec));
@@ -938,9 +938,11 @@ animate();
             {/* ====== 顶部栏 ====== */}
             <div className="top-bar">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 22, height: 22, borderRadius: 5, background: 'linear-gradient(135deg, #3A68FF, #6B8FFF)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    </div>
+                    <img
+                        src="logo.png"
+                        alt="logo"
+                        style={{ width: 22, height: 22, display: 'block', objectFit: 'contain' }}
+                    />
                     {editingCanvasName ? (
                         <input
                             autoFocus
@@ -1100,7 +1102,7 @@ animate();
                             <div style={{ position: 'absolute', top: -28, left: 0, fontSize: 11, color: '#737373', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 4 }}>
                                 <span>{page.name}</span>
                                 <div
-                                    style={{ width: 18, height: 18, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: page.isPlaying ? '#3A68FF' : '#737373', background: page.isPlaying ? 'rgba(58,104,255,0.15)' : 'transparent', transition: 'all 0.15s' }}
+                                    style={{ width: 18, height: 18, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: page.isPlaying ? '#FA5A0A' : '#737373', background: page.isPlaying ? 'rgba(250,90,10,0.15)' : 'transparent', transition: 'all 0.15s' }}
                                     onMouseDown={(e) => { e.stopPropagation(); togglePagePlay(page.id); }}
                                 >
                                     {page.isPlaying ? (
@@ -1139,10 +1141,10 @@ animate();
 
                 {pages.length === 0 && !isDrawing && (
                     <div className="empty-canvas">
-                        <div style={{ fontSize: 48, marginBottom: 16, opacity: 0.2 }}>⊞</div>
+                        <div style={{ fontSize: 48, marginBottom: 16, opacity: 0.2 }}>&#x22DE;</div>
                         <div style={{ fontSize: 14, marginBottom: 8 }}>点击下方 + 新建页面</div>
                         <div style={{ fontSize: 12, color: '#404040' }}>
-                            F 新建 · V 移动 · Space 播放 · 双指缩放/平移
+                            F 新建 &#183; V 移动 &#183; Space 播放 &#183; 双指缩放/平移
                         </div>
                     </div>
                 )}
@@ -1184,7 +1186,7 @@ animate();
                                     style={{
                                         flex: 1, padding: '10px 0', border: 'none', background: 'transparent',
                                         color: rightTab === tab ? '#e5e5e5' : '#525252', fontSize: 12, fontWeight: 500,
-                                        cursor: 'pointer', borderBottom: rightTab === tab ? '2px solid #3A68FF' : '2px solid transparent',
+                                        cursor: 'pointer', borderBottom: rightTab === tab ? '2px solid #FA5A0A' : '2px solid transparent',
                                         transition: 'all 0.15s', fontFamily: 'inherit'
                                     }}
                                 >
@@ -1282,7 +1284,7 @@ animate();
                                             <DragInput value={config.cornerRadius} min={0} max={100} onChange={v => updatePageConfig({ ...config, cornerRadius: v })} className="input-field" />
                                         </div>
                                         <div>
-                                            <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>旋转 (°)</div>
+                                            <div style={{ fontSize: 10, color: '#525252', marginBottom: 4 }}>旋转 (&#176;)</div>
                                             <DragInput value={config.rotation} min={0} max={360} onChange={v => updatePageConfig({ ...config, rotation: v })} className="input-field" />
                                         </div>
                                     </div>
@@ -1460,7 +1462,7 @@ animate();
                                                 className="preset-tag"
                                                 style={{ background: '#111', borderStyle: 'dashed' }}
                                                 onClick={() => { applyPreset(preset); }}
-                                                title={`${CN[preset.layout] || preset.layout} · ${CN[preset.pattern] || preset.pattern}`}
+                                                title={`${CN[preset.layout] || preset.layout} &#183; ${CN[preset.pattern] || preset.pattern}`}
                                             >{preset.name}</button>
                                         ))}
                                     </div>
@@ -1572,7 +1574,7 @@ animate();
                             </div>
                         </div>
                         <div style={{ padding: 40, textAlign: 'center', color: '#525252' }}>
-                            <div style={{ fontSize: 40, marginBottom: 16 }}>◻</div>
+                            <div style={{ fontSize: 40, marginBottom: 16 }}>&#x25FB;</div>
                             <div style={{ fontSize: 13, marginBottom: 8 }}>选择一个页面开始编辑</div>
                             <div style={{ fontSize: 11 }}>或在画布上绘制新形状</div>
                         </div>
