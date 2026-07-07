@@ -286,6 +286,59 @@ These out-of-scope tracks may be mentioned only briefly if needed to explain why
 - If a capability cannot be verified through public pages or available access, write "to verify" instead of assuming.
 - For financing and company ownership, use public records and clearly label dates.
 - For pricing, use current official pricing pages when available; if pricing is sales-led or unavailable, mark "not publicly disclosed".
+- Product feature clues must not be upgraded into stronger claims without evidence. For example, a content generation module or optimization workflow does not prove that a product has a real Agent.
+
+## Module Verification Workflow
+
+Every report module must follow a verification-first workflow before it is written into the Feishu document.
+
+1. Define the module question.
+   - Example: for the Agent module, the question is not "does the product mention AI", but whether it has an Agent entry, context, tool calling, task state, and closed-loop execution.
+
+2. Collect evidence for each product.
+   Evidence priority:
+   - Product hands-on screenshots.
+   - Official website or product page.
+   - Official documentation or help center.
+   - Official pricing page.
+   - Company announcement, listed company disclosure, or credible financing database.
+   - Credible media report.
+   - Third-party review or industry article as supporting context only.
+
+3. Assign a verification status to every claim.
+
+   | Status | Meaning | Writing Rule |
+   |---|---|---|
+   | Verified | Direct evidence confirms the claim | Can be written as a factual statement with source or screenshot ID |
+   | Partially verified | Evidence shows related capability but not the full claim | Write the narrower confirmed claim and state what remains unverified |
+   | To verify | Public or available access is insufficient | Do not use as a main conclusion |
+   | Not found | No evidence found in checked sources | Write "not found in checked sources", not "does not exist" unless exhaustively verified |
+   | Inference | Reasoned hypothesis from weak signals | Keep out of main conclusions; use only as a question for follow-up validation |
+
+4. Write a module-level evidence table before finalizing conclusions.
+
+   Required columns:
+   - Module.
+   - Product.
+   - Claim.
+   - Evidence ID or source link.
+   - Verification status.
+   - Risk / caveat.
+   - Report wording.
+
+5. Run a claim-evidence consistency check.
+   Before finalizing each module, check:
+   - Which statements are confirmed facts?
+   - Which statements are only capability signals?
+   - Which statements require login, sales consultation, or customer proof?
+   - Did any feature module get mislabeled as an Agent?
+   - Did any third-party article get treated as official evidence?
+
+6. Use conservative wording.
+   - If evidence shows a workflow but no Agent entry, write "workflow capability" or "Agent-like workflow to verify".
+   - If evidence shows a report but no task state, do not write "execution Agent".
+   - If evidence shows monitored platforms but not the product's own generation model, separate "monitored AI platforms" from "underlying model used by the product".
+   - If a financing or pricing claim is not publicly disclosed, write "not publicly disclosed" instead of guessing.
 
 ## Final Feishu Writing Style
 
