@@ -1,0 +1,240 @@
+<title>AlphaRank AIGC/GEO 内容优化 Agent 竞品分析</title>
+
+<h1>一、结论摘要</h1>
+<p>本报告聚焦 AlphaRank 在国内 AIGC 生文、GEO、AI 搜索可见度、文本内容优化与 Agent 执行方向的产品机会。当前阶段，AlphaRank 不应被定位为泛 AI 写作工具，而应定位为“国内 AI 搜索可见度监测 + 内容优化 + Agent 执行闭环”的项目化工作台。</p>
+<p>核心判断是：AIDSO 已经把国内 GEO 的免费入口、实时搜索、引用来源和内容优化流程讲得很强；ImpetaAI 更像品牌 GEO 数据监测与 ToB 报告型产品；Profound 代表海外企业级 AI Visibility / AEO 平台，并且已明确提出 Agents、Agent Builder、闭环优化和规模化内容生产。AlphaRank 的机会不是平均追赶所有功能，而是把“诊断结果”继续推进到“策略、任务、内容、复盘”的可执行闭环。</p>
+<table>
+  <thead><tr><th>判断项</th><th>结论</th><th>证据</th><th>AlphaRank 启发</th></tr></thead>
+  <tbody>
+    <tr><td>最直接国内对标</td><td>AIDSO GEO</td><td>AIDSO-SRC-001；AIDSO-IMG-001 至 AIDSO-IMG-005</td><td>学习免费诊断入口、国内 AI 平台覆盖表达、引用来源榜和内容优化流程，但不要照抄其较重的信息堆叠。</td></tr>
+    <tr><td>品牌监测型对标</td><td>ImpetaAI</td><td>IMP-SRC-001；IMP-IMG-001 至 IMP-IMG-004</td><td>学习品牌可见性、AI 认知、竞品对比、Prompts 生成、诊断报告和价格包装。</td></tr>
+    <tr><td>海外企业级标杆</td><td>Profound</td><td>PRO-SRC-001 至 PRO-SRC-009；PRO-IMG-001 至 PRO-IMG-007</td><td>学习 AI Visibility 指标体系、Share of Voice、Answer Engine Insights、Agent Builder、闭环优化和企业级套餐表达。</td></tr>
+    <tr><td>Agent 判断</td><td>Profound 可标为“明确 Agent”；AIDSO 与 ImpetaAI 目前只能保守标为工作流或相关功能模块</td><td>PRO-SRC-009；AIDSO-SRC-001；IMP-SRC-001</td><td>AlphaRank 若要打 Agent 差异化，需要证明能读项目数据、生成策略、拆任务、调工具并复盘效果。</td></tr>
+  </tbody>
+</table>
+
+<h1>二、分析目标与范围</h1>
+<p>本次竞品分析服务于 AlphaRank 的产品定位与下一阶段能力建设，核心不是泛 AIGC 六大领域扫描，而是聚焦文本内容优化、GEO、AI Search Visibility 与国内 Agent 工作流。</p>
+<table>
+  <thead><tr><th>范围</th><th>纳入方式</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>AIGC 生文</td><td>重点纳入</td><td>作为内容优化执行 Agent 的产出能力，重点看官网页、FAQ、案例页、对比页和社媒文案。</td></tr>
+    <tr><td>GEO / AI Search Visibility</td><td>重点纳入</td><td>作为核心赛道，重点看监测、诊断、排名、提及、引用、情感、报告。</td></tr>
+    <tr><td>AI SEO / AEO</td><td>纳入相邻概念</td><td>用于理解 Profound、Writesonic 等海外产品的包装方式和指标体系。</td></tr>
+    <tr><td>国内 Agent</td><td>重点纳入</td><td>重点拆数据分析师 Agent、品牌策略师 Agent、内容优化执行 Agent 三类能力。</td></tr>
+    <tr><td>图片、视频、数字人、3D</td><td>不作为主线</td><td>仅作为不优先进入方向的背景，不进入深拆矩阵。</td></tr>
+  </tbody>
+</table>
+
+<h1>三、竞品选择理由与分层</h1>
+<table>
+  <thead><tr><th>层级</th><th>产品</th><th>为什么选</th><th>处理方式</th></tr></thead>
+  <tbody>
+    <tr><td>我方基线</td><td>AlphaRank</td><td>用户提供为我方产品方向，当前已验证 GEO 诊断入口和诊断记录。</td><td>完整拆解，作为所有矩阵的对照组。</td></tr>
+    <tr><td>国内直接竞品</td><td>AIDSO GEO</td><td>公开页已验证实时搜索、品牌诊断、排行榜、引用来源、知识库、内容生成和发布监控流程。</td><td>深度拆解。</td></tr>
+    <tr><td>国内直接/准直接竞品</td><td>ImpetaAI</td><td>官网定位为品牌 GEO 数据监测平台，公开展示监测、AI 分析、Prompts、竞品对比、诊断、优化监测和价格。</td><td>深度拆解。</td></tr>
+    <tr><td>海外标杆</td><td>Profound</td><td>官方页面验证其覆盖 Answer Engine Insights、Agent Analytics、Agents、Pricing 和公司融资信息。</td><td>深度拆解。</td></tr>
+    <tr><td>轻扫参考</td><td>Writesonic、Otterly.AI、透镜 GEO、搜极星</td><td>用于补充内容生成、AI 搜索监测和国内 GEO 工具形态。</td><td>后续轻扫，不作为当前深拆主线。</td></tr>
+  </tbody>
+</table>
+
+<h1>四、赛道判断</h1>
+<p>GEO 正在从 SEO 的附属概念变成独立产品问题。用户不只关心“网页在搜索引擎中排第几”，而是关心“AI 回答推荐谁、引用谁、为什么推荐竞品、如何让品牌成为 AI 的可信答案”。这使得 GEO 工具需要同时具备数据监测、问题库、引用源分析、内容优化和报告复盘能力。</p>
+<table>
+  <thead><tr><th>概念</th><th>核心问题</th><th>典型产品能力</th><th>对 AlphaRank 的意义</th></tr></thead>
+  <tbody>
+    <tr><td>GEO</td><td>品牌是否被生成式 AI 推荐、引用和正确描述</td><td>提及率、排名、引用源、问题库、优化建议</td><td>AlphaRank 的核心赛道。</td></tr>
+    <tr><td>AI Search Visibility</td><td>品牌在 AI 搜索和 Answer Engines 中的可见度</td><td>Visibility Score、Share of Voice、Prompt Coverage、Citation Share</td><td>可借鉴 Profound 的企业级指标表达。</td></tr>
+    <tr><td>AIGC 生文</td><td>如何生成适合 AI 引用和用户阅读的内容</td><td>FAQ、文章、案例页、对比页、质检报告</td><td>不能单独做泛写作，应服务 GEO 指标提升。</td></tr>
+    <tr><td>Agent 工作流</td><td>如何把诊断和策略变成可执行任务</td><td>Agent Builder、模板、任务、定时复盘、报告</td><td>是 AlphaRank 和纯监测工具拉开差异的关键。</td></tr>
+  </tbody>
+</table>
+
+<h1>五、用户与购买决策链路</h1>
+<table>
+  <thead><tr><th>用户角色</th><th>核心问题</th><th>愿意付费的触发点</th><th>需要的产品表达</th></tr></thead>
+  <tbody>
+    <tr><td>中小企业老板 / 创始人</td><td>AI 推荐同类产品时有没有我？为什么竞品出现更多？</td><td>看到明确 GEO 得分、竞品差距和行动建议。</td><td>老板版报告、总分、差距摘要、投入效果证明。</td></tr>
+    <tr><td>市场负责人</td><td>品牌在豆包、DeepSeek、百度 AI、Kimi 等平台曝光如何？</td><td>能持续追踪平台表现和优化效果。</td><td>趋势看板、平台对比、报告导出。</td></tr>
+    <tr><td>SEO / GEO 运营</td><td>哪些问题、关键词、引用源和竞品表现需要优化？</td><td>问题库、关键词库、引用源、排名变化足够细。</td><td>监测工作台、筛选、详情页、证据链。</td></tr>
+    <tr><td>内容运营</td><td>应该写什么内容才能被 AI 引用？</td><td>系统能指出内容缺口，并生成可执行草稿。</td><td>内容机会矩阵、FAQ/案例/对比页建议、质检报告。</td></tr>
+    <tr><td>ToB 销售 / 增长团队</td><td>AI 曝光是否带来官网访问和线索？</td><td>能看到引用、访问、咨询或线索归因。</td><td>效果复盘、归因、销售材料。</td></tr>
+  </tbody>
+</table>
+
+<h1>六、公司与商业背景横向表</h1>
+<table>
+  <thead><tr><th>维度</th><th>AlphaRank</th><th>AIDSO GEO</th><th>ImpetaAI</th><th>Profound</th></tr></thead>
+  <tbody>
+    <tr><td>产品角色</td><td>我方基线</td><td>国内增长型 GEO 平台</td><td>国内品牌 GEO 数据监测平台</td><td>海外企业级 AI Visibility / AEO 平台</td></tr>
+    <tr><td>公司主体</td><td>待验证</td><td>杭州爱搜全域数据科技有限公司；需工商源进一步复核</td><td>慧辰股份相关产品；需进一步核验具体产品主体</td><td>Cooper Square Technologies, Inc.，官方 AI Instructions 已验证</td></tr>
+    <tr><td>地区</td><td>中国</td><td>中国</td><td>中国</td><td>美国纽约</td></tr>
+    <tr><td>成立/背景</td><td>待验证</td><td>公开页显示其围绕 DSO/GEO 做搜索助攻全链路营销</td><td>页面标题和官网显示慧辰股份背景</td><td>官方 AI Instructions 显示成立于 2024 年 8 月</td></tr>
+    <tr><td>融资</td><td>待验证</td><td>未在已查官方资料中发现</td><td>产品融资未公开；上市公司背景需另查</td><td>A 轮 2000 万美元、B 轮 3500 万美元为官方博客验证；C 轮 9600 万美元为 Fortune 报道</td></tr>
+    <tr><td>商业模式</td><td>待验证</td><td>公开页展示登录/注册、诊断、API、合作咨询等</td><td>公开价格表：免费版、高级版、专业版、企业版</td><td>Starter、Growth、Enterprise，按 prompts、Answer Engines、支持和企业能力包装</td></tr>
+  </tbody>
+</table>
+
+<h1>七、获客入口与转化路径对比</h1>
+<table>
+  <thead><tr><th>维度</th><th>AlphaRank</th><th>AIDSO</th><th>ImpetaAI</th><th>Profound</th><th>AlphaRank 建议</th></tr></thead>
+  <tbody>
+    <tr><td>首页/入口表达</td><td>当前已验证 GEO 诊断页，非官网首屏</td><td>首屏直接提出“AI 给你的答案，从何而来”，提供实时搜索和品牌诊断</td><td>首屏定位“品牌 GEO 数据监测平台”</td><td>首屏定位 AI Search 品牌可见度，并强调 marketing agents</td><td>需要一个更强的公开诊断入口，把“老板想知道我有没有被 AI 推荐”作为第一屏问题。</td></tr>
+    <tr><td>免费体验</td><td>诊断记录可见，免费策略待验证</td><td>公开页可直接输入问题查看 AI 引用倾向，但登录深度待验证</td><td>公开展示免费版 7 天</td><td>Pricing 页有 Starter/Growth/Enterprise 和 Get Started / Get Demo</td><td>建议做“免费品牌体检 + 老板版摘要 + 升级项目监测”的转化路径。</td></tr>
+    <tr><td>转化触点</td><td>下载报告、查看结果等入口可见</td><td>登录/注册、立即诊断、合作咨询、API 服务</td><td>立即开始、免费试用、立即开通、联系销售</td><td>Get a Demo、Get Started、Try for free</td><td>应把诊断后的“竞品差距、内容缺口、Agent 可执行任务”设计成付费触发点。</td></tr>
+  </tbody>
+</table>
+
+<h1>八、操作逻辑图 / 用户链路图</h1>
+<p>以下链路图是基于已验证公开页面和用户提供的 AlphaRank 产品说明整理。未验证的深层功能不写成事实。</p>
+<pre lang="mermaid"><code>flowchart LR
+  A["AlphaRank: 新建品牌项目"] --> B["填写品牌、官网、竞品、关键词"]
+  B --> C["生成问题库 / 关键词库 / 场景库"]
+  C --> D["多 AI 平台监测"]
+  D --> E["提及率、排名、引用源、情感、趋势"]
+  E --> F["内容机会与竞品差距"]
+  F --> G["Agent 报告 / 任务 / 内容建议"]
+  G --> H["复盘优化前后变化"]</code></pre>
+<pre lang="mermaid"><code>flowchart LR
+  A["AIDSO: 实时搜索 / 品牌诊断"] --> B["查看 AI 答案与引用来源"]
+  B --> C["品牌诊断报告 / 排行榜"]
+  C --> D["品牌知识库"]
+  D --> E["用户意图分析 / 拓展 AI 问题"]
+  E --> F["GEO 内容生成"]
+  F --> G["发布与监控"]</code></pre>
+<pre lang="mermaid"><code>flowchart LR
+  A["ImpetaAI: 品牌 GEO 监测"] --> B["Prompts / 模型 / 竞品配置"]
+  B --> C["可见性、认知度、影响力分析"]
+  C --> D["AI 智能分析 / 情感倾向 / 竞品对比"]
+  D --> E["智能诊断 / 信源诊断"]
+  E --> F["优化建议 / 报告 / 效果监测"]</code></pre>
+<pre lang="mermaid"><code>flowchart LR
+  A["Profound: Answer Engine Insights"] --> B["Prompts / Topics / Competitors"]
+  B --> C["Visibility / Share of Voice / Sentiment / Citations"]
+  C --> D["Agent Analytics"]
+  D --> E["Agents / Agent Builder / Templates"]
+  E --> F["Content workflows / closed-loop optimization"]</code></pre>
+
+<h1>九、核心功能矩阵</h1>
+<table>
+  <thead><tr><th>功能维度</th><th>AlphaRank</th><th>AIDSO</th><th>ImpetaAI</th><th>Profound</th><th>最佳参考</th><th>AlphaRank 建议</th></tr></thead>
+  <tbody>
+    <tr><td>品牌诊断入口</td><td>已验证品牌诊断/网页诊断入口</td><td>已验证实时搜索和品牌诊断</td><td>已验证立即开始和监测入口</td><td>偏平台/报告/Demo 入口</td><td>AIDSO</td><td>公开页做更低门槛的免费品牌诊断。</td></tr>
+    <tr><td>AI 平台覆盖</td><td>用户说明覆盖国内主流平台；当前页未完整验证</td><td>已验证豆包、DeepSeek、元宝、千问、百度 AI、文心、Kimi、AI 抖音等监测对象</td><td>已验证称覆盖 6+ 主流 AI 模型</td><td>已验证 tracking Answer Engines，部分页面提及 ChatGPT、Gemini、Claude、Perplexity</td><td>AIDSO + Profound</td><td>区分国内平台、端侧、网页/移动端，并明确监测平台不等于底层模型。</td></tr>
+    <tr><td>引用来源分析</td><td>已验证引用来源数量；详情页待补</td><td>已验证 GEO 引用来源倾向</td><td>已验证引用来源分析/信源诊断文案</td><td>已验证 citation 分析和 cited pages</td><td>Profound + AIDSO</td><td>将引用源变成内容机会和信源建设建议。</td></tr>
+    <tr><td>竞品对比</td><td>用户说明中有同类品牌分析；当前截图待补</td><td>排行榜可间接对比品牌</td><td>已验证竞品对比、AI 认知份额、排名变化</td><td>已验证 competitors / Share of Voice 相关能力</td><td>ImpetaAI + Profound</td><td>做“竞品为什么被推荐”的归因，不只列排名。</td></tr>
+    <tr><td>内容优化执行</td><td>用户说明中有营销 Agent 和任务体系；截图待补</td><td>已验证 GEO 内容生成、发布与监控流程文案</td><td>偏优化建议和服务，内容执行不明显</td><td>已验证 Agents、AEO FAQ、Content Refresh、闭环优化</td><td>Profound</td><td>用 Agent 将内容机会拆成任务、草稿、质检和复盘。</td></tr>
+    <tr><td>Agent 能力</td><td>待验证</td><td>Agent-like 工作流，未验证独立 Agent</td><td>相关功能模块，未验证独立 Agent</td><td>明确 Agent</td><td>Profound</td><td>不要只命名 Agent，要证明入口、上下文、工具、任务、闭环。</td></tr>
+  </tbody>
+</table>
+
+<h1>十、指标体系与数据可信度对比</h1>
+<table>
+  <thead><tr><th>指标/数据维度</th><th>AlphaRank</th><th>AIDSO</th><th>ImpetaAI</th><th>Profound</th><th>AlphaRank 建议</th></tr></thead>
+  <tbody>
+    <tr><td>综合分</td><td>GEO 综合得分已验证</td><td>品牌得分已验证</td><td>AI 认知指数等案例指标已验证</td><td>Visibility Score 已验证</td><td>综合分必须可解释，避免黑箱。</td></tr>
+    <tr><td>提及/可见度</td><td>品牌提及率已验证</td><td>品牌提及率、提及次数已验证</td><td>品牌可见性、认知度已验证</td><td>Visibility / Share of Voice 已验证</td><td>老板看总分，运营看问题级明细。</td></tr>
+    <tr><td>排名</td><td>平均提及排名已验证</td><td>平均提及排名已验证</td><td>排名变化已验证</td><td>竞争基准能力已验证</td><td>将排名变化和问题意图、引用源绑定。</td></tr>
+    <tr><td>引用</td><td>引用率和引用来源数量已验证；详情待补</td><td>引用来源倾向已验证</td><td>引用来源分析/信源诊断已验证</td><td>Citations / Content performance 已验证</td><td>将“被引用”转为“该补哪些信源和页面”。</td></tr>
+    <tr><td>数据可信度</td><td>采集方法待补</td><td>公开声称端侧真实数据、APP 数据、电商数据；需深层验证</td><td>公开展示覆盖模型、Prompts、每日更新等套餐限制</td><td>公开展示 tracked prompts/answer engines，具体采集方法未完全公开</td><td>报告中必须区分已验证、部分验证、待验证。</td></tr>
+  </tbody>
+</table>
+
+<h1>十一、关键页面截图证据</h1>
+<table>
+  <thead><tr><th>证据编号</th><th>产品</th><th>页面/模块</th><th>证明点</th><th>本地截图文件</th></tr></thead>
+  <tbody>
+    <tr><td>AR-IMG-001</td><td>AlphaRank</td><td>GEO 诊断入口</td><td>品牌诊断与网页诊断入口</td><td>evidence/screenshots/AR-IMG-001-geo-diagnosis-entry.png</td></tr>
+    <tr><td>AR-IMG-002</td><td>AlphaRank</td><td>诊断记录</td><td>GEO 得分、提及率、平均排名、引用率、引用来源数</td><td>evidence/screenshots/AR-IMG-002-diagnosis-record.png</td></tr>
+    <tr><td>AIDSO-IMG-001</td><td>AIDSO</td><td>首页入口</td><td>实时搜索、品牌诊断和平台覆盖</td><td>evidence/screenshots/AIDSO-IMG-001-home-entry.png</td></tr>
+    <tr><td>AIDSO-IMG-002</td><td>AIDSO</td><td>品牌排行榜</td><td>提及率、提及次数、平均排名、情感、品牌得分</td><td>evidence/screenshots/AIDSO-IMG-002-brand-ranking.png</td></tr>
+    <tr><td>AIDSO-IMG-003</td><td>AIDSO</td><td>引用来源倾向</td><td>AI 引用媒体来源和引用率</td><td>evidence/screenshots/AIDSO-IMG-003-citation-sources.png</td></tr>
+    <tr><td>AIDSO-IMG-004</td><td>AIDSO</td><td>GEO 优化流程</td><td>诊断、知识库、情报、意图、问题、内容、发布监控流程</td><td>evidence/screenshots/AIDSO-IMG-004-geo-workflow.png</td></tr>
+    <tr><td>IMP-IMG-001</td><td>ImpetaAI</td><td>定位页</td><td>品牌 GEO 数据监测平台定位</td><td>evidence/screenshots/IMP-IMG-001-positioning.png</td></tr>
+    <tr><td>IMP-IMG-002</td><td>ImpetaAI</td><td>产品优势</td><td>监测、AI 分析、Prompts、竞品对比、诊断、优化监测</td><td>evidence/screenshots/IMP-IMG-002-product-advantages.png</td></tr>
+    <tr><td>IMP-IMG-004</td><td>ImpetaAI</td><td>价格</td><td>免费版、高级版、专业版、企业版</td><td>evidence/screenshots/IMP-IMG-004-pricing.png</td></tr>
+    <tr><td>PRO-IMG-003</td><td>Profound</td><td>Agents</td><td>Agent Builder、模板、闭环优化、内容生产</td><td>evidence/screenshots/PRO-IMG-003-agents-page.png</td></tr>
+    <tr><td>PRO-IMG-004</td><td>Profound</td><td>Answer Engine Insights</td><td>可见度、AI 回答、引用、情感、Share of Voice</td><td>evidence/screenshots/PRO-IMG-004-answer-engine-insights.png</td></tr>
+    <tr><td>PRO-IMG-006</td><td>Profound</td><td>Pricing</td><td>Starter、Growth、Enterprise 套餐</td><td>evidence/screenshots/PRO-IMG-006-pricing-agents.png</td></tr>
+  </tbody>
+</table>
+
+<h1>十二、优劣势与可借鉴矩阵</h1>
+<table>
+  <thead><tr><th>维度</th><th>AlphaRank</th><th>AIDSO</th><th>ImpetaAI</th><th>Profound</th></tr></thead>
+  <tbody>
+    <tr><td>做得好的地方</td><td>已有 GEO 诊断入口、记录和用户说明中的 Agent/任务体系基础</td><td>首页价值表达直接，平台覆盖、排行榜、引用来源和优化流程完整</td><td>品牌监测、AI 分析、Prompts、竞品对比、价格包装清晰</td><td>企业级指标、Answer Engine Insights、Agent Builder、Pricing、融资和定位都很成熟</td></tr>
+    <tr><td>做得不好的地方 / 风险</td><td>公开获客入口、完整 Agent 证据、价格和公司背景还需补齐</td><td>信息密度高，DSO/GEO/内容/电商/API/游学都在讲，定位可能略散；独立 Agent 未验证</td><td>偏监测和报告，内容执行和 Agent 闭环不明显；案例真实性需进一步核验</td><td>海外语境强，国内平台和中小企业低门槛需求需要本土化；底层模型未公开</td></tr>
+    <tr><td>AlphaRank 可借鉴</td><td>保留项目化监测和任务体系方向</td><td>免费诊断入口、引用来源、问题拓展、内容优化流程</td><td>品牌可见性/认知/影响力表达、价格维度、Prompts 专家模式</td><td>Share of Voice、Agent Builder、闭环优化、企业级报告和套餐包装</td></tr>
+    <tr><td>不建议照抄</td><td>不要做成泛写作工具</td><td>不要把过多概念堆到首页；不要把工作流直接包装成 Agent</td><td>不要只停在监测和报告，缺少执行闭环</td><td>不要一开始做成重型海外企业 SaaS，国内 SMB 需要更直接的诊断和行动</td></tr>
+  </tbody>
+</table>
+
+<h1>十三、定价与商业模式拆解</h1>
+<table>
+  <thead><tr><th>维度</th><th>AlphaRank</th><th>AIDSO</th><th>ImpetaAI</th><th>Profound</th><th>AlphaRank 建议</th></tr></thead>
+  <tbody>
+    <tr><td>免费入口</td><td>待验证</td><td>公开页强引导实时搜索/品牌诊断</td><td>免费版 7 天</td><td>Get Started / Try for free / Get Demo</td><td>设置免费品牌体检作为获客入口。</td></tr>
+    <tr><td>套餐限制</td><td>待验证</td><td>未看到完整价格表</td><td>按账号、大模型、项目、提示词、报告数量、数据更新频率</td><td>按 prompts、Answer Engines、公司数、支持、安全能力</td><td>建议按品牌数、问题数、平台数、报告数、Agent 执行次数包装。</td></tr>
+    <tr><td>企业版</td><td>待验证</td><td>合作咨询/API 服务</td><td>企业版联系销售</td><td>Enterprise Custom，含 SSO/SAML、SOC2、Slack 支持等</td><td>企业版强调数据可信度、报告、团队协作、API 和私有化/合规。</td></tr>
+  </tbody>
+</table>
+
+<h1>十四、Agent 能力细拆</h1>
+<p>本报告中的三个 Agent 是 AlphaRank 目标产品形态下的能力原型，不代表所有竞品都有这些独立 Agent。判断竞品时以“证据链路”为准：有功能模块不等于有 Agent，有多步骤工作流也不一定等于有 Agent。</p>
+<table>
+  <thead><tr><th>产品</th><th>品牌数据分析师 Agent</th><th>品牌策略师 Agent</th><th>内容优化执行 Agent</th><th>保守判断</th></tr></thead>
+  <tbody>
+    <tr><td>AlphaRank</td><td>相关功能模块 / 待验证</td><td>相关功能模块 / 待验证</td><td>相关功能模块 / 待验证</td><td>已验证诊断数据，用户说明有营销 Agent 和任务体系，但需补截图证明完整闭环。</td></tr>
+    <tr><td>AIDSO</td><td>相关功能模块</td><td>Agent-like 工作流</td><td>Agent-like 工作流</td><td>可验证诊断、引用来源、问题拓展、内容创作和发布监控流程；尚不能证明独立 Agent。</td></tr>
+    <tr><td>ImpetaAI</td><td>相关功能模块</td><td>相关功能模块</td><td>未公开 / 待验证</td><td>更偏品牌监测、AI 分析、Prompts、竞品对比、诊断和报告。</td></tr>
+    <tr><td>Profound</td><td>相关功能模块</td><td>明确 Agent</td><td>明确 Agent</td><td>Agents 页面已验证自定义 Agent、Agent Builder、模板、闭环优化和内容生产。</td></tr>
+  </tbody>
+</table>
+
+<h1>十五、Agent 成熟度评估</h1>
+<table>
+  <thead><tr><th>产品</th><th>成熟度判断</th><th>理由</th><th>未验证项</th></tr></thead>
+  <tbody>
+    <tr><td>AlphaRank</td><td>L1-L3 待验证</td><td>用户说明中有营销 Agent、任务体系、定时任务、知识库和工具调用，但当前抓到的页面仅验证 GEO 诊断入口和记录。</td><td>Agent 入口、工具调用、任务状态、复盘闭环截图。</td></tr>
+    <tr><td>AIDSO</td><td>L1-L2 / Agent-like 工作流</td><td>公开页有诊断、内容生成、质检报告、发布与监控流程，但没有验证独立 Agent 入口或任务状态。</td><td>登录后是否有 Agent、任务、定时、工具调用。</td></tr>
+    <tr><td>ImpetaAI</td><td>L1-L2</td><td>公开页有 AI 分析、智能 Prompts、诊断、优化建议和报告，但执行 Agent 证据不足。</td><td>是否支持 Agent 化策略、任务和内容执行。</td></tr>
+    <tr><td>Profound</td><td>L3-L4 公开表达已验证</td><td>Agents 页面验证 Agent Builder、模板、closed-loop optimization、content production at scale。</td><td>底层模型、真实工具调用细节、任务状态数据结构未公开。</td></tr>
+  </tbody>
+</table>
+
+<h1>十六、AlphaRank 差距、机会与风险</h1>
+<table>
+  <thead><tr><th>类别</th><th>内容</th><th>原因</th><th>建议</th></tr></thead>
+  <tbody>
+    <tr><td>必须补齐</td><td>公开免费诊断入口、结果页证据链、竞品差距摘要、引用来源详情</td><td>AIDSO 已经把入口和引用源心智打出来，ImpetaAI 也有监测和报告包装。</td><td>P0 补齐诊断转化链路和老板版报告。</td></tr>
+    <tr><td>可以领先</td><td>Agent 任务闭环</td><td>国内竞品公开证据更多是功能或工作流，Profound 的 Agent 形态值得学习但需本土化。</td><td>将数据分析师、品牌策略师、内容执行 Agent 串成闭环。</td></tr>
+    <tr><td>暂不追</td><td>泛 AI 写作、过度复杂的电商/DSO 全域扩张</td><td>容易稀释 AlphaRank 的 GEO 项目化定位。</td><td>内容生成只服务 GEO 指标和引用友好内容。</td></tr>
+    <tr><td>长期壁垒</td><td>国内 AI 平台监测数据、问题库、行业模板、引用源知识库、复盘数据</td><td>真正壁垒不是单次生成，而是持续监测和优化闭环。</td><td>沉淀行业问题库和内容效果数据。</td></tr>
+  </tbody>
+</table>
+
+<h1>十七、AlphaRank 下一阶段产品优先级</h1>
+<table>
+  <thead><tr><th>优先级</th><th>能力</th><th>用户价值</th><th>对标来源</th><th>验收标准</th></tr></thead>
+  <tbody>
+    <tr><td>P0</td><td>老板版 GEO 诊断报告</td><td>让老板快速看懂是否被 AI 推荐、输给谁、该做什么</td><td>AIDSO 诊断入口；ImpetaAI 报告包装；Profound 可见度指标</td><td>每次诊断输出总分、竞品差距、引用来源、3 条行动建议和可下载报告。</td></tr>
+    <tr><td>P0</td><td>引用来源与内容机会联动</td><td>让运营知道补哪些页面和信源</td><td>AIDSO 引用来源；Profound citations</td><td>每个高价值问题能看到引用源、竞品页面、自身内容缺口和建议内容类型。</td></tr>
+    <tr><td>P1</td><td>品牌策略师 Agent</td><td>把诊断转成策略优先级</td><td>Profound Agents；ImpetaAI Prompts/竞品对比</td><td>基于问题库、竞品和引用源生成内容机会矩阵与阶段性策略。</td></tr>
+    <tr><td>P1</td><td>内容优化执行 Agent</td><td>把策略转成任务和草稿</td><td>Profound Agent Builder；AIDSO 内容生成流程</td><td>能生成 FAQ、案例页、对比页、官网页建议，并自动生成复盘任务。</td></tr>
+    <tr><td>P2</td><td>团队协作与销售化报告</td><td>服务代理商、市场团队和 ToB 销售</td><td>Profound Enterprise；ImpetaAI 企业版</td><td>支持项目分享、报告导出、任务负责人、周期复盘。</td></tr>
+  </tbody>
+</table>
+
+<h1>十八、附录：资料来源与验证状态</h1>
+<p>本报告使用“已验证、部分验证、待验证、未公开、未在已查资料中发现”五类状态。未看到证据的内容不会写成事实；功能模块不会被直接升级为 Agent。</p>
+<table>
+  <thead><tr><th>证据类型</th><th>可信等级</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>产品实测截图 / 官网 / 官方文档 / 官方价格页</td><td>A</td><td>可支持直接事实判断。</td></tr>
+    <tr><td>官方公告 / 上市公司披露 / 融资数据库 / 可信媒体</td><td>B</td><td>可支持公司背景和融资判断，需标注来源。</td></tr>
+    <tr><td>第三方测评 / 博客 / 社媒</td><td>C</td><td>只能做辅助背景，不作为关键结论。</td></tr>
+    <tr><td>推测</td><td>D</td><td>不进入主结论，只作为待验证问题。</td></tr>
+  </tbody>
+</table>
+<p>当前待补验证项：AlphaRank 更深层结果页、AI 可见度、引用来源详情、同类品牌分析、营销 Agent 任务体系；AIDSO 登录后是否有独立 Agent、任务状态和定时执行；ImpetaAI 登录后是否有 Agent 化策略/执行；Profound 底层模型与后端工具调用细节。</p>
