@@ -203,7 +203,27 @@ These out-of-scope tracks may be mentioned only briefly if needed to explain why
     - Service / consulting packaging.
     - Whether pricing supports SMB, agency, or enterprise customers.
 
-14. Agent Maturity Assessment
+14. Agent Capability Breakdown
+    Each deep-dive product must include a structured Agent analysis, not just a maturity score. The goal is to determine whether the product is only using "Agent" as marketing language or actually supports executable workflows.
+
+    Required Agent dimensions:
+
+    - Agent entry: where the user enters the Agent experience.
+    - Agent role: analyst, strategist, content writer, report generator, task executor, or mixed role.
+    - Trigger method: manual chat, template command, scheduled task, workflow automation, or event-based trigger.
+    - Input context: brand project, question library, keywords, competitors, website pages, uploaded knowledge, historical monitoring data.
+    - Tool calling: whether the Agent can call diagnosis, monitoring, content generation, report, export, or external tools.
+    - Output type: insight, report, task, content draft, optimization roadmap, dashboard explanation, or alert.
+    - Task system: whether the Agent can create, assign, track, and rerun tasks.
+    - Knowledge system: personal knowledge, project knowledge, brand knowledge base, competitor knowledge, or document upload.
+    - Scheduling and recurrence: whether the Agent supports timed monitoring, recurring reports, or periodic optimization.
+    - Human collaboration: approvals, comments, handoff to team members, sales/customer report handoff.
+    - Closed-loop ability: whether the Agent connects diagnosis, recommendation, execution, monitoring, and review.
+    - Evidence: screenshot ID, official source, or "to verify" label.
+
+    Horizontal table columns should include AlphaRank, AIDSO, ImpetaAI, and Profound, plus "best reference" and "AlphaRank recommendation".
+
+15. Agent Maturity Assessment
     Evaluate each product using these levels:
 
     | Level | Meaning |
@@ -214,14 +234,14 @@ These out-of-scope tracks may be mentioned only briefly if needed to explain why
     | L3 | Creates tasks and runs scheduled workflows |
     | L4 | Connects multiple tools and continuously optimizes outcomes |
 
-15. AlphaRank Gap, Opportunity, and Risk Analysis
+16. AlphaRank Gap, Opportunity, and Risk Analysis
     - Must-fill gaps.
     - Potential leading advantages.
     - Deferred features.
     - Long-term moats.
     - Risks and non-goals.
 
-16. AlphaRank Next-Stage Product Priorities
+17. AlphaRank Next-Stage Product Priorities
     This is not a detailed engineering plan. It is a product priority recommendation section.
 
     Required table columns:
@@ -234,7 +254,7 @@ These out-of-scope tracks may be mentioned only briefly if needed to explain why
     - Commercial value.
     - Acceptance criteria.
 
-17. Appendix
+18. Appendix
     - Source list.
     - Source confidence grading.
     - Screenshot evidence library.
