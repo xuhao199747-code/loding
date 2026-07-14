@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b1020" />
     <title>Canvas AI · 批量生成工作台</title>
+    <script id="dev-entry" type="module" src="/src/main.tsx"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if (location.protocol === 'file:') {
+        document.getElementById('dev-entry')?.remove()
+        const script = document.createElement('script')
+        script.src = './dist/assets/app.js'
+        document.body.appendChild(script)
+      }
+    </script>
   </body>
 </html>
