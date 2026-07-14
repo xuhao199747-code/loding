@@ -1,0 +1,44 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #f3f6ff;
+  background: #080b14;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 1180px; min-height: 100vh; background: #080b14; }
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+.app-shell { min-height: 100vh; background: radial-gradient(circle at 80% -20%, rgba(74, 89, 183, .19), transparent 34rem), #080b14; }
+.topbar { height: 68px; display: flex; align-items: center; gap: 20px; padding: 0 24px; border-bottom: 1px solid #1b2336; background: rgba(11, 16, 30, .88); backdrop-filter: blur(22px); }
+.brand-lockup { display: flex; align-items: center; gap: 11px; min-width: 220px; }
+.brand-mark { width: 34px; height: 34px; display: grid; place-items: center; color: white; border-radius: 11px; background: linear-gradient(145deg, #7c6cff, #36c9e8); box-shadow: 0 0 24px rgba(96, 118, 255, .32); }
+.brand-name { font-size: 14px; font-weight: 760; letter-spacing: .01em; }
+.brand-subtitle { margin-top: 1px; color: #7d8aa5; font-size: 11px; }
+.mode-tabs { display: flex; gap: 4px; padding: 4px; border: 1px solid #1d2840; border-radius: 12px; background: #0e1423; }
+.mode-tab { display: inline-flex; align-items: center; gap: 7px; padding: 8px 18px; border: 0; border-radius: 8px; color: #7e8ba7; background: transparent; font-size: 12px; font-weight: 700; }
+.mode-tab.active { color: white; background: linear-gradient(120deg, #655fe9, #3c9be9); box-shadow: 0 6px 18px rgba(72, 104, 241, .2); }
+.topbar-spacer { flex: 1; }
+.run-status, .balance-pill { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 11px; color: #9ba8c3; border: 1px solid #1b2740; border-radius: 999px; background: #0d1423; font-size: 11px; font-weight: 650; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: #50dfab; box-shadow: 0 0 12px #50dfab; }
+.balance-pill { color: #83d9f2; }
+.icon-button { width: 32px; height: 32px; display: grid; place-items: center; color: #95a3c0; border: 1px solid #1b2740; border-radius: 9px; background: #0d1423; }
+.workspace { display: grid; grid-template-columns: 392px minmax(0, 1fr); min-height: calc(100vh - 68px); }
+.config-panel { border-right: 1px solid #1b2336; background: linear-gradient(180deg, rgba(13, 18, 31, .96), rgba(9, 13, 24, .92)); }
+.panel-placeholder { padding: 32px 25px; }
+.placeholder-icon { width: 40px; height: 40px; display: grid; place-items: center; color: #7d8bff; border: 1px solid #29325a; border-radius: 12px; background: rgba(90, 94, 221, .12); }
+.panel-placeholder h1 { margin: 18px 0 8px; font-size: 18px; letter-spacing: -.02em; }
+.panel-placeholder p { max-width: 260px; margin: 0; color: #72809d; font-size: 12px; line-height: 1.7; }
+.queue-panel { min-width: 0; background: radial-gradient(circle at 58% 15%, rgba(59, 94, 173, .08), transparent 32rem); }
+.queue-header { display: flex; align-items: center; justify-content: space-between; padding: 28px 32px 20px; border-bottom: 1px solid #171f31; }
+.eyebrow { color: #607192; font-size: 10px; font-weight: 800; letter-spacing: .16em; }
+.queue-header h2 { margin: 7px 0 0; font-size: 24px; letter-spacing: -.04em; }
+.queue-metrics { display: flex; gap: 18px; color: #71809d; font-size: 11px; }
+.queue-metrics b { margin-left: 4px; color: #dbe6ff; font-size: 13px; }
+.queue-empty { display: grid; justify-items: center; padding-top: 19vh; color: #73809b; text-align: center; }
+.empty-orbit { width: 62px; height: 62px; display: grid; place-items: center; color: #9c91ff; border: 1px solid #32366b; border-radius: 22px; background: radial-gradient(circle, rgba(103, 94, 235, .2), rgba(20, 24, 49, .16)); box-shadow: 0 0 60px rgba(90, 88, 220, .15); }
+.queue-empty h3 { margin: 18px 0 7px; color: #dbe2f8; font-size: 16px; }
+.queue-empty p { margin: 0; font-size: 12px; }
+
+@media (min-width: 1600px) { .workspace { grid-template-columns: 424px minmax(0, 1fr); } }
