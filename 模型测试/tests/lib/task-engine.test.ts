@@ -1,7 +1,7 @@
 import { expect, it, vi } from 'vitest'
 import { getModels } from '../../src/data/models'
 import { createDefaultPersistedState } from '../../src/lib/storage'
-import { createApiClient, createOfflineTasks, normalizeApiError } from '../../src/lib/task-engine'
+import { createApiClient, createOfflineTasks, normalizeApiError, runApiTask } from '../../src/lib/task-engine'
 
 const draft = createDefaultPersistedState().drafts.image
 
@@ -23,4 +23,19 @@ it('uses APImart image endpoint for API tasks', async () => {
   expect(fetchMock).toHaveBeenCalledWith('https://api.example.com/v1/images/generations', expect.objectContaining({ method: 'POST' }))
   expect(tasks[0].id).toBe('task-1')
   fetchMock.mockRestore()
+})
+
+it('polls API tasks until they succeed and can be cancelled', async () => {
+  vi.useFakeTimers()
+  const updates: string[] = []
+  const client = { createTask: vi.fn(), getTask: vi.fn()
+    .mockResolvedValueOnce({ status: 'running', progress: 42 })
+    .mockResolvedValueOnce({ status: 'success', progress: 100, outputUrl: 'https://cdn.example.com/result.png' }) }
+  const task = createOfflineTasks({ prompts: ['猫'], models: getModels('image').slice(0, 1), count: 1, mode: 'image', draft })[0]
+  const stop = runApiTask(task, client, next => updates.push(next.status), 100)
+  await vi.runOnlyPendingTimersAsync()
+  expect(client.getTask).toHaveBeenCalledTimes(2)
+  expect(updates).toEqual(['running', 'success'])
+  stop()
+  vi.useRealTimers()
 })

@@ -13,6 +13,8 @@ export interface ApiClient {
   getTask(taskId: string): Promise<Pick<Task, 'status' | 'progress' | 'outputUrl' | 'error'>>
 }
 
+export type TaskUpdate = (task: Task) => void
+
 const uid = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 
 function createPreview(prompt: string, model: ModelDefinition, mode: Mode) {
@@ -54,6 +56,44 @@ export function runOfflineTask(task: Task, onUpdate: (task: Task) => void) {
     }
   }, 180)
   return () => window.clearInterval(timer)
+}
+
+export function runApiTask(task: Task, client: ApiClient, onUpdate: TaskUpdate, intervalMs = 1200) {
+  const startedAt = Date.now()
+  let stopped = false
+  let timer: number | undefined
+
+  const poll = async () => {
+    if (stopped) return
+    try {
+      const result = await client.getTask(task.id)
+      const elapsedMs = Date.now() - startedAt
+      const nextTask: Task = {
+        ...task,
+        status: result.status,
+        progress: result.status === 'success' || result.status === 'error' ? 100 : Math.max(task.progress, result.progress),
+        elapsedMs,
+        outputUrl: result.outputUrl,
+        outputKind: result.outputUrl ? task.mode : undefined,
+        error: result.error,
+      }
+      onUpdate(nextTask)
+      if (result.status === 'success' || result.status === 'error') {
+        stopped = true
+        return
+      }
+      timer = window.setTimeout(poll, intervalMs)
+    } catch (error) {
+      stopped = true
+      onUpdate({ ...task, status: 'error', progress: 100, elapsedMs: Date.now() - startedAt, error: error instanceof Error ? error.message : '轮询任务失败' })
+    }
+  }
+
+  void poll()
+  return () => {
+    stopped = true
+    if (timer) window.clearTimeout(timer)
+  }
 }
 
 export function normalizeApiError(response: Response) {

@@ -6,8 +6,8 @@ import { SettingsDialog } from './components/SettingsDialog'
 import { TaskDetailDialog } from './components/TaskDetailDialog'
 import { TaskWorkspace, type TaskFilter } from './components/TaskWorkspace'
 import { ToastStack, type Toast } from './components/ToastStack'
-import { createApiClient, createOfflineTasks, runOfflineTask } from './lib/task-engine'
-import { createDefaultPersistedState, loadState, saveState } from './lib/storage'
+import { createApiClient, createOfflineTasks, runApiTask, runOfflineTask } from './lib/task-engine'
+import { loadState, saveState } from './lib/storage'
 import type { Draft, Mode, Settings, Task } from './types'
 
 function App() {
@@ -31,29 +31,65 @@ function App() {
   const toast = (message: string) => { const id = `${Date.now()}-${Math.random()}`; setToasts(current => [...current, { id, message }]); window.setTimeout(() => setToasts(current => current.filter(item => item.id !== id)), 3200) }
   const updateDraft = (nextDraft: Draft) => setDrafts(current => ({ ...current, [mode]: nextDraft }))
   const updateTask = (nextTask: Task) => setTasks(current => current.map(task => task.id === nextTask.id ? nextTask : task))
-  const startOfflineTask = (task: Task) => { cleanups.current.set(task.id, runOfflineTask(task, updateTask)) }
+  const startTask = (task: Task) => {
+    cleanups.current.get(task.id)?.()
+    const cleanup = settings.runMode === 'api'
+      ? runApiTask(task, createApiClient(settings), updateTask)
+      : runOfflineTask(task, updateTask)
+    cleanups.current.set(task.id, cleanup)
+  }
+
+  useEffect(() => {
+    initial.tasks.filter(task => task.status === 'running' || task.status === 'queued').forEach(startTask)
+  }, [])
 
   const handleGenerate = async (input: { prompts: string[]; models: typeof models; count: number; mode: Mode; draft: Draft }) => {
     if (settings.runMode === 'offline') {
       const created = createOfflineTasks(input)
       setTasks(current => [...created, ...current])
-      created.forEach(startOfflineTask)
+      created.forEach(startTask)
       toast(`已创建 ${created.length} 个离线任务`)
       return
     }
     try {
       const created = await createApiClient(settings).createTask(input)
       setTasks(current => [...created, ...current])
+      created.forEach(startTask)
       toast(`已提交 ${created.length} 个 API 任务`)
     } catch (error) {
       toast(error instanceof Error ? error.message : 'API 请求失败')
     }
   }
 
-  const retryTask = (task: Task) => { const reset = { ...task, status: 'queued' as const, progress: 0, error: undefined, outputUrl: undefined }; updateTask(reset); startOfflineTask(reset); toast('已重新加入生成队列') }
+  const retryTask = async (task: Task) => {
+    cleanups.current.get(task.id)?.()
+    if (settings.runMode === 'api') {
+      try {
+        const [created] = await createApiClient(settings).createTask({ prompts: [task.prompt], models: [task.model], count: 1, mode: task.mode, draft: drafts[task.mode] })
+        setTasks(current => current.map(item => item.id === task.id ? created : item))
+        startTask(created)
+        toast('API 任务已重新提交')
+      } catch (error) {
+        updateTask({ ...task, status: 'error', progress: 100, error: error instanceof Error ? error.message : '重试失败' })
+        toast(error instanceof Error ? error.message : 'API 重试失败')
+      }
+      return
+    }
+    const reset = { ...task, status: 'queued' as const, progress: 0, error: undefined, outputUrl: undefined }
+    updateTask(reset)
+    startTask(reset)
+    toast('已重新加入生成队列')
+  }
   const retryAll = () => { tasks.filter(task => task.status === 'error').forEach(retryTask) }
   const deleteTask = (task: Task) => { cleanups.current.get(task.id)?.(); setTasks(current => current.filter(item => item.id !== task.id)); if (detailTask?.id === task.id) setDetailTask(null) }
-  const copyPrompt = async (task: Task) => { await navigator.clipboard?.writeText(task.prompt); toast('提示词已复制') }
+  const copyPrompt = async (task: Task) => {
+    try {
+      if (navigator.clipboard) await navigator.clipboard.writeText(task.prompt)
+      toast('提示词已复制')
+    } catch {
+      toast('当前环境不支持自动复制，请手动复制')
+    }
+  }
   const downloadTask = (task: Task) => { if (!task.outputUrl) return; const link = document.createElement('a'); link.href = task.outputUrl; link.download = `canvas-ai-${task.id}.${task.mode === 'image' ? 'svg' : 'mp4'}`; link.click(); toast('结果下载已开始') }
   const downloadAll = () => tasks.filter(task => task.status === 'success').forEach(downloadTask)
   const useAsReference = () => { if (!detailTask?.outputUrl) return; updateDraft({ ...draft, references: [...draft.references, detailTask.outputUrl] }); setDetailTask(null); toast('已加入参考素材') }
