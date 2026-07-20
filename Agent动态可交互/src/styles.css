@@ -185,6 +185,17 @@ body {
 .inspector dt { margin-top: 9px; color: var(--muted); font-size: .78rem; }
 .inspector dd { margin: 3px 0 0; color: #54D6AD; font-size: .86rem; }
 
+.controls-host { position: sticky; bottom: 0; padding: 12px 20px; background: linear-gradient(transparent, #050B14 25%); }
+.playback { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: #081423EE; }
+.playback button, .playback select { border: 1px solid var(--line); background: #0D1B2D; color: #38D1FF; border-radius: 8px; padding: 9px 12px; }
+.playback button:disabled { opacity: .35; }
+.decision-options { display: flex; gap: 6px; }
+.decision-options button { border-color: var(--branch, var(--muted)); }
+.edge-parallel.is-live { stroke: var(--live); animation: flow 1.2s linear infinite; }
+.edge-join.is-live { stroke: var(--done); }
+.edge-replan.is-live { stroke: var(--error, #FF6978); }
+@keyframes flow { to { stroke-dashoffset: -24; } }
+
 @media (max-width: 700px) {
   .topbar { align-items: start; flex-direction: column; }
   [data-testid="breadcrumb"] { text-align: left; }

@@ -1,6 +1,7 @@
 import { renderGraph } from "./GraphView.js";
 import { renderMiniMap } from "./MiniMap.js";
 import { renderInspector } from "./Inspector.js";
+import { renderPlaybackControls } from "./PlaybackControls.js";
 
 export function createAppView(root, handlers) {
   root.innerHTML = `<section class="app-shell"><header class="topbar"><div><span class="eyebrow">AGENT EXECUTION MAP</span><h1 data-lang="zh">智能代理执行流程</h1><p class="foundation-screen__support" data-lang="en">Interactive Agent Flow</p></div><nav data-testid="breadcrumb" aria-label="当前位置 Current location"></nav></header><div class="canvas-shell"><div class="graph-host"></div><aside class="minimap" data-testid="minimap"></aside><button class="return-live" data-action="return-live">回到当前执行 · Return Live</button><aside class="inspector"></aside></div><footer class="controls-host"></footer></section>`;
@@ -10,6 +11,7 @@ export function createAppView(root, handlers) {
   const inspector = root.querySelector(".inspector");
   const breadcrumb = root.querySelector('[data-testid="breadcrumb"]');
   const returnLive = root.querySelector('[data-action="return-live"]');
+  const controls = root.querySelector(".controls-host");
 
   return {
     render(state) {
@@ -26,6 +28,8 @@ export function createAppView(root, handlers) {
         open: Boolean(node),
         onClose: handlers.onCloseInspector,
       });
+      const event = state.graph.events.find((item) => item.id === state.run.currentEventId);
+      renderPlaybackControls(controls, { run: state.run, event, speed: state.playbackSpeed ?? 1 }, handlers);
     },
   };
 }

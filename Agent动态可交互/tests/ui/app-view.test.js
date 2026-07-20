@@ -84,4 +84,33 @@ describe("AppView", () => {
     expect(edges[6].classList.contains("is-live")).toBe(true);
     expect(edges[7].classList.contains("is-live")).toBe(false);
   });
+
+  it("replaces next with branch choices at a decision", () => {
+    const onBranchChoice = vi.fn();
+    const view = createAppView(document.querySelector("#app"), {
+      onNodeSelect: vi.fn(),
+      onOverview: vi.fn(),
+      onModuleFocus: vi.fn(),
+      onToggleFollow: vi.fn(),
+      onReturnLive: vi.fn(),
+      onBranchChoice,
+      onPrimaryAction: vi.fn(),
+      onPrevious: vi.fn(),
+      onPlayPause: vi.fn(),
+      onRestart: vi.fn(),
+      onSpeedChange: vi.fn(),
+    });
+    view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport("rag-route", "rag") });
+
+    expect(document.querySelectorAll("[data-branch-choice]")).toHaveLength(3);
+    expect(document.querySelector('[data-action="primary"]').disabled).toBe(true);
+  });
+
+  it("shows branch completion counts for parallel work", () => {
+    const run = { ...createRun(demoGraph, "rag-retrieval"), activeBranches: ["vector", "web"], completedBranches: ["vector"] };
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run, viewport: createViewport("rag-route", "rag") });
+
+    expect(document.querySelector("[data-testid=branch-progress]").textContent).toContain("1 / 2");
+  });
 });
