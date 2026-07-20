@@ -52,14 +52,14 @@
 - `renderGraph` renders layers in this order: system boundary → module/group panels → all edges → executable/detail nodes → guardrails → live pulses.
 - Detail nodes are noninteractive informative SVG groups with explicit bilingual labels.
 
-- [ ] Write failing rendering tests for all groups/detail nodes and their nesting classes.
-- [ ] Write failing tests for reference-relative positions and all relationship paths.
-- [ ] Render the outer Agent System boundary and reference module/group panels.
-- [ ] Render Planning/Memory/RAG/Tools details and map branch state to the detailed RAG chains.
-- [ ] Route feedback edges with orthogonal/curved paths that avoid primary nodes; retain arrows and pulses.
-- [ ] Adjust SVG viewBox and typography so all content is legible in the fixed stage.
-- [ ] Run focused tests RED/GREEN and full suite.
-- [ ] Commit.
+- [x] Write failing rendering tests for all groups/detail nodes and their nesting classes.
+- [x] Write failing tests for reference-relative positions and all relationship paths.
+- [x] Render the outer Agent System boundary and reference module/group panels.
+- [x] Render Planning/Memory/RAG/Tools details and map branch state to the detailed RAG chains.
+- [x] Route feedback edges with orthogonal/curved paths that avoid primary nodes; retain arrows and pulses.
+- [x] Adjust SVG viewBox and typography so all content is legible in the fixed stage.
+- [x] Run focused tests RED/GREEN and full suite.
+- [x] Commit.
 
 ---
 
@@ -78,11 +78,14 @@
 **Interfaces:**
 - Manual Previous/Next/Restart and decision/recovery controls drive the reference-faithful node paths.
 - Vector/Data retrieval highlights embedding, vector search, keyword/database search, and their TOP K outputs; Web retrieval highlights web search and TOP K; Run Both highlights all selected paths before merge.
+- The LLM dispatches three valid modes: RAG only, Tools only, or RAG + Tools in parallel. In parallel mode, retrieval and tool preparation fan out independently, then Context and Observation fan in to the LLM.
+- A small Context Gate blocks Action only when its arguments depend on retrieved context; independent actions proceed without waiting for RAG.
 
-- [ ] Add failing tests for the detailed RAG branch projection and reference callback/tool flow.
-- [ ] Align event labels/current-step rail with the reference topology while preserving reducer snapshot behavior.
-- [ ] Verify decisions, parallel joins, callback, retry, replan, recovery, and focus restoration.
-- [ ] Build before testing, run Node 24 full check, and audit standalone output.
-- [ ] Browser-verify no scrolling and full visibility at 1366×768, 1440×900, and 1920×1080.
-- [ ] Browser-verify representative normal, vector-only, web-only, parallel, callback, and replan states.
-- [ ] Commit rebuilt artifact.
+- [x] Add failing tests for the detailed RAG branch projection and reference callback/tool flow.
+- [x] Add failing tests for top-level RAG/Tools fan-out, independent lane completion, the conditional Context Gate, and LLM fan-in.
+- [x] Align event labels/current-step rail with the reference topology while preserving reducer snapshot behavior.
+- [x] Verify decisions, parallel joins, callback, retry, replan, recovery, and focus restoration.
+- [x] Build before testing, run Node 24 full check, and audit standalone output.
+- [x] Browser-verify no scrolling and full visibility at 1366×768, 1440×900, and 1920×1080.
+- [x] Browser-verify representative normal, parallel fan-out, RAG callback/context gate release, Observation callback, and LLM fan-in states.
+- [x] Commit rebuilt artifact.
