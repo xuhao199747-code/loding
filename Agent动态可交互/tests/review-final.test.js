@@ -144,15 +144,16 @@ describe("final review regressions", () => {
     expect(css).toMatch(/prefers-reduced-motion/);
   });
 
-  it("renders historical inspector data and explicit rerun action without moving live execution", () => {
-    const onRerunSnapshot = vi.fn();
+  it("retains historical snapshot data without exposing the removed inspector", () => {
     const run = transition(createRun(demoGraph, "tool-event"), { type: "ADVANCE" });
-    const view = createAppView(document.body, { onRerunSnapshot, onNodeSelect: vi.fn(), onOverview: vi.fn(), onModuleFocus: vi.fn(), onToggleFollow: vi.fn(), onReturnLive: vi.fn(), onCloseInspector: vi.fn() });
+    const historicalSnapshot = run.eventSnapshots.at(-1);
+    const view = createAppView(document.body, { onNodeSelect: vi.fn() });
     view.render({ graph: demoGraph, run, viewport: { ...createViewport("tool-select", "tools"), viewing: { level: "node", moduleId: "tools", nodeId: "action" }, isViewingLive: false } });
 
-    expect(document.querySelector(".inspector").textContent).toContain("完成：执行工具调用");
-    document.querySelector('[data-action="rerun-snapshot"]').click();
-    expect(onRerunSnapshot).toHaveBeenCalledWith(run.eventSnapshots.at(-1).id);
+    expect(historicalSnapshot.output).toBe("完成：执行工具调用");
+    expect(document.querySelector(".inspector")).toBeNull();
+    expect(document.querySelector('[data-action="rerun-snapshot"]')).toBeNull();
+    expect(document.querySelector(".step-rail").textContent).toContain("评估执行结果");
     expect(run.currentEventId).toBe("observation-event");
   });
 
@@ -176,29 +177,29 @@ describe("final review regressions", () => {
     expect(document.querySelectorAll('[data-action="recovery"]')).toHaveLength(3);
   });
 
-  it("keeps recovery controls available, collapses the minimap, and uses a full-width mobile inspector", () => {
+  it("keeps recovery controls beside a fixed rail without spatial-navigation UI", () => {
     const blocked = { ...createRun(demoGraph, "tool-event"), simulatedIssue: demoGraph.scenarios[3], status: "blocked" };
-    const view = createAppView(document.body, { onRecovery: vi.fn(), onMiniMapToggle: vi.fn(), onNodeSelect: vi.fn(), onOverview: vi.fn(), onModuleFocus: vi.fn(), onToggleFollow: vi.fn(), onReturnLive: vi.fn(), onCloseInspector: vi.fn() });
+    const view = createAppView(document.body, { onRecovery: vi.fn(), onNodeSelect: vi.fn() });
     view.render({ graph: demoGraph, run: blocked, viewport: createViewport("action", "tools"), scenarioId: "permission-denied", minimapCollapsed: true });
 
     expect(document.querySelector('[data-action="primary"]').disabled).toBe(true);
     expect(document.querySelectorAll('[data-action="recovery"]')).toHaveLength(3);
-    expect(document.querySelector('[data-action="minimap-toggle"]')).toBeTruthy();
-    expect(document.querySelector(".minimap").classList.contains("is-collapsed")).toBe(true);
+    expect(document.querySelector('[data-action="minimap-toggle"]')).toBeNull();
+    expect(document.querySelector(".minimap")).toBeNull();
+    expect(document.querySelector(".inspector")).toBeNull();
+    expect(document.querySelector(".step-rail").closest(".flow-stage")).toBe(document.querySelector(".flow-stage"));
 
     const css = readFileSync("src/styles.css", "utf8");
-    expect(css).toMatch(/@media \(max-width: 620px\)[\s\S]*\.inspector \{[\s\S]*left: 0;[\s\S]*right: 0;/);
-    expect(css).not.toContain("right: 184px");
+    expect(css).toMatch(/\.flow-stage\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) 260px;/);
   });
 
-  it("uses Escape as hierarchical navigation before the focused-control guard", async () => {
-    vi.useFakeTimers();
+  it("does not bind Escape to removed hierarchical navigation", async () => {
     document.body.innerHTML = '<main id="app"></main>';
     await import("../src/main.js?escape-hierarchy-review");
-    await vi.advanceTimersByTimeAsync(4000);
-    document.querySelector('[data-node-id="llm"]').dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    const before = document.querySelector("[data-testid=breadcrumb]").textContent;
     document.querySelector('[data-action="scenario"]').dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
 
-    expect(document.querySelector("[data-testid=breadcrumb]").textContent).toBe("Agent 系统 > Agent 核心");
+    expect(document.querySelector("[data-testid=breadcrumb]").textContent).toBe(before);
+    expect(document.querySelector('[data-layer="scene"]')).toBeNull();
   });
 });

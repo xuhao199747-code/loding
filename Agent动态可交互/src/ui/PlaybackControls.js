@@ -1,5 +1,5 @@
 export function renderPlaybackControls(container, model, handlers) {
-  const { run, event, scenario, speed = 1, eventNumber = 1, eventCount = 1 } = model;
+  const { run, event, scenario, eventNumber = 1, eventCount = 1 } = model;
   const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
   const needsChoice = event.relation === "decision" && selectedBranches.length === 0;
   const branchProgress = selectedBranches.length === 0
@@ -12,7 +12,8 @@ export function renderPlaybackControls(container, model, handlers) {
       : "下一事件 · Next Event";
 
   const blocked = Boolean(run.simulatedIssue);
-  container.innerHTML = `<div class="playback"><button data-action="previous">← 上一步 <small>Previous</small></button><button data-action="play" ${blocked ? "disabled" : ""}>${run.status === "running" ? "暂停 · Pause" : "播放 · Play"}</button><div class="decision-options"></div><button data-action="primary" ${needsChoice || blocked ? "disabled" : ""}>${primaryLabel}</button><button data-action="restart">重新开始 · Restart</button><select data-action="speed" aria-label="播放速度 Playback speed"><option value="1" ${speed === 1 ? "selected" : ""}>1×</option><option value="1.5" ${speed === 1.5 ? "selected" : ""}>1.5×</option><option value="2" ${speed === 2 ? "selected" : ""}>2×</option></select><span class="run-progress" data-testid="run-progress" aria-label="当前轮次和事件 Current iteration and event">轮次 ${run.iteration} · 事件 ${eventNumber} / ${eventCount}<small>Iteration ${run.iteration} · Event ${eventNumber} / ${eventCount}</small></span><span data-testid="branch-progress" aria-label="并行分支进度 Parallel branch progress">${branchProgress}</span><div class="recovery-options"></div></div>`;
+  const terminal = ["completed", "failed", "cancelled"].includes(run.status);
+  container.innerHTML = `<div class="playback"><button data-action="previous">← 上一步 <small>Previous</small></button><div class="decision-options"></div><button data-action="primary" ${needsChoice || blocked || terminal ? "disabled" : ""}>${primaryLabel}</button><button data-action="restart">重新开始 · Restart</button><span class="run-progress" data-testid="run-progress" aria-label="当前轮次和事件 Current iteration and event">轮次 ${run.iteration} · 事件 ${eventNumber} / ${eventCount}<small>Iteration ${run.iteration} · Event ${eventNumber} / ${eventCount}</small></span><span data-testid="branch-progress" aria-label="并行分支进度 Parallel branch progress">${branchProgress}</span><div class="recovery-options"></div></div>`;
 
   const options = container.querySelector(".decision-options");
   for (const [choiceId, choice] of blocked ? [] : Object.entries(event.choices ?? {})) {
@@ -34,8 +35,6 @@ export function renderPlaybackControls(container, model, handlers) {
   }
 
   container.querySelector('[data-action="previous"]').onclick = handlers.onPrevious;
-  container.querySelector('[data-action="play"]').onclick = handlers.onPlayPause;
   container.querySelector('[data-action="primary"]').onclick = handlers.onPrimaryAction;
   container.querySelector('[data-action="restart"]').onclick = handlers.onRestart;
-  container.querySelector('[data-action="speed"]').onchange = (changeEvent) => handlers.onSpeedChange(Number(changeEvent.target.value));
 }

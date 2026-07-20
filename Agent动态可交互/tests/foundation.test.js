@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 const approvedPalette = new Set([
   "#050B14", "#081423", "#0D1B2D", "#1E3855", "#38D1FF",
-  "#54D6AD", "#A88BFA", "#FFBD59", "#FF6978",
+  "#54D6AD", "#A88BFA", "#FFBD59", "#FF6978", "#EAF4FF",
 ]);
 
 describe("foundation shell", () => {
