@@ -19,6 +19,13 @@ describe("execution state machine", () => {
     expect(run.currentEventId).toBe("rag-join");
   });
 
+  it("preserves selected branches on the join trace", () => {
+    let run = createRun(demoGraph, "rag-route");
+    run = transition(run, { type: "CHOOSE_BRANCH", choice: "web" });
+    run = transition(run, { type: "COMPLETE_BRANCH", branch: "web" });
+    expect(run.trace.at(-1)).toMatchObject({ from: "rag-retrieval", to: "rag-join", relation: "join", branches: ["web"] });
+  });
+
   it("blocks advance while parallel branches are incomplete", () => {
     let run = createRun(demoGraph, "rag-route");
     run = transition(run, { type: "CHOOSE_BRANCH", choice: "parallel" });

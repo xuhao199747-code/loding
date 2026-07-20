@@ -72,7 +72,7 @@ export function transition(run, action) {
     if (completedBranches.length < run.activeBranches.length) {
       return { ...run, completedBranches, history: [...run.history, snapshot(run)] };
     }
-    return { ...move(run, event.join, "join"), activeBranches: [], completedBranches };
+    return { ...move(run, event.join, "join", { branches: [...run.activeBranches] }), activeBranches: [], completedBranches };
   }
   if (action.type === "REPLAN") {
     const planningEvent = run.graph.events.find((item) => item.id === "planning-event");

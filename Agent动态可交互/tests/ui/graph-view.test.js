@@ -41,6 +41,17 @@ describe("GraphView", () => {
     expect(webEdge.classList.contains("is-complete")).toBe(true);
   });
 
+  it("keeps a web-only trace selected after its branch joins", () => {
+    let run = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "web" });
+    run = transition(run, { type: "COMPLETE_BRANCH", branch: "web" });
+    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, viewport: createViewport("rag-merge", "rag"), onNodeSelect: vi.fn() });
+    const vectorEdge = document.querySelector('[data-edge-id="e7"]');
+    const webEdge = document.querySelector('[data-edge-id="e8"]');
+    expect(webEdge.classList.contains("is-complete")).toBe(true);
+    expect(vectorEdge.classList.contains("is-complete")).toBe(false);
+    expect(vectorEdge.classList.contains("is-skipped")).toBe(false);
+  });
+
   it("completes only the chosen observation outcome", () => {
     const run = transition(createRun(demoGraph, "observation-event"), { type: "CHOOSE_BRANCH", choice: "retry" });
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, viewport: createViewport("action", "tools"), onNodeSelect: vi.fn() });

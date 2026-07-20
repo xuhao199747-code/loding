@@ -25,6 +25,9 @@ function completedEdgeIdsForTrace(graph, trace) {
     const event = events.get(entry.from);
     const choice = event?.choices?.[entry.choice];
     if (!choice) {
+      if (entry.relation === "join" && event?.relation === "parallel") {
+        return event.edgeIds.filter((edgeId) => entry.branches?.includes(edges.get(edgeId)?.branch));
+      }
       if (!DIRECT_NONLINEAR_RELATIONS.has(entry.relation)) return event?.edgeIds ?? [];
       return event?.edgeIds?.filter((edgeId) => edges.get(edgeId)?.type === entry.relation) ?? [];
     }
