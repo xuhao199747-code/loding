@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createAppView } from "../../src/ui/AppView.js";
 import { createRun, transition } from "../../src/domain/execution.js";
 import { createViewport } from "../../src/domain/viewport.js";
@@ -15,6 +15,7 @@ const handlers = () => ({
 
 describe("AppView", () => {
   beforeEach(() => { document.body.innerHTML = '<main id="app"></main>'; });
+  afterEach(() => { vi.useRealTimers(); vi.resetModules(); });
 
   it("renders a Chinese-primary breadcrumb and spatial right-top minimap", () => {
     const viewHandlers = handlers();
@@ -112,5 +113,20 @@ describe("AppView", () => {
     view.render({ graph: demoGraph, run, viewport: createViewport("rag-route", "rag") });
 
     expect(document.querySelector("[data-testid=branch-progress]").textContent).toContain("1 / 2");
+  });
+
+  it("pauses autoplay immediately when advancement arrives at a decision", async () => {
+    vi.useFakeTimers();
+    await import("../../src/main.js?autoplay-decision-test");
+
+    document.querySelector('[data-action="play"]').click();
+    await vi.advanceTimersByTimeAsync(900 * 4);
+
+    expect(document.querySelector('[data-node-id="rag-route"]').classList.contains("is-live")).toBe(true);
+    expect(document.querySelector('[data-action="play"]').textContent).toContain("播放 · Play");
+    expect(vi.getTimerCount()).toBe(0);
+
+    await vi.advanceTimersByTimeAsync(900 * 2);
+    expect(document.querySelector('[data-node-id="rag-route"]').classList.contains("is-live")).toBe(true);
   });
 });

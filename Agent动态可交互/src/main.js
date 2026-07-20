@@ -46,13 +46,15 @@ function schedulePlayback() {
   playbackTimer = setTimeout(() => {
     playbackTimer = null;
     const progressed = advanceOne();
-    if (!progressed || isTerminal(state.run.status)) {
+    const currentEvent = state.graph.events.find((item) => item.id === state.run.currentEventId);
+    const shouldPause = !progressed || isTerminal(state.run.status) || currentEvent.relation === "decision";
+    if (shouldPause) {
       state.run = { ...state.run, status: isTerminal(state.run.status) ? state.run.status : "paused" };
     } else {
       state.run = { ...state.run, status: "running" };
     }
     syncLive();
-    schedulePlayback();
+    if (!shouldPause) schedulePlayback();
   }, 900 / (state.playbackSpeed ?? 1));
 }
 
