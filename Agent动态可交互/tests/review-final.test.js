@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createRun, transition } from "../src/domain/execution.js";
+import { createRun, latestSnapshotForNode, transition } from "../src/domain/execution.js";
 import { demoGraph } from "../src/data/demo-graph.js";
 import { createViewport } from "../src/domain/viewport.js";
 import { renderGraph } from "../src/ui/GraphView.js";
@@ -50,12 +50,34 @@ describe("final review regressions", () => {
 
   it("intentionally reruns from a real historical snapshot", () => {
     let run = transition(createRun(demoGraph), { type: "ADVANCE" });
-    const initialSnapshot = run.eventSnapshots.find((snapshot) => snapshot.nodeId === "user-task");
+    const initialSnapshot = latestSnapshotForNode(run, "user-task");
 
     run = transition(run, { type: "RERUN_SNAPSHOT", snapshotId: initialSnapshot.id, reason: "review replay" });
     expect(run.currentEventId).toBe("input-event");
     expect(run.eventSnapshots).toHaveLength(1);
     expect(run.trace).toHaveLength(0);
+  });
+
+  it.each([
+    ["input-event", "user-task", "orchestrator-event"],
+    ["tool-event", "action", "observation-event"],
+  ])("reruns a successful %s snapshot without restoring its outgoing transition", (eventId, nodeId, nextEventId) => {
+    let run = transition(createRun(demoGraph, eventId), { type: "ADVANCE" });
+    const snapshot = latestSnapshotForNode(run, nodeId);
+    const successfulTrace = structuredClone(snapshot.trace);
+
+    run = transition(run, { type: "RERUN_SNAPSHOT", snapshotId: snapshot.id, reason: "review replay" });
+    expect(run.currentEventId).toBe(eventId);
+    expect(run.trace.some((entry) => entry.from === eventId)).toBe(false);
+    expect(run.eventSnapshots).not.toContain(snapshot);
+    expect(snapshot.trace).toEqual(successfulTrace);
+    expect(Object.isFrozen(snapshot)).toBe(true);
+
+    run = transition(run, { type: "ADVANCE" });
+    expect(run.currentEventId).toBe(nextEventId);
+    expect(run.trace.filter((entry) => entry.from === eventId)).toHaveLength(1);
+    expect(latestSnapshotForNode(run, nodeId)).toMatchObject({ status: "success" });
+    expect(transition(run, { type: "PREVIOUS" }).currentEventId).toBe(eventId);
   });
 
   it("records recovery actions and makes each simulated issue recoverable", () => {

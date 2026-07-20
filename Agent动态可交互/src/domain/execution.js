@@ -2,6 +2,7 @@ const TERMINAL = new Set(["completed", "cancelled", "failed"]);
 
 const cloneTrace = (trace) => trace.map((entry) => ({ ...entry, branches: entry.branches ? [...entry.branches] : undefined }));
 const cloneBranches = (branches) => [...(branches ?? [])];
+const tracesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 
 function eventFor(run, eventId = run.currentEventId) {
   return run.graph.events.find((event) => event.id === eventId);
@@ -111,15 +112,24 @@ export function transition(run, action) {
   if (action.type === "RERUN_SNAPSHOT") {
     const snapshot = run.eventSnapshots.find((item) => item.id === action.snapshotId);
     if (!snapshot) throw new Error(`Unknown snapshot: ${action.snapshotId}`);
-    const replay = createRun(run.graph, snapshot.eventId);
+    const snapshotIndex = run.eventSnapshots.indexOf(snapshot);
+    const outgoingIndex = snapshot.trace.map((entry) => entry.from).lastIndexOf(snapshot.eventId);
+    const resumeTrace = cloneTrace(outgoingIndex === -1 ? snapshot.trace : snapshot.trace.slice(0, outgoingIndex));
+    const historyIndex = run.history.map((entry) => entry.currentEventId === snapshot.eventId && tracesMatch(entry.trace, resumeTrace)).lastIndexOf(true);
+    const priorState = historyIndex === -1 ? null : run.history[historyIndex];
     return {
-      ...replay,
-      iteration: snapshot.iteration,
-      selectedBranches: cloneBranches(snapshot.selectedBranches),
-      activeBranches: cloneBranches(snapshot.selectedBranches),
-      completedBranches: cloneBranches(snapshot.completedBranches),
-      trace: cloneTrace(snapshot.trace),
-      eventSnapshots: run.eventSnapshots.slice(0, run.eventSnapshots.indexOf(snapshot) + 1),
+      graph: run.graph,
+      status: "paused",
+      currentEventId: snapshot.eventId,
+      currentNodeId: snapshot.nodeId,
+      iteration: priorState?.iteration ?? snapshot.iteration,
+      selectedBranches: cloneBranches(priorState?.selectedBranches ?? snapshot.selectedBranches),
+      activeBranches: cloneBranches(priorState?.activeBranches ?? snapshot.selectedBranches),
+      completedBranches: cloneBranches(priorState?.completedBranches ?? snapshot.completedBranches),
+      trace: resumeTrace,
+      history: historyIndex === -1 ? [] : run.history.slice(0, historyIndex + 1),
+      eventSnapshots: run.eventSnapshots.slice(0, snapshotIndex),
+      simulatedIssue: priorState?.simulatedIssue ? { ...priorState.simulatedIssue } : null,
       recovery: { action: "rerun", reason: action.reason ?? "Historical snapshot replay" },
     };
   }
