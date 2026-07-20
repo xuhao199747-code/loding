@@ -13,6 +13,7 @@ export function createRun(graph, startEventId = graph.events[0].id) {
     iteration: 1,
     trace: [],
     history: [],
+    simulatedIssue: null,
   };
 }
 
@@ -25,6 +26,7 @@ function snapshot(run) {
     completedBranches: [...run.completedBranches],
     iteration: run.iteration,
     trace: [...run.trace],
+    simulatedIssue: run.simulatedIssue,
   };
 }
 

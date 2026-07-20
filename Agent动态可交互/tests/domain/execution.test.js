@@ -78,6 +78,14 @@ describe("execution state machine", () => {
     expect(run).toMatchObject({ currentEventId: "rag-route", activeBranches: [], completedBranches: [], iteration: 1 });
   });
 
+  it("clears a simulated issue when restoring the previous snapshot", () => {
+    let run = transition(createRun(demoGraph, "input-event"), { type: "ADVANCE" });
+    run = { ...run, simulatedIssue: demoGraph.scenarios[1].label };
+    run = transition(run, { type: "PREVIOUS" });
+
+    expect(run.simulatedIssue).toBeNull();
+  });
+
   it("keeps terminal cancellation immutable", () => {
     let run = createRun(demoGraph);
     run = transition(run, { type: "CANCEL" });

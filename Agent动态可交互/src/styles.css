@@ -238,4 +238,5 @@ body {
 
 @media (max-width: 620px) {
   .minimap { width: 164px; }
+  .inspector { right: 184px; }
 }

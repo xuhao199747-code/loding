@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { readFileSync } from "node:fs";
 import { createAppView } from "../../src/ui/AppView.js";
 import { createRun, transition } from "../../src/domain/execution.js";
 import { createViewport } from "../../src/domain/viewport.js";
@@ -184,6 +185,34 @@ describe("AppView", () => {
     expect(live.classList.contains("is-partial")).toBe(true);
     expect(document.querySelector('[data-action="play"]').textContent).toContain("播放 · Play");
     expect(demoGraph).toEqual(graphSnapshot);
+  });
+
+  it("allows Previous to advance again after a simulated issue", async () => {
+    await import("../../src/main.js?previous-after-simulation-test");
+    const select = document.querySelector('[data-action="scenario"]');
+    select.value = "no-results";
+    select.dispatchEvent(new Event("change"));
+
+    for (let index = 0; index < 4; index += 1) document.querySelector('[data-action="primary"]').click();
+    document.querySelector('[data-branch-choice="vector"]').click();
+    document.querySelector('[data-action="primary"]').click();
+    document.querySelector('[data-action="previous"]').click();
+    document.querySelector('[data-action="primary"]').click();
+
+    expect(document.querySelector('[data-node-id="rag-merge"]').classList.contains("is-partial")).toBe(true);
+  });
+
+  it("reserves the minimap column for the inspector at the 620px breakpoint", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    const viewport = {
+      ...createViewport("action", "tools"),
+      viewing: { level: "node", moduleId: "tools", nodeId: "action" },
+    };
+    view.render({ graph: demoGraph, run: createRun(demoGraph, "tool-event"), viewport, scenarioId: "normal" });
+
+    const css = readFileSync("src/styles.css", "utf8");
+    expect(document.querySelector(".inspector").closest(".canvas-shell")).toBe(document.querySelector(".canvas-shell"));
+    expect(css).toContain(".inspector { right: 184px; }");
   });
 
   it("supports keyboard activation for minimap modules and inspector close", () => {
