@@ -19,7 +19,14 @@ describe("execution state machine", () => {
     expect(run.currentEventId).toBe("rag-join");
   });
 
-  it("records callback and replan iterations", () => {
+  it("blocks advance while parallel branches are incomplete", () => {
+    let run = createRun(demoGraph, "rag-route");
+    run = transition(run, { type: "CHOOSE_BRANCH", choice: "parallel" });
+    expect(() => transition(run, { type: "ADVANCE" })).toThrow("Parallel branches must complete");
+    expect(run).toMatchObject({ currentEventId: "rag-retrieval", status: "paused" });
+  });
+
+  it("records replan iterations", () => {
     let run = createRun(demoGraph, "observation-event");
     run = transition(run, { type: "REPLAN", reason: "completion score below threshold" });
     expect(run.iteration).toBe(2);
@@ -31,8 +38,30 @@ describe("execution state machine", () => {
   it("routes observation outcomes to finish, retry, or replan", () => {
     const base = createRun(demoGraph, "observation-event");
     expect(transition(base, { type: "CHOOSE_BRANCH", choice: "finish" }).currentEventId).toBe("final-event");
-    expect(transition(base, { type: "CHOOSE_BRANCH", choice: "retry" })).toMatchObject({ currentEventId: "tool-event", iteration: 2 });
-    expect(transition(base, { type: "CHOOSE_BRANCH", choice: "replan" })).toMatchObject({ currentEventId: "planning-event", iteration: 2 });
+    const retry = transition(base, { type: "CHOOSE_BRANCH", choice: "retry" });
+    const replan = transition(base, { type: "CHOOSE_BRANCH", choice: "replan" });
+    expect(retry).toMatchObject({ currentEventId: "tool-event", iteration: 2 });
+    expect(retry.trace.at(-1)).toMatchObject({ relation: "retry", iteration: 2 });
+    expect(replan).toMatchObject({ currentEventId: "planning-event", iteration: 2 });
+    expect(replan.trace.at(-1)).toMatchObject({ relation: "replan", iteration: 2 });
+  });
+
+  it("advances sequence events", () => {
+    const run = transition(createRun(demoGraph, "input-event"), { type: "ADVANCE" });
+    expect(run).toMatchObject({ currentEventId: "orchestrator-event", currentNodeId: "orchestrator" });
+    expect(run.trace.at(-1)).toMatchObject({ relation: "sequence", iteration: 1 });
+  });
+
+  it("advances callback events and records their trace", () => {
+    const run = transition(createRun(demoGraph, "rag-callback"), { type: "ADVANCE" });
+    expect(run).toMatchObject({ currentEventId: "llm-return-event", currentNodeId: "llm" });
+    expect(run.trace.at(-1)).toMatchObject({ from: "rag-callback", to: "llm-return-event", relation: "callback", iteration: 1 });
+  });
+
+  it("retries the current event directly", () => {
+    const run = transition(createRun(demoGraph, "tool-event"), { type: "RETRY" });
+    expect(run).toMatchObject({ currentEventId: "tool-event", iteration: 2 });
+    expect(run.trace.at(-1)).toMatchObject({ from: "tool-event", to: "tool-event", relation: "retry", iteration: 2 });
   });
 
   it("restores the complete previous snapshot instead of only moving the cursor", () => {

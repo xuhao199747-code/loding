@@ -32,7 +32,7 @@ function eventFor(run) {
   return run.graph.events.find((event) => event.id === run.currentEventId);
 }
 
-function move(run, eventId, relation, detail = {}) {
+function move(run, eventId, relation, detail = {}, iteration = run.iteration) {
   const target = run.graph.events.find((event) => event.id === eventId);
   if (!target) throw new Error(`Unknown target event: ${eventId}`);
   return {
@@ -40,7 +40,7 @@ function move(run, eventId, relation, detail = {}) {
     status: "paused",
     currentEventId: target.id,
     currentNodeId: target.nodeId,
-    trace: [...run.trace, { from: run.currentEventId, to: target.id, relation, iteration: run.iteration, ...detail }],
+    trace: [...run.trace, { from: run.currentEventId, to: target.id, relation, iteration, ...detail }],
     history: [...run.history, snapshot(run)],
   };
 }
@@ -57,12 +57,13 @@ export function transition(run, action) {
   if (action.type === "CHOOSE_BRANCH") {
     const choice = event.choices?.[action.choice];
     if (!choice) throw new Error(`Unknown branch choice: ${action.choice}`);
-    const next = move(run, choice.next, choice.relation ?? "decision", { choice: action.choice });
+    const iteration = ["retry", "replan"].includes(choice.relation) ? run.iteration + 1 : run.iteration;
+    const next = move(run, choice.next, choice.relation ?? "decision", { choice: action.choice }, iteration);
     return {
       ...next,
       activeBranches: choice.branches ?? [],
       completedBranches: [],
-      iteration: ["retry", "replan"].includes(choice.relation) ? run.iteration + 1 : run.iteration,
+      iteration,
     };
   }
   if (action.type === "COMPLETE_BRANCH") {
@@ -95,6 +96,7 @@ export function transition(run, action) {
   }
   if (action.type === "ADVANCE") {
     if (event.relation === "decision") throw new Error("Branch selection required");
+    if (event.relation === "parallel") throw new Error("Parallel branches must complete");
     if (!event.next) {
       return {
         ...run,
