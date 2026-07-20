@@ -37,6 +37,18 @@ describe("GraphView", () => {
     for (const edge of edges) expect(edge.getAttribute("marker-end")).toBeTruthy();
   });
 
+  it("anchors a straight edge to node rectangle boundaries rather than centers", () => {
+    render({ run: createRun(demoGraph), viewport: createViewport() });
+
+    const coordinates = document.querySelector('[data-edge-id="e2"]')
+      .getAttribute("d")
+      .match(/-?\d+(?:\.\d+)?/g)
+      .map(Number);
+
+    expect(coordinates).toEqual([490, 193, 490, 225]);
+    expect(coordinates).not.toEqual([490, 164, 490, 254]);
+  });
+
   it("marks the Chinese module and node names as primary labels", () => {
     render({ run: createRun(demoGraph), viewport: createViewport() });
 
@@ -138,7 +150,7 @@ describe("GraphView", () => {
     expect(support.getAttribute("font-size")).toBe("10");
   });
 
-  it("adds textual status labels and keyboard-focusable nodes", () => {
+  it("renders informative SVG nodes with accessible labels and textual status", () => {
     renderGraph(document.querySelector("#graph"), {
       graph: demoGraph,
       run: { ...createRun(demoGraph), status: "failed" },
@@ -147,13 +159,14 @@ describe("GraphView", () => {
     });
 
     const live = document.querySelector('[data-node-id="user-task"]');
-    expect(live.getAttribute("tabindex")).toBe("0");
+    expect(live.getAttribute("role")).toBeNull();
+    expect(live.getAttribute("tabindex")).toBeNull();
     expect(live.getAttribute("aria-label")).toContain("用户任务");
     expect(live.classList.contains("is-failed")).toBe(true);
     expect(live.querySelector(".status-label").textContent).toContain("失败");
   });
 
-  it("activates a focused SVG node with Enter and Space", () => {
+  it("does not activate SVG nodes by click, Enter, or Space", () => {
     const onNodeSelect = vi.fn();
     renderGraph(document.querySelector("#graph"), {
       graph: demoGraph,
@@ -163,10 +176,10 @@ describe("GraphView", () => {
     });
 
     const node = document.querySelector('[data-node-id="user-task"]');
+    node.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     node.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
     node.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
 
-    expect(onNodeSelect).toHaveBeenCalledTimes(2);
-    expect(onNodeSelect).toHaveBeenLastCalledWith(expect.objectContaining({ id: "user-task" }));
+    expect(onNodeSelect).not.toHaveBeenCalled();
   });
 });

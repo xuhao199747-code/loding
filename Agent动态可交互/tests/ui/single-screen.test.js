@@ -31,4 +31,13 @@ describe("single-screen style contract", () => {
     expect(styles).toMatch(/\.primary-label\s*\{(?=[^}]*fill:\s*#EAF4FF;)[^}]*\}/i);
   });
 
+  it("keeps skipped edges and nodes visibly legible", () => {
+    const edgeDeclarations = declarationsFor([".graph-edge.is-skipped"]);
+    const nodeDeclarations = declarationsFor([".graph-node.is-skipped"]);
+
+    expect(Number(declarationValue(edgeDeclarations, "opacity"))).toBeGreaterThanOrEqual(0.5);
+    expect(declarationValue(edgeDeclarations, "stroke-dasharray")).toBeDefined();
+    expect(Number(declarationValue(nodeDeclarations, "opacity"))).toBeGreaterThanOrEqual(0.5);
+  });
+
 });

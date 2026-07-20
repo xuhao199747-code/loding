@@ -22,7 +22,7 @@ export function createAppView(root, handlers) {
       const currentModule = state.graph.modules.find((item) => item.id === currentNode.moduleId);
       breadcrumb.textContent = ["Agent 系统", currentModule.label.zh, currentNode.label.zh].join(" > ");
 
-      renderGraph(graphHost, { ...state, onNodeSelect: handlers.onNodeSelect });
+      renderGraph(graphHost, state);
       renderStepRail(stepRail, {
         node: currentNode,
         event: currentEvent,

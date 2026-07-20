@@ -61,7 +61,7 @@ function relationEndpoints(graph, run, currentEvent) {
   return new Set([source, target].filter(Boolean));
 }
 
-export function renderGraph(container, { graph, run, onNodeSelect = () => {} }) {
+export function renderGraph(container, { graph, run }) {
   const root = svg("svg", { viewBox: "0 0 1200 800", preserveAspectRatio: "xMidYMid meet", role: "group", "aria-label": "Agent 架构与执行路径" });
   root.classList.add("architecture-graph");
   appendMarkers(root);
@@ -115,7 +115,7 @@ export function renderGraph(container, { graph, run, onNodeSelect = () => {} }) 
   for (const node of graph.nodes) {
     const status = node.id === run.currentNodeId ? run.status : branchStatus(graph, run, node.id) ?? (completedNodeIds.has(node.id) ? "completed" : null);
     const suffix = status ? ` · ${statusLabels[status] ?? status}` : "";
-    const group = svg("g", { "data-node-id": node.id, transform: `translate(${node.x} ${node.y})`, tabindex: 0, role: "button", "aria-label": `${node.label.zh} ${node.label.en}${suffix}` });
+    const group = svg("g", { "data-node-id": node.id, transform: `translate(${node.x} ${node.y})`, "aria-label": `${node.label.zh} ${node.label.en}${suffix}` });
     group.classList.add("graph-node", `node-${node.kind}`);
     if (node.id === run.currentNodeId) group.classList.add("is-live", `is-${run.status}`);
     if (endpoints.has(node.id)) group.classList.add("is-relation-endpoint");
@@ -129,10 +129,6 @@ export function renderGraph(container, { graph, run, onNodeSelect = () => {} }) 
       const statusText = svg("text", { x: 65, y: 54, "text-anchor": "middle", class: "status-label" });
       statusText.textContent = statusLabels[status] ?? status; group.append(statusText);
     }
-    group.addEventListener("click", () => onNodeSelect(node));
-    group.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onNodeSelect(node); }
-    });
     nodesLayer.append(group);
   }
   const guardrails = svg("g", { "data-layer": "guardrails", transform: "translate(30 752)" });
