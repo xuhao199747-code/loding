@@ -355,12 +355,31 @@ body {
   font-size: .58rem;
 }
 
-.edge-parallel.is-live { stroke: var(--live); animation: flow 1.2s linear infinite; }
+.edge-parallel.is-live { stroke: var(--live); }
 .edge-join.is-live { stroke: var(--done); }
 .edge-callback.is-live,
 .edge-retry.is-live,
-.edge-replan.is-live { stroke: var(--error); animation: flow 1.2s linear infinite; }
-@keyframes flow { to { stroke-dashoffset: -24; } }
+.edge-replan.is-live { stroke: var(--error); }
+
+.edge-pulse {
+  pointer-events: none;
+}
+
+.edge-pulse__moving,
+.edge-pulse__static {
+  stroke: #38D1FF;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.edge-pulse__moving {
+  fill: #EAF4FF;
+}
+
+.edge-pulse__static {
+  fill: #EAF4FF;
+  display: none;
+}
 
 :focus-visible { outline: 2px solid var(--live); outline-offset: 3px; }
 .is-failed rect { stroke: var(--error) !important; }
@@ -370,4 +389,6 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  .edge-pulse__moving { display: none; }
+  .edge-pulse__static { display: block; }
 }

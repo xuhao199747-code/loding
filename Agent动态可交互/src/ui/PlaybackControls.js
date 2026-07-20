@@ -1,7 +1,32 @@
+function focusTarget(container, identity) {
+  const identitySelector = identity.kind === "action"
+    ? `[data-action="${identity.value}"]`
+    : `[data-${identity.kind}="${identity.value}"]`;
+  const candidates = [
+    identitySelector,
+    '[data-action="primary"]',
+    "[data-branch-choice]",
+    '[data-action="recovery"]',
+    '[data-action="restart"]',
+  ];
+  const target = candidates
+    .map((selector) => container.querySelector(selector))
+    .find((element) => element && !element.disabled && !element.hidden);
+  target?.focus();
+}
+
+function preserveFocus(container, identity, handler) {
+  return (event) => {
+    const restore = document.activeElement === event.currentTarget;
+    handler?.();
+    if (restore) focusTarget(container, identity);
+  };
+}
+
 export function renderPlaybackControls(container, model, handlers) {
   const { run, event, scenario, eventNumber = 1, eventCount = 1 } = model;
   const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
-  const needsChoice = event.relation === "decision" && selectedBranches.length === 0;
+  const needsChoice = event.relation === "decision" && Object.keys(event.choices ?? {}).length > 0;
   const branchProgress = selectedBranches.length === 0
     ? "0 / 0"
     : `${run.completedBranches.length} / ${selectedBranches.length}`;
@@ -20,7 +45,7 @@ export function renderPlaybackControls(container, model, handlers) {
     const button = document.createElement("button");
     button.dataset.branchChoice = choiceId;
     button.innerHTML = `${choice.label.zh}<small>${choice.label.en}</small>`;
-    button.onclick = () => handlers.onBranchChoice(choiceId);
+    button.onclick = preserveFocus(container, { kind: "branch-choice", value: choiceId }, () => handlers.onBranchChoice(choiceId));
     options.append(button);
   }
 
@@ -30,11 +55,11 @@ export function renderPlaybackControls(container, model, handlers) {
     button.dataset.action = "recovery";
     button.dataset.recovery = option.action;
     button.innerHTML = `${option.label.zh}<small>${option.label.en}</small>`;
-    button.onclick = () => handlers.onRecovery(option.action);
+    button.onclick = preserveFocus(container, { kind: "recovery", value: option.action }, () => handlers.onRecovery(option.action));
     recovery.append(button);
   }
 
-  container.querySelector('[data-action="previous"]').onclick = handlers.onPrevious;
-  container.querySelector('[data-action="primary"]').onclick = handlers.onPrimaryAction;
-  container.querySelector('[data-action="restart"]').onclick = handlers.onRestart;
+  container.querySelector('[data-action="previous"]').onclick = preserveFocus(container, { kind: "action", value: "previous" }, handlers.onPrevious);
+  container.querySelector('[data-action="primary"]').onclick = preserveFocus(container, { kind: "action", value: "primary" }, handlers.onPrimaryAction);
+  container.querySelector('[data-action="restart"]').onclick = preserveFocus(container, { kind: "action", value: "restart" }, handlers.onRestart);
 }

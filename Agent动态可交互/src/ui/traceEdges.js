@@ -1,8 +1,20 @@
 const DIRECT_NONLINEAR_RELATIONS = new Set(["callback", "replan", "retry"]);
 
 export function isCurrentLiveEdge(currentEvent, edge, selectedBranches = [], completedBranches = []) {
-  return currentEvent?.edgeIds?.includes(edge.id)
-    && (currentEvent.relation !== "parallel" || !edge.branch || (selectedBranches.includes(edge.branch) && !completedBranches.includes(edge.branch)));
+  if (!currentEvent?.edgeIds?.includes(edge.id) || currentEvent.relation === "decision") return false;
+  if (edge.branch && !selectedBranches.includes(edge.branch)) return false;
+  return currentEvent.relation !== "parallel" || !edge.branch || !completedBranches.includes(edge.branch);
+}
+
+export function activeTransitionEdgeIds(graph, trace) {
+  const entry = trace.at(-1);
+  if (!entry || !DIRECT_NONLINEAR_RELATIONS.has(entry.relation)) return new Set();
+  const source = graph.events.find((event) => event.id === entry.from);
+  const targetNodeId = graph.events.find((event) => event.id === entry.to)?.nodeId;
+  return new Set((source?.edgeIds ?? []).filter((edgeId) => {
+    const edge = graph.edges.find((item) => item.id === edgeId);
+    return edge?.type === entry.relation && edge.to === targetNodeId;
+  }));
 }
 
 export function completedEdgeIdsForTrace(graph, trace) {

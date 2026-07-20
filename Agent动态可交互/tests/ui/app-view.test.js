@@ -13,6 +13,38 @@ const handlers = () => ({
   onCloseInspector: vi.fn(),
 });
 
+function createInteractiveView(startRun = createRun(demoGraph)) {
+  const state = { graph: demoGraph, run: startRun, scenarioId: "normal", viewport: createViewport() };
+  let view;
+  const render = () => view.render(state);
+  const interactiveHandlers = {
+    onPrimaryAction() {
+      const event = demoGraph.events.find((item) => item.id === state.run.currentEventId);
+      if (event.relation === "parallel") {
+        const branch = state.run.activeBranches.find((item) => !state.run.completedBranches.includes(item));
+        state.run = transition(state.run, { type: "COMPLETE_BRANCH", branch });
+      } else {
+        state.run = transition(state.run, { type: "ADVANCE" });
+      }
+      render();
+    },
+    onBranchChoice(choice) {
+      state.run = transition(state.run, { type: "CHOOSE_BRANCH", choice });
+      render();
+    },
+    onPrevious() { state.run = transition(state.run, { type: "PREVIOUS" }); render(); },
+    onRestart() { state.run = transition(state.run, { type: "RESET" }); render(); },
+  };
+  view = createAppView(document.querySelector("#app"), interactiveHandlers);
+  render();
+  return state;
+}
+
+function activateWithKeyboard(button) {
+  button.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+  button.click();
+}
+
 describe("AppView", () => {
   beforeEach(() => { document.body.innerHTML = '<main id="app"></main>'; });
   afterEach(() => { vi.useRealTimers(); vi.resetModules(); });
@@ -66,6 +98,44 @@ describe("AppView", () => {
 
     expect(document.querySelectorAll("[data-branch-choice]")).toHaveLength(3);
     expect(document.querySelector('[data-action="primary"]').disabled).toBe(true);
+  });
+
+  it("does not let RAG branch history resolve the observation decision", () => {
+    const run = {
+      ...createRun(demoGraph, "observation-event"),
+      selectedBranches: ["vector"],
+      activeBranches: ["vector"],
+      completedBranches: ["vector"],
+    };
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run, viewport: createViewport("observation", "tools") });
+
+    expect(document.querySelectorAll("[data-branch-choice]")).toHaveLength(3);
+    expect(document.querySelector('[data-action="primary"]').disabled).toBe(true);
+  });
+
+  it("restores focus to Next after mouse activation rerenders the footer", () => {
+    createInteractiveView();
+    const next = document.querySelector('[data-action="primary"]');
+    next.focus();
+    next.click();
+
+    expect(document.activeElement).toBe(document.querySelector('[data-action="primary"]'));
+    expect(document.activeElement.textContent).toContain("下一事件");
+  });
+
+  it("moves keyboard focus from Next to a decision choice and then Complete Branch", () => {
+    createInteractiveView(createRun(demoGraph, "llm-route-event"));
+    const next = document.querySelector('[data-action="primary"]');
+    next.focus();
+    activateWithKeyboard(next);
+
+    expect(document.activeElement).toBe(document.querySelector('[data-branch-choice="vector"]'));
+    activateWithKeyboard(document.activeElement);
+
+    expect(document.activeElement).toBe(document.querySelector('[data-action="primary"]'));
+    expect(document.activeElement.textContent).toContain("完成下一分支");
+    expect(document.activeElement).not.toBe(document.body);
   });
 
   it("shows recovery actions only when the current scenario is blocked", () => {

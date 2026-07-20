@@ -1,4 +1,4 @@
-import { completedEdgeIdsForTrace, isCurrentLiveEdge } from "./traceEdges.js";
+import { activeTransitionEdgeIds, completedEdgeIdsForTrace, isCurrentLiveEdge } from "./traceEdges.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const statusLabels = {
@@ -44,6 +44,16 @@ function appendMarkers(root) {
   defs.append(marker); root.append(defs);
 }
 
+function edgePulse(edge, pathData, nodes) {
+  const { from } = nodeBoundaryPoints(nodes.get(edge.from), nodes.get(edge.to));
+  const pulse = svg("g", { class: "edge-pulse", "data-edge-pulse-for": edge.id, "aria-hidden": true });
+  const moving = svg("circle", { class: "edge-pulse__moving", r: 4 });
+  moving.append(svg("animateMotion", { path: pathData, dur: "1.2s", repeatCount: "indefinite" }));
+  const staticPulse = svg("circle", { class: "edge-pulse__static", cx: from.x, cy: from.y, r: 4 });
+  pulse.append(moving, staticPulse);
+  return pulse;
+}
+
 function branchStatus(graph, run, nodeId) {
   const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
   const branch = graph.edges.find((edge) => edge.branch && edge.to === nodeId)?.branch;
@@ -70,6 +80,7 @@ export function renderGraph(container, { graph, run }) {
   const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
   const completedEvents = run.trace.map((entry) => graph.events.find((event) => event.id === entry.from)).filter(Boolean);
   const completedEdgeIds = completedEdgeIdsForTrace(graph, run.trace);
+  const transitionEdgeIds = activeTransitionEdgeIds(graph, run.trace);
   const completedNodeIds = new Set(completedEvents.map((event) => event.nodeId));
   const endpoints = relationEndpoints(graph, run, currentEvent);
   const modulesLayer = svg("g", { "data-layer": "modules" });
@@ -87,14 +98,18 @@ export function renderGraph(container, { graph, run }) {
   }
 
   for (const edge of graph.edges) {
-    const path = svg("path", { d: edgePath(edge, nodes), "data-edge-id": edge.id, "marker-end": "url(#arrow)", "aria-label": relationLabels[edge.type] ?? `流向 ${edge.from} 到 ${edge.to}` });
+    const pathData = edgePath(edge, nodes);
+    const path = svg("path", { d: pathData, "data-edge-id": edge.id, "marker-end": "url(#arrow)", "aria-label": relationLabels[edge.type] ?? `流向 ${edge.from} 到 ${edge.to}` });
     path.classList.add("graph-edge", `edge-${edge.type}`, `is-${edge.type}`);
     if (relationLabels[edge.type]) path.classList.add("is-nonlinear");
-    if (isCurrentLiveEdge(currentEvent, edge, selectedBranches, run.completedBranches)) path.classList.add("is-live");
-    if (completedEdgeIds.has(edge.id)) path.classList.add("is-complete");
-    if (edge.branch && run.completedBranches.includes(edge.branch)) path.classList.add("is-complete");
-    if (edge.branch && selectedBranches.length && !selectedBranches.includes(edge.branch)) path.classList.add("is-skipped");
+    const selected = !edge.branch || selectedBranches.includes(edge.branch);
+    const live = isCurrentLiveEdge(currentEvent, edge, selectedBranches, run.completedBranches) || transitionEdgeIds.has(edge.id);
+    if (live) path.classList.add("is-live");
+    if (selected && completedEdgeIds.has(edge.id)) path.classList.add("is-complete");
+    if (edge.type === "parallel" && edge.branch && run.completedBranches.includes(edge.branch)) path.classList.add("is-complete");
+    if (edge.branch && selectedBranches.length && !selected) path.classList.add("is-skipped");
     edgesLayer.append(path);
+    if (live) edgesLayer.append(edgePulse(edge, pathData, nodes));
     if (relationLabels[edge.type]) {
       const from = nodeCenter(nodes.get(edge.from)); const to = nodeCenter(nodes.get(edge.to));
       const label = svg("text", { class: "relation-label", x: (from.x + to.x) / 2, y: Math.min(from.y, to.y) - 20, "text-anchor": "middle" });

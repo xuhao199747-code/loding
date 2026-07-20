@@ -140,7 +140,11 @@ describe("final review regressions", () => {
     expect(host.querySelector('[data-node-id="llm"]').classList.contains("is-dimmed")).toBe(false);
 
     const css = readFileSync("src/styles.css", "utf8");
-    expect(css).toMatch(/\.edge-callback\.is-live[\s\S]*animation: flow/);
+    const callback = host.querySelector('[data-edge-id="e12"]');
+    expect(host.querySelector('[data-edge-pulse-for="e12"] animateMotion').getAttribute("path")).toBe(callback.getAttribute("d"));
+    expect(css).toMatch(/\.edge-pulse__moving\s*\{[^}]*fill:/);
+    expect(css).toMatch(/prefers-reduced-motion:[\s\S]*\.edge-pulse__moving\s*\{[^}]*display:\s*none/);
+    expect(css).toMatch(/prefers-reduced-motion:[\s\S]*\.edge-pulse__static\s*\{[^}]*display:\s*block/);
     expect(css).toMatch(/prefers-reduced-motion/);
   });
 

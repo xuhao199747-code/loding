@@ -112,6 +112,62 @@ describe("GraphView", () => {
     expect(vectorEdge.classList.contains("is-skipped")).toBe(true);
   });
 
+  it.each([
+    ["vector", "e9", "e10"],
+    ["web", "e10", "e9"],
+  ])("projects only the %s branch through its join edge", (branch, selectedEdgeId, skippedEdgeId) => {
+    let run = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: branch });
+    run = transition(run, { type: "COMPLETE_BRANCH", branch });
+    render({ run, viewport: createViewport("rag-merge", "rag") });
+
+    const selected = document.querySelector(`[data-edge-id="${selectedEdgeId}"]`);
+    const skipped = document.querySelector(`[data-edge-id="${skippedEdgeId}"]`);
+    expect(selected.classList.contains("is-live")).toBe(true);
+    expect(selected.classList.contains("is-complete")).toBe(false);
+    expect(skipped.classList.contains("is-skipped")).toBe(true);
+    expect(skipped.classList.contains("is-live")).toBe(false);
+    expect(skipped.classList.contains("is-complete")).toBe(false);
+
+    run = transition(run, { type: "ADVANCE" });
+    render({ run, viewport: createViewport("rag-context", "rag") });
+    expect(document.querySelector(`[data-edge-id="${selectedEdgeId}"]`).classList.contains("is-complete")).toBe(true);
+    expect(document.querySelector(`[data-edge-id="${selectedEdgeId}"]`).classList.contains("is-live")).toBe(false);
+    expect(document.querySelector(`[data-edge-id="${skippedEdgeId}"]`).classList.contains("is-skipped")).toBe(true);
+    expect(document.querySelector(`[data-edge-id="${skippedEdgeId}"]`).classList.contains("is-complete")).toBe(false);
+  });
+
+  it.each([
+    ["sequence", "e1", () => createRun(demoGraph)],
+    ["module", "e3", () => createRun(demoGraph, "planning-event")],
+    ["decision", "e6", () => createRun(demoGraph, "llm-route-event")],
+    ["parallel", "e7", () => transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "vector" })],
+    ["join", "e9", () => transition(transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "vector" }), { type: "COMPLETE_BRANCH", branch: "vector" })],
+    ["callback", "e12", () => createRun(demoGraph, "rag-callback")],
+    ["retry", "e18", () => transition(createRun(demoGraph, "observation-event"), { type: "CHOOSE_BRANCH", choice: "retry" })],
+    ["replan", "e16", () => transition(createRun(demoGraph, "observation-event"), { type: "CHOOSE_BRANCH", choice: "replan" })],
+  ])("renders a path-derived moving pulse for an active %s edge", (_type, edgeId, runForCase) => {
+    render({ run: runForCase(), viewport: createViewport() });
+
+    const edge = document.querySelector(`[data-edge-id="${edgeId}"]`);
+    const pulse = document.querySelector(`[data-edge-pulse-for="${edgeId}"]`);
+    expect(edge.classList.contains("is-live")).toBe(true);
+    expect(pulse).not.toBeNull();
+    expect(pulse.querySelector("animateMotion").getAttribute("path")).toBe(edge.getAttribute("d"));
+    expect([...document.querySelectorAll("[data-edge-pulse-for]")].map((item) => item.dataset.edgePulseFor).sort())
+      .toEqual([...document.querySelectorAll(".graph-edge.is-live")].map((item) => item.dataset.edgeId).sort());
+  });
+
+  it("removes the pulse when a completed edge is no longer active", () => {
+    let run = transition(createRun(demoGraph, "observation-event"), { type: "CHOOSE_BRANCH", choice: "retry" });
+    run = transition(run, { type: "ADVANCE" });
+    render({ run, viewport: createViewport() });
+
+    const retry = document.querySelector('[data-edge-id="e18"]');
+    expect(retry.classList.contains("is-complete")).toBe(true);
+    expect(retry.classList.contains("is-live")).toBe(false);
+    expect(document.querySelector('[data-edge-pulse-for="e18"]')).toBeNull();
+  });
+
   it("completes only the chosen observation outcome", () => {
     const run = transition(createRun(demoGraph, "observation-event"), { type: "CHOOSE_BRANCH", choice: "retry" });
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, viewport: createViewport("action", "tools"), onNodeSelect: vi.fn() });
