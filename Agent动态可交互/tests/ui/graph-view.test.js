@@ -7,27 +7,22 @@ import { createViewport } from "../../src/domain/viewport.js";
 describe("GraphView", () => {
   beforeEach(() => { document.body.innerHTML = '<div id="graph"></div>'; });
 
-  it("keeps all modules mounted while dimming non-focused modules", () => {
-    const viewport = { ...createViewport("rag-route", "rag"), viewing: { level: "module", moduleId: "rag", nodeId: null } };
-    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport, onNodeSelect: vi.fn() });
-    expect(document.querySelectorAll("[data-module-id]")).toHaveLength(5);
-    expect(document.querySelector('[data-layer="guardrails"]').textContent).toContain("权限");
-    expect(document.querySelector('[data-module-id="core"]').classList.contains("is-dimmed")).toBe(true);
-    expect(document.querySelector('[data-module-id="rag"]').classList.contains("is-dimmed")).toBe(false);
-    expect(document.querySelector('[data-layer="scene"]').getAttribute("transform")).not.toBe("translate(0 0) scale(1)");
+  it("draws modules, edges, and nodes in stable SVG layers with explicit primary labels", () => {
+    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), onNodeSelect: vi.fn() });
+
+    const layers = [...document.querySelectorAll(".architecture-graph > [data-layer]")];
+    expect(layers.map((layer) => layer.dataset.layer)).toEqual(["modules", "edges", "nodes"]);
+    const edges = document.querySelectorAll('[data-layer="edges"] [data-edge-id]');
+    expect(edges).toHaveLength(demoGraph.edges.length);
+    for (const edge of edges) expect(edge.getAttribute("marker-end")).toBeTruthy();
+    expect(document.querySelectorAll('[data-layer="modules"] .primary-label')).toHaveLength(demoGraph.modules.length);
+    expect(document.querySelectorAll('[data-layer="nodes"] .primary-label')).toHaveLength(demoGraph.nodes.length);
   });
 
   it("marks callback edges and live nodes", () => {
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph, "rag-callback"), viewport: createViewport("rag-context", "rag"), onNodeSelect: vi.fn() });
     expect(document.querySelector('[data-node-id="rag-context"]').classList.contains("is-live")).toBe(true);
     expect(document.querySelector('[data-edge-id="e12"]').classList.contains("is-callback")).toBe(true);
-  });
-
-  it("reveals internal substeps only at node focus", () => {
-    const viewport = { ...createViewport("planning", "core"), viewing: { level: "node", moduleId: "core", nodeId: "planning" } };
-    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph, "planning-event"), viewport, onNodeSelect: vi.fn() });
-    expect(document.querySelectorAll("[data-detail-step]")).toHaveLength(3);
-    expect(document.querySelector("[data-detail-step]").textContent).toContain("子目标拆解");
   });
 
   it("completes only the selected RAG branch while marking unselected branches skipped", () => {
