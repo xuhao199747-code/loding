@@ -45,8 +45,8 @@ describe("reference hierarchy layout", () => {
       const rendered = document.querySelector(`[data-detail-node-id="${detail.id}"]`);
       expect(rendered.classList.contains("detail-node")).toBe(true);
       expect(rendered.classList.contains(`in-${detail.groupId}`)).toBe(true);
-      expect(rendered.getAttribute("role")).toBe("group");
-      expect(rendered.getAttribute("tabindex")).toBeNull();
+      expect(rendered.getAttribute("role")).toBe("button");
+      expect(rendered.getAttribute("tabindex")).toBe("0");
       expect(rendered.getAttribute("aria-label")).toContain(`${detail.label.zh} ${detail.label.en}`);
       expect(rendered.textContent).toContain(detail.label.zh);
       expect(rendered.textContent).toContain(detail.label.en);
@@ -60,7 +60,7 @@ describe("reference hierarchy layout", () => {
       expect(rendered.textContent).toContain(detail.description.zh);
       expect(rendered.textContent).toContain(detail.description.en);
     }
-    expect(document.querySelectorAll('[data-detail-node-id] button, [data-detail-node-id][role="button"]')).toHaveLength(0);
+    expect(document.querySelectorAll('[data-detail-node-id][role="button"]')).toHaveLength(demoGraph.detailNodes.length + 1);
   });
 
   it("uses only the explicit 1400 by 800 reference positions for the required hierarchy", () => {
@@ -132,8 +132,8 @@ describe("reference hierarchy layout", () => {
     }
 
     const gate = document.querySelector('[data-detail-node-id="context-dependency-gate"]');
-    expect(gate.getAttribute("role")).toBe("group");
-    expect(gate.getAttribute("tabindex")).toBeNull();
+    expect(gate.getAttribute("role")).toBe("button");
+    expect(gate.getAttribute("tabindex")).toBe("0");
     expect(gate.getAttribute("data-layout-source")).toBe("tools-group");
     expect(gate.textContent).toContain("上下文依赖门");
     expect(gate.textContent).toContain("Context Gate");

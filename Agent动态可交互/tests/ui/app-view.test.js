@@ -69,6 +69,43 @@ describe("AppView", () => {
     expect(document.querySelector("[data-testid=breadcrumb]").textContent).toContain("RAG 检索增强");
   });
 
+  it("shows fixed Current Step and Node Detail tabs in the right rail", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport() });
+
+    expect([...document.querySelectorAll("[data-rail-tab]")].map((tab) => tab.dataset.railTab)).toEqual(["current", "node"]);
+    expect(document.querySelector('[data-rail-tab="current"]').getAttribute("aria-selected")).toBe("true");
+    expect(document.querySelector('[data-rail-tab="node"]').disabled).toBe(true);
+  });
+
+  it("opens clicked graph content in Node Detail without changing the execution cursor", () => {
+    const run = createRun(demoGraph, "rag-route");
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run, viewport: createViewport() });
+
+    document.querySelector('[data-detail-node-id="rag-query"]').dispatchEvent(new MouseEvent("click", { bubbles: true }));
+
+    expect(run.currentEventId).toBe("rag-route");
+    expect(document.querySelector('[data-rail-tab="node"]').getAttribute("aria-selected")).toBe("true");
+    expect(document.querySelector(".step-rail").textContent).toContain("Query处理");
+    expect(document.querySelector(".step-rail").textContent).toContain("Query Processing");
+    expect(document.querySelector(".node-connections").textContent).toContain("大语言模型");
+    expect(document.querySelector(".node-connections").textContent).toContain("路由");
+  });
+
+  it("returns the rail to Current Step when execution advances", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    const run = createRun(demoGraph, "input-event");
+    view.render({ graph: demoGraph, run, viewport: createViewport() });
+    document.querySelector('[data-node-id="llm"]').dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    expect(document.querySelector('[data-rail-tab="node"]').getAttribute("aria-selected")).toBe("true");
+
+    const nextRun = transition(run, { type: "ADVANCE" });
+    view.render({ graph: demoGraph, run: nextRun, viewport: createViewport() });
+    expect(document.querySelector('[data-rail-tab="current"]').getAttribute("aria-selected")).toBe("true");
+    expect(document.querySelector(".step-rail").textContent).toContain("初始化编排");
+  });
+
   it("keeps only step navigation and contextual actions in the footer", () => {
     const view = createAppView(document.querySelector("#app"), handlers());
     view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport("rag-route", "rag") });
@@ -76,7 +113,18 @@ describe("AppView", () => {
     expect(document.querySelector('[data-action="play"]')).toBeNull();
     expect(document.querySelector('[data-action="speed"]')).toBeNull();
     expect([...document.querySelectorAll(".controls-host button[data-action]")].map((button) => button.dataset.action))
-      .toEqual(["previous", "primary", "restart"]);
+      .toEqual(["previous", "restart", "primary"]);
+  });
+
+  it("separates history, contextual actions, and progress in the footer", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport() });
+
+    expect(document.querySelector(".control-history [data-action=previous]")).not.toBeNull();
+    expect(document.querySelector(".control-history [data-action=restart]")).not.toBeNull();
+    expect(document.querySelector(".control-actions [data-branch-choice=vector]")).not.toBeNull();
+    expect(document.querySelector(".control-progress [data-testid=run-progress]")).not.toBeNull();
+    expect(document.querySelector(".control-progress [data-testid=branch-progress]")).not.toBeNull();
   });
 
   it("replaces next with branch choices at a decision", () => {
@@ -205,6 +253,26 @@ describe("AppView", () => {
     select.value = "tool-timeout";
     select.dispatchEvent(new Event("change"));
     expect(onScenarioChange).toHaveBeenCalledWith("tool-timeout");
+  });
+
+  it("shows a concise scenario summary and simulated-state badge", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), scenarioId: "no-results" });
+
+    expect(document.querySelector("[data-scenario-status]").textContent).toContain("SIMULATED");
+    expect(document.querySelector("[data-scenario-summary]").textContent).toContain("检索结果为空");
+    expect(document.querySelector("[data-scenario-summary]").textContent).toContain("Empty retrieval results");
+  });
+
+  it("shows issue cause and impact in the right rail", () => {
+    const issue = demoGraph.scenarios.find((scenario) => scenario.id === "no-results");
+    const run = { ...createRun(demoGraph, "rag-join"), simulatedIssue: issue, status: issue.status };
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run, viewport: createViewport(), scenarioId: issue.id });
+
+    expect(document.querySelector(".issue-banner").textContent).toContain("检索结果为空");
+    expect(document.querySelector(".issue-banner").textContent).toContain("RAG 汇合");
+    expect(document.querySelector(".issue-banner").textContent).toContain("RAG Join");
   });
 
   it("resets the run when changing scenarios", async () => {

@@ -22,6 +22,46 @@ describe("GraphView", () => {
     expect(document.querySelectorAll(".graph-module.is-dimmed, .graph-node.is-dimmed")).toHaveLength(0);
   }
 
+  it("highlights only the hovered node and its direct upstream/downstream relationships", () => {
+    render({ run: createRun(demoGraph), viewport: createViewport() });
+    const query = document.querySelector('[data-detail-node-id="rag-query"]');
+    query.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+
+    expect(query.classList.contains("is-inspected")).toBe(true);
+    expect(document.querySelector('[data-topology-edge="llm->rag-query"]').classList.contains("is-related")).toBe(true);
+    expect(document.querySelector('[data-topology-edge="rag-query->rag-routing"]').classList.contains("is-related")).toBe(true);
+    expect(document.querySelector('[data-topology-edge="action->observation"]').classList.contains("is-context-dimmed")).toBe(true);
+
+    query.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
+    expect(document.querySelectorAll(".is-related, .is-context-dimmed, .is-inspected")).toHaveLength(0);
+  });
+
+  it("supports pointer hover used by real browsers", () => {
+    render({ run: createRun(demoGraph), viewport: createViewport() });
+    const query = document.querySelector('[data-detail-node-id="rag-query"]');
+    query.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true }));
+
+    expect(query.classList.contains("is-inspected")).toBe(true);
+    expect(document.querySelector('[data-topology-edge="llm->rag-query"]').classList.contains("is-related")).toBe(true);
+
+    query.dispatchEvent(new PointerEvent("pointerleave", { bubbles: true }));
+    expect(document.querySelectorAll(".is-related, .is-context-dimmed, .is-inspected")).toHaveLength(0);
+  });
+
+  it("opens node detail on click or keyboard without advancing execution", () => {
+    const onNodeSelect = vi.fn();
+    const run = createRun(demoGraph, "rag-route");
+    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, onNodeSelect });
+    const route = document.querySelector('[data-detail-node-id="rag-routing"]');
+
+    route.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    expect(onNodeSelect).toHaveBeenCalledWith(expect.objectContaining({ id: "rag-routing", type: "detail" }));
+    expect(run.currentEventId).toBe("rag-route");
+
+    route.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    expect(onNodeSelect).toHaveBeenCalledTimes(2);
+  });
+
   it("draws the six reference layers in their exact visual order", () => {
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), onNodeSelect: vi.fn() });
 
@@ -231,14 +271,14 @@ describe("GraphView", () => {
     });
 
     const live = document.querySelector('[data-node-id="user-task"]');
-    expect(live.getAttribute("role")).toBe("group");
-    expect(live.getAttribute("tabindex")).toBeNull();
+    expect(live.getAttribute("role")).toBe("button");
+    expect(live.getAttribute("tabindex")).toBe("0");
     expect(live.getAttribute("aria-label")).toContain("用户任务");
     expect(live.classList.contains("is-failed")).toBe(true);
     expect(live.querySelector(".status-label").textContent).toContain("失败");
   });
 
-  it("does not activate SVG nodes by click, Enter, or Space", () => {
+  it("opens SVG node detail by click, Enter, or Space", () => {
     const onNodeSelect = vi.fn();
     renderGraph(document.querySelector("#graph"), {
       graph: demoGraph,
@@ -252,6 +292,7 @@ describe("GraphView", () => {
     node.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
     node.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
 
-    expect(onNodeSelect).not.toHaveBeenCalled();
+    expect(onNodeSelect).toHaveBeenCalledTimes(3);
+    expect(onNodeSelect).toHaveBeenLastCalledWith(expect.objectContaining({ id: "user-task", type: "executable" }));
   });
 });

@@ -28,7 +28,7 @@ describe("single-screen style contract", () => {
   });
 
   it("gives primary SVG labels an explicit light fill", () => {
-    expect(styles).toMatch(/\.primary-label\s*\{(?=[^}]*fill:\s*#EAF4FF;)[^}]*\}/i);
+    expect(styles).toMatch(/\.primary-label\s*\{(?=[^}]*fill:\s*var\(--text\);)[^}]*\}/i);
   });
 
   it("keeps skipped edges and nodes visibly legible", () => {

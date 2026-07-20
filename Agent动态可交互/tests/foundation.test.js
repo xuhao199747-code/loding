@@ -3,8 +3,9 @@ import { describe, expect, it } from "vitest";
 import { demoGraph } from "../src/data/demo-graph.js";
 
 const approvedPalette = new Set([
-  "#050B14", "#081423", "#0D1B2D", "#1E3855", "#38D1FF",
-  "#54D6AD", "#A88BFA", "#FFBD59", "#FF6978", "#EAF4FF",
+  "#0C0C0C", "#111111", "#151515", "#1B1B1B", "#242424",
+  "#2A2A2A", "#3A3A3A", "#666666", "#9B9B9B", "#EDEDED",
+  "#6E8BFF", "#6FCF97", "#9B8AFB", "#D6A85F", "#E06C75",
 ]);
 
 describe("foundation shell", () => {
@@ -29,7 +30,7 @@ describe("foundation shell", () => {
     expect(support).not.toBeNull();
     expect(support.textContent).toContain("Interactive Agent Flow");
     expect(support.classList.contains("foundation-screen__support")).toBe(true);
-    expect(styles).toMatch(/\.foundation-screen__support\s*{[^}]*color:\s*#A88BFA;/);
+    expect(styles).toMatch(/\.foundation-screen__support\s*{[^}]*color:\s*var\(--muted\);/);
   });
 
   it("declares the pinned tooling Node support range", () => {
