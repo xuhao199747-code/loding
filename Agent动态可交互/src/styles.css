@@ -28,6 +28,7 @@ body,
 body {
   min-width: 320px;
   background: #050B14;
+  overflow-x: hidden;
 }
 
 .foundation-screen {
@@ -107,6 +108,11 @@ body {
   stroke: #54D6AD;
 }
 
+.graph-node.is-running rect { stroke-width: 3; stroke-dasharray: 3 2; }
+.graph-node.is-success rect { stroke: #54D6AD; stroke-width: 3; }
+.graph-node.is-relation-endpoint rect { stroke-width: 4; stroke-dasharray: 7 3; }
+.graph-node:focus-visible rect { stroke: #FFBD59; stroke-width: 4; stroke-dasharray: 4 2; }
+
 .node-en {
   fill: #A88BFA;
   font-size: 10px;
@@ -136,6 +142,10 @@ body {
   stroke: #FFBD59;
   stroke-dasharray: 8 6;
 }
+
+.edge-arrow { fill: #38D1FF; }
+.graph-edge.is-complete + .relation-label, .relation-label { fill: #FFBD59; font-size: 10px; }
+.retry-loop { fill: none; stroke: #FFBD59; stroke-width: 2; stroke-dasharray: 5 3; }
 
 .detail-flow rect {
   fill: #0D1B2D;
@@ -167,10 +177,11 @@ body {
 .canvas-shell { position: relative; min-height: 620px; margin: 0 20px 16px; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
 .graph-host { width: 100%; height: 100%; min-height: 620px; }
 
-.minimap { position: absolute; right: 18px; top: 18px; z-index: 2; width: 250px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #081423E8; backdrop-filter: blur(12px); }
+.minimap { position: absolute; right: 18px; top: 18px; z-index: 2; width: 250px; max-height: calc(100% - 36px); overflow-y: auto; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #081423E8; backdrop-filter: blur(12px); }
 .minimap-head, .minimap-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .minimap-head small, .minimap-actions small { color: var(--muted); }
 .minimap-map { display: block; width: 100%; height: 150px; margin: 9px 0; }
+.minimap.is-collapsed .minimap-map-host { display: none; }
 .minimap-map [data-minimap-module] { cursor: pointer; }
 .minimap-map [data-minimap-module] rect { fill: #0D1B2D; stroke: var(--line); stroke-width: 5; }
 .minimap-map [data-minimap-module]:focus rect { stroke: var(--live); outline: none; }
@@ -184,7 +195,7 @@ body {
 .minimap button, .return-live, .inspector button { border: 1px solid var(--line); background: #0D1B2D; color: var(--muted); border-radius: 7px; padding: 7px; cursor: pointer; }
 
 .return-live { position: absolute; right: 18px; top: 226px; z-index: 2; }
-.inspector { position: absolute; right: 18px; bottom: 18px; z-index: 2; width: min(300px, calc(100% - 36px)); background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.inspector { position: absolute; right: 18px; bottom: 18px; z-index: 2; width: min(300px, calc(100% - 36px)); max-height: 55vh; overflow-y: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
 .inspector header { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
 .inspector h2 { margin: 0; font-size: 1rem; }
 .inspector h2 small { display: block; color: var(--muted); font-size: 12px; font-weight: 400; }
@@ -198,6 +209,8 @@ body {
 .playback button:disabled { opacity: .35; }
 .decision-options { display: flex; gap: 6px; }
 .decision-options button { border-color: var(--branch, var(--muted)); }
+.recovery-options { display: flex; gap: 6px; flex-wrap: wrap; }
+.recovery-options button { border-style: dashed; border-color: var(--warn); }
 .run-progress { color: var(--muted); font-size: .78rem; white-space: nowrap; }
 .run-progress small { display: block; font-size: .65rem; }
 .edge-parallel.is-live { stroke: var(--live); animation: flow 1.2s linear infinite; }
@@ -221,10 +234,13 @@ body {
 }
 
 @media (max-width: 620px) {
-  .minimap { width: 164px; }
+  .minimap { width: min(210px, calc(100% - 20px)); max-height: 42vh; }
+  .minimap.is-collapsed { width: min(210px, calc(100% - 20px)); }
   .minimap-modules { grid-template-columns: 1fr; }
   .topbar h1 { font-size: 20px; }
-  .canvas-shell { min-height: 520px; }
+  .canvas-shell { min-height: 520px; padding-bottom: min(55vh, 360px); }
+  .inspector { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; max-height: 55vh; border-radius: 14px 14px 0 0; }
+  .playback { flex-wrap: wrap; }
   .playback button, .playback select { padding: 8px; }
 }
 
@@ -236,9 +252,4 @@ body {
   .topbar { align-items: start; flex-direction: column; }
   [data-testid="breadcrumb"] { text-align: left; }
   .minimap { width: 210px; }
-}
-
-@media (max-width: 620px) {
-  .minimap { width: 164px; }
-  .inspector { right: 184px; }
 }

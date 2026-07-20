@@ -2,24 +2,16 @@ import { completedEdgeIdsForTrace, isCurrentLiveEdge } from "./traceEdges.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const statusLabels = {
-  waiting: "等待 · Waiting",
-  paused: "暂停 · Paused",
-  running: "执行中 · Running",
-  success: "成功 · Success",
-  completed: "完成 · Completed",
-  failed: "失败 · Failed",
-  skipped: "已跳过 · Skipped",
-  blocked: "已阻塞 · Blocked",
-  retrying: "重试中 · Retrying",
-  cancelled: "已取消 · Cancelled",
-  partial: "部分完成 · Partial",
+  waiting: "等待 · Waiting", paused: "暂停 · Paused", running: "执行中 · Running", success: "成功 · Success",
+  completed: "完成 · Completed", failed: "失败 · Failed", skipped: "跳过 · Skipped", blocked: "已阻塞 · Blocked",
+  retrying: "重试中 · Retrying", cancelled: "已取消 · Cancelled", partial: "部分完成 · Partial",
 };
+const relationLabels = { callback: "回传 ↑ Callback", retry: "重试 ↻ Retry", replan: "重规划 ↶ Replan" };
 const svg = (tag, attributes = {}) => {
   const element = document.createElementNS(SVG_NS, tag);
   for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, String(value));
   return element;
 };
-
 const nodeCenter = (node) => ({ x: node.x + 65, y: node.y + 29 });
 
 function edgePath(edge, nodes) {
@@ -57,15 +49,41 @@ function renderDetailFlow(root, node) {
   root.append(panel);
 }
 
+function appendMarkers(root) {
+  const defs = svg("defs");
+  const marker = svg("marker", { id: "arrow", viewBox: "0 0 8 8", refX: 7, refY: 4, markerWidth: 6, markerHeight: 6, orient: "auto-start-reverse" });
+  marker.append(svg("path", { d: "M 0 0 L 8 4 L 0 8 z", class: "edge-arrow" }));
+  defs.append(marker); root.append(defs);
+}
+
+function branchStatus(graph, run, nodeId) {
+  const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
+  const branch = graph.edges.find((edge) => edge.branch && edge.to === nodeId)?.branch;
+  if (!branch) return null;
+  if (selectedBranches.includes(branch)) return run.completedBranches.includes(branch) ? "success" : "running";
+  return selectedBranches.length ? "skipped" : null;
+}
+
+function relationEndpoints(graph, run) {
+  const entry = run.trace.at(-1);
+  if (!entry || entry.relation === "complete") return new Set();
+  const source = graph.events.find((event) => event.id === entry.from)?.nodeId;
+  const target = graph.events.find((event) => event.id === entry.to)?.nodeId;
+  return new Set([source, target].filter(Boolean));
+}
+
 export function renderGraph(container, { graph, run, viewport, onNodeSelect }) {
-  const root = svg("svg", { viewBox: "0 0 1200 800", role: "img", "aria-label": "Agent 架构与执行路径" });
+  const root = svg("svg", { viewBox: "0 0 1200 800", role: "group", "aria-label": "Agent 架构与执行路径" });
   root.classList.add("architecture-graph");
+  appendMarkers(root);
   const focusedModule = viewport.viewing.moduleId;
   const nodes = new Map(graph.nodes.map((node) => [node.id, node]));
   const currentEvent = graph.events.find((event) => event.id === run.currentEventId);
+  const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
   const completedEvents = run.trace.map((entry) => graph.events.find((event) => event.id === entry.from)).filter(Boolean);
   const completedEdgeIds = completedEdgeIdsForTrace(graph, run.trace);
   const completedNodeIds = new Set(completedEvents.map((event) => event.nodeId));
+  const endpoints = relationEndpoints(graph, run);
   const camera = cameraFor(graph, viewport.viewing);
   const scene = svg("g", { "data-layer": "scene", transform: `translate(${camera.x} ${camera.y}) scale(${camera.scale})` });
 
@@ -80,38 +98,52 @@ export function renderGraph(container, { graph, run, viewport, onNodeSelect }) {
   }
 
   for (const edge of graph.edges) {
-    const path = svg("path", { d: edgePath(edge, nodes), "data-edge-id": edge.id });
-    path.classList.add("graph-edge", `edge-${edge.type}`);
-    if (["callback", "replan", "retry"].includes(edge.type)) path.classList.add("is-callback");
-    if (isCurrentLiveEdge(currentEvent, edge, run.activeBranches)) path.classList.add("is-live");
+    const path = svg("path", { d: edgePath(edge, nodes), "data-edge-id": edge.id, "marker-end": "url(#arrow)", "aria-label": relationLabels[edge.type] ?? `流向 ${edge.from} 到 ${edge.to}` });
+    path.classList.add("graph-edge", `edge-${edge.type}`, `is-${edge.type}`);
+    if (relationLabels[edge.type]) path.classList.add("is-nonlinear");
+    if (isCurrentLiveEdge(currentEvent, edge, selectedBranches)) path.classList.add("is-live");
     if (completedEdgeIds.has(edge.id)) path.classList.add("is-complete");
-    if (currentEvent?.relation === "parallel" && edge.branch && !run.activeBranches.includes(edge.branch)) path.classList.add("is-skipped");
+    if (edge.branch && run.completedBranches.includes(edge.branch)) path.classList.add("is-complete");
+    if (edge.branch && selectedBranches.length && !selectedBranches.includes(edge.branch)) path.classList.add("is-skipped");
     scene.append(path);
+    if (relationLabels[edge.type]) {
+      const from = nodeCenter(nodes.get(edge.from)); const to = nodeCenter(nodes.get(edge.to));
+      const label = svg("text", { class: "relation-label", x: (from.x + to.x) / 2, y: Math.min(from.y, to.y) - 20, "text-anchor": "middle" });
+      label.textContent = edge.type === "replan" && run.trace.at(-1)?.relation === "replan" ? `${relationLabels[edge.type]} · ${run.trace.at(-1).reason ?? ""}` : relationLabels[edge.type];
+      scene.append(label);
+    }
+  }
+
+  const retryTrace = run.trace.at(-1);
+  if (retryTrace?.relation === "retry" && retryTrace.from === retryTrace.to) {
+    const node = nodes.get(graph.events.find((event) => event.id === retryTrace.from)?.nodeId);
+    if (node) {
+      const loop = svg("path", { class: "retry-loop", d: `M ${node.x + 108} ${node.y + 12} C ${node.x + 160} ${node.y - 34}, ${node.x + 160} ${node.y + 80}, ${node.x + 108} ${node.y + 46}`, "marker-end": "url(#arrow)", "aria-label": `重试 Attempt ${retryTrace.iteration}` });
+      scene.append(loop);
+    }
   }
 
   for (const node of graph.nodes) {
-    const group = svg("g", { "data-node-id": node.id, transform: `translate(${node.x} ${node.y})`, tabindex: 0, role: "button", "aria-label": `${node.label.zh} ${node.label.en}` });
+    const status = node.id === run.currentNodeId ? run.status : branchStatus(graph, run, node.id) ?? (completedNodeIds.has(node.id) ? "completed" : null);
+    const suffix = status ? ` · ${statusLabels[status] ?? status}` : "";
+    const group = svg("g", { "data-node-id": node.id, transform: `translate(${node.x} ${node.y})`, tabindex: 0, role: "button", "aria-label": `${node.label.zh} ${node.label.en}${suffix}` });
     group.classList.add("graph-node", `node-${node.kind}`);
     if (focusedModule && focusedModule !== node.moduleId) group.classList.add("is-dimmed");
-    if (node.id === run.currentNodeId) {
-      group.classList.add("is-live", `is-${run.status}`);
-    }
-    if (completedNodeIds.has(node.id)) group.classList.add("is-complete");
+    if (node.id === run.currentNodeId) group.classList.add("is-live", `is-${run.status}`);
+    if (endpoints.has(node.id)) group.classList.add("is-relation-endpoint");
+    if (completedNodeIds.has(node.id) && !status) group.classList.add("is-complete");
+    if (status && node.id !== run.currentNodeId) group.classList.add(`is-${status}`);
     const rect = svg("rect", { width: 130, height: 58, rx: 10 });
     const zh = svg("text", { x: 65, y: 25, "text-anchor": "middle" }); zh.textContent = node.label.zh;
     const en = svg("text", { x: 65, y: 42, "text-anchor": "middle", class: "node-en" }); en.textContent = node.label.en;
     group.append(rect, zh, en);
-    if (node.id === run.currentNodeId) {
-      const status = svg("text", { x: 65, y: 54, "text-anchor": "middle", class: "status-label" });
-      status.textContent = statusLabels[run.status] ?? run.status;
-      group.append(status);
+    if (status) {
+      const statusText = svg("text", { x: 65, y: 54, "text-anchor": "middle", class: "status-label" });
+      statusText.textContent = statusLabels[status] ?? status; group.append(statusText);
     }
     group.addEventListener("click", () => onNodeSelect(node));
     group.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        onNodeSelect(node);
-      }
+      if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onNodeSelect(node); }
     });
     scene.append(group);
   }

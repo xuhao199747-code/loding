@@ -67,13 +67,13 @@ describe("AppView", () => {
   it.each([
     ["vector", 6, 7],
     ["web", 7, 6],
-  ])("marks only the %s RAG branch complete in the minimap", (choice, completeIndex, incompleteIndex) => {
+  ])("does not mark a selected %s RAG branch complete before it finishes", (choice, completeIndex, incompleteIndex) => {
     const run = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice });
     const view = createAppView(document.querySelector("#app"), handlers());
     view.render({ graph: demoGraph, run, viewport: createViewport("rag-route", "rag") });
     const edges = document.querySelectorAll(".minimap-edge");
 
-    expect(edges[completeIndex].classList.contains("is-complete")).toBe(true);
+    expect(edges[completeIndex].classList.contains("is-complete")).toBe(false);
     expect(edges[incompleteIndex].classList.contains("is-complete")).toBe(false);
   });
 
@@ -109,21 +109,21 @@ describe("AppView", () => {
   });
 
   it("shows branch completion counts for parallel work", () => {
-    const run = { ...createRun(demoGraph, "rag-retrieval"), activeBranches: ["vector", "web"], completedBranches: ["vector"] };
+    const run = { ...createRun(demoGraph, "rag-retrieval"), selectedBranches: ["vector", "web"], activeBranches: ["vector", "web"], completedBranches: ["vector"] };
     const view = createAppView(document.querySelector("#app"), handlers());
     view.render({ graph: demoGraph, run, viewport: createViewport("rag-route", "rag") });
 
     expect(document.querySelector("[data-testid=branch-progress]").textContent).toContain("1 / 2");
   });
 
-  it("resets branch progress after a parallel join completes", () => {
+  it("preserves branch progress after a parallel join completes", () => {
     let run = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "parallel" });
     run = transition(run, { type: "COMPLETE_BRANCH", branch: "vector" });
     run = transition(run, { type: "COMPLETE_BRANCH", branch: "web" });
     const view = createAppView(document.querySelector("#app"), handlers());
     view.render({ graph: demoGraph, run, viewport: createViewport("rag-merge", "rag") });
 
-    expect(document.querySelector("[data-testid=branch-progress]").textContent).toContain("0 / 0");
+    expect(document.querySelector("[data-testid=branch-progress]").textContent).toContain("2 / 2");
   });
 
   it("shows the current iteration and event number in playback controls", () => {
@@ -183,6 +183,9 @@ describe("AppView", () => {
 
     document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
     expect(document.querySelector('[data-action="play"]').textContent).toContain("播放 · Play");
+    expect(document.querySelector("[data-testid=breadcrumb]").textContent).toBe("Agent 系统 > 输入与编排");
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
     expect(document.querySelector('[data-layer="scene"]').getAttribute("transform")).toBe("translate(0 0) scale(1)");
 
     const select = document.querySelector('[data-action="scenario"]');
@@ -280,7 +283,7 @@ describe("AppView", () => {
     expect(document.querySelector('[data-node-id="rag-merge"]').classList.contains("is-partial")).toBe(true);
   });
 
-  it("reserves the minimap column for the inspector at the 620px breakpoint", () => {
+  it("stacks a full-width inspector at the 620px breakpoint", () => {
     const view = createAppView(document.querySelector("#app"), handlers());
     const viewport = {
       ...createViewport("action", "tools"),
@@ -290,7 +293,7 @@ describe("AppView", () => {
 
     const css = readFileSync("src/styles.css", "utf8");
     expect(document.querySelector(".inspector").closest(".canvas-shell")).toBe(document.querySelector(".canvas-shell"));
-    expect(css).toContain(".inspector { right: 184px; }");
+    expect(css).toMatch(/@media \(max-width: 620px\)[\s\S]*\.inspector \{[\s\S]*left: 0;[\s\S]*right: 0;/);
   });
 
   it("supports keyboard activation for minimap modules and inspector close", () => {

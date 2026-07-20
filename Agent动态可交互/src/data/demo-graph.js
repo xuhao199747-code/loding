@@ -48,10 +48,10 @@ export const demoGraph = {
   guardrails: { scope: "global", label: label("权限 · 安全 · 评估 · 审计", "Permissions · Safety · Evaluation · Audit") },
   scenarios: [
     { id: "normal", label: label("正常运行", "Normal Run") },
-    { id: "no-results", label: label("检索无结果", "No Retrieval Results"), trigger: "rag-join", status: "partial" },
-    { id: "tool-timeout", label: label("工具超时", "Tool Timeout"), trigger: "tool-event", status: "retrying" },
-    { id: "permission-denied", label: label("权限不足", "Permission Denied"), trigger: "tool-event", status: "blocked" },
-    { id: "evaluation-failed", label: label("评估不通过", "Evaluation Failed"), trigger: "observation-event", status: "paused" },
+    { id: "no-results", label: label("检索无结果", "No Retrieval Results"), trigger: "rag-join", status: "partial", recovery: [{ action: "retry", label: label("重试检索", "Retry Retrieval") }, { action: "replan", label: label("重新规划", "Replan") }] },
+    { id: "tool-timeout", label: label("工具超时", "Tool Timeout"), trigger: "tool-event", status: "retrying", recovery: [{ action: "retry", label: label("重试工具", "Retry Tool") }] },
+    { id: "permission-denied", label: label("权限不足", "Permission Denied"), trigger: "tool-event", status: "blocked", recovery: [{ action: "request", label: label("请求确认", "Request Confirmation") }, { action: "confirm", label: label("确认授权并重试", "Confirm access & retry") }, { action: "cancel", label: label("取消执行", "Cancel") }] },
+    { id: "evaluation-failed", label: label("评估不通过", "Evaluation Failed"), trigger: "observation-event", status: "paused", recovery: [{ action: "retry", label: label("重试评估", "Retry") }, { action: "replan", label: label("重新规划", "Replan") }, { action: "finish", label: label("仍然输出", "Finish") }] },
   ],
   events: [
     { id: "input-event", nodeId: "user-task", label: label("接收用户任务", "Receive Task"), relation: "sequence", edgeIds: ["e1"], next: "orchestrator-event" },

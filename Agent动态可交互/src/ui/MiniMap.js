@@ -21,7 +21,7 @@ function viewportBox(graph, viewing) {
 }
 
 export function renderMiniMap(container, { graph, run, viewport, handlers }) {
-  container.innerHTML = `<div class="minimap-head"><span>全局定位 <small>OVERVIEW</small></span><button data-action="overview">全局视图 <small>Overview</small></button></div><div class="minimap-map-host"></div><div class="minimap-actions"><button data-action="follow">${viewport.followRun ? "跟随中 · Following" : "跟随执行 · Follow Run"}</button><button data-action="minimap-return-live" ${viewport.isViewingLive ? "hidden" : ""}>回到当前节点 · Return Live</button></div>`;
+  container.innerHTML = `<div class="minimap-head"><span>全局定位 <small>OVERVIEW</small></span><button data-action="minimap-toggle" aria-expanded="true">收起小地图 <small>Collapse Map</small></button></div><div class="minimap-map-host"></div><div class="minimap-actions"><button data-action="overview">全局视图 <small>Overview</small></button><button data-action="follow">${viewport.followRun ? "跟随中 · Following" : "跟随执行 · Follow Run"}</button><button data-action="minimap-return-live" ${viewport.isViewingLive ? "hidden" : ""}>回到当前节点 · Return Live</button></div>`;
 
   const map = svg("svg", {
     viewBox: "0 0 1200 800",
@@ -31,6 +31,7 @@ export function renderMiniMap(container, { graph, run, viewport, handlers }) {
   });
   const nodes = new Map(graph.nodes.map((node) => [node.id, node]));
   const currentEvent = graph.events.find((event) => event.id === run.currentEventId);
+  const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
   const complete = completedEdgeIdsForTrace(graph, run.trace);
 
   for (const edge of graph.edges) {
@@ -42,7 +43,8 @@ export function renderMiniMap(container, { graph, run, viewport, handlers }) {
       "data-edge-type": edge.type,
     });
     if (complete.has(edge.id)) path.classList.add("is-complete");
-    if (isCurrentLiveEdge(currentEvent, edge, run.activeBranches)) path.classList.add("is-live");
+    if (edge.branch && run.completedBranches.includes(edge.branch)) path.classList.add("is-complete");
+    if (isCurrentLiveEdge(currentEvent, edge, selectedBranches)) path.classList.add("is-live");
     map.append(path);
   }
 
@@ -88,6 +90,7 @@ export function renderMiniMap(container, { graph, run, viewport, handlers }) {
 
   container.querySelector(".minimap-map-host").append(map);
   container.querySelector('[data-action="overview"]').addEventListener("click", handlers.onOverview);
+  container.querySelector('[data-action="minimap-toggle"]').addEventListener("click", handlers.onMiniMapToggle);
   container.querySelector('[data-action="follow"]').addEventListener("click", handlers.onToggleFollow);
   container.querySelector('[data-action="minimap-return-live"]').addEventListener("click", handlers.onReturnLive);
 }

@@ -10,6 +10,7 @@ const state = {
   viewport: reduceViewport(createViewport(), { type: "SHOW_INTRO_OVERVIEW" }),
   scenarioId: "normal",
   introActive: true,
+  minimapCollapsed: false,
 };
 let playbackTimer = null;
 let introTimer = null;
@@ -65,7 +66,7 @@ function advanceOne() {
   }
   const scenario = state.graph.scenarios.find((item) => item.id === state.scenarioId);
   if (scenario?.trigger === state.run.currentEventId) {
-    state.run = { ...state.run, status: scenario.status, simulatedIssue: scenario.label };
+    state.run = transition(state.run, { type: "REPORT_ISSUE", issue: scenario });
     return false;
   }
   return true;
@@ -115,6 +116,16 @@ const handlers = {
     state.viewport = reduceViewport(state.viewport, { type: "SHOW_OVERVIEW" });
     render();
   },
+  onEscape() {
+    cancelIntro(false);
+    pausePlayback();
+    if (state.viewport.viewing.level === "node") {
+      state.viewport = reduceViewport(state.viewport, { type: "FOCUS_MODULE", moduleId: state.viewport.viewing.moduleId });
+    } else {
+      state.viewport = reduceViewport(state.viewport, { type: "SHOW_OVERVIEW" });
+    }
+    render();
+  },
   onModuleFocus(moduleId) {
     cancelIntro();
     state.viewport = reduceViewport(state.viewport, { type: "FOCUS_MODULE", moduleId });
@@ -128,6 +139,11 @@ const handlers = {
   onReturnLive() {
     cancelIntro();
     state.viewport = reduceViewport(state.viewport, { type: "RETURN_TO_LIVE", moduleId: moduleForNode(state.run.currentNodeId) });
+    render();
+  },
+  onMiniMapToggle() {
+    cancelIntro(false);
+    state.minimapCollapsed = !state.minimapCollapsed;
     render();
   },
   onBranchChoice(choice) {
@@ -153,6 +169,18 @@ const handlers = {
     cancelPlayback();
     state.scenarioId = scenarioId;
     state.run = transition(state.run, { type: "RESET" });
+    syncLive();
+  },
+  onRecovery(action) {
+    cancelIntro();
+    pausePlayback();
+    state.run = transition(state.run, { type: "RECOVER", action, reason: `Scenario recovery: ${action}` });
+    syncLive();
+  },
+  onRerunSnapshot(snapshotId) {
+    cancelIntro();
+    pausePlayback();
+    state.run = transition(state.run, { type: "RERUN_SNAPSHOT", snapshotId, reason: "Inspector replay" });
     syncLive();
   },
   onPlayPause() {
@@ -188,6 +216,11 @@ const keyboardController = new AbortController();
 globalThis[keyboardControllerKey] = keyboardController;
 
 document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    handlers.onEscape();
+    return;
+  }
   if (event.defaultPrevented || event.target.closest?.("input, textarea, select, button, [contenteditable='true'], [role='button']")) return;
 
   if (event.key === "ArrowLeft") {
@@ -199,9 +232,6 @@ document.addEventListener("keydown", (event) => {
   } else if (event.key === " " || event.code === "Space") {
     event.preventDefault();
     handlers.onPlayPause();
-  } else if (event.key === "Escape") {
-    event.preventDefault();
-    handlers.onOverview();
   }
 }, { signal: keyboardController.signal });
 

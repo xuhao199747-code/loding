@@ -1,50 +1,98 @@
 const TERMINAL = new Set(["completed", "cancelled", "failed"]);
 
+const cloneTrace = (trace) => trace.map((entry) => ({ ...entry, branches: entry.branches ? [...entry.branches] : undefined }));
+const cloneBranches = (branches) => [...(branches ?? [])];
+
+function eventFor(run, eventId = run.currentEventId) {
+  return run.graph.events.find((event) => event.id === eventId);
+}
+
+function createEventSnapshot(run, detail = {}) {
+  const event = eventFor(run);
+  const selectedBranches = Object.freeze(cloneBranches(run.selectedBranches));
+  const completedBranches = Object.freeze(cloneBranches(run.completedBranches));
+  const trace = Object.freeze(cloneTrace(run.trace).map((entry) => Object.freeze(entry)));
+  const issue = run.simulatedIssue ? Object.freeze({ ...run.simulatedIssue }) : null;
+  return Object.freeze({
+    id: `${event.id}:${run.eventSnapshots.length + 1}`,
+    eventId: event.id,
+    nodeId: event.nodeId,
+    status: run.status,
+    input: detail.input ?? event.label.zh,
+    output: detail.output ?? "—",
+    summary: detail.summary ?? event.label.en,
+    iteration: run.iteration,
+    selectedBranches,
+    completedBranches,
+    issue,
+    trace,
+  });
+}
+
+function recordEvent(run, detail) {
+  return { ...run, eventSnapshots: [...run.eventSnapshots, createEventSnapshot(run, detail)] };
+}
+
+function stateSnapshot(run) {
+  return {
+    status: run.status,
+    currentEventId: run.currentEventId,
+    currentNodeId: run.currentNodeId,
+    selectedBranches: cloneBranches(run.selectedBranches),
+    activeBranches: cloneBranches(run.activeBranches),
+    completedBranches: cloneBranches(run.completedBranches),
+    iteration: run.iteration,
+    trace: cloneTrace(run.trace),
+    eventSnapshots: [...run.eventSnapshots],
+    simulatedIssue: run.simulatedIssue ? { ...run.simulatedIssue } : null,
+  };
+}
+
+function withHistory(run) {
+  return { ...run, history: [...run.history, stateSnapshot(run)] };
+}
+
+function move(run, eventId, relation, detail = {}, iteration = run.iteration) {
+  const target = eventFor(run, eventId);
+  if (!target) throw new Error(`Unknown target event: ${eventId}`);
+  const recorded = recordEvent(run, detail);
+  const withSnapshot = withHistory(recorded);
+  return {
+    ...withSnapshot,
+    status: "paused",
+    currentEventId: target.id,
+    currentNodeId: target.nodeId,
+    iteration,
+    trace: [...run.trace, { from: run.currentEventId, to: target.id, relation, iteration, ...detail }],
+  };
+}
+
+function resetIssue(run) {
+  return { ...run, simulatedIssue: null, status: "paused" };
+}
+
 export function createRun(graph, startEventId = graph.events[0].id) {
   const event = graph.events.find((item) => item.id === startEventId);
   if (!event) throw new Error(`Unknown start event: ${startEventId}`);
-  return {
+  const run = {
     graph,
     status: "paused",
     currentEventId: event.id,
     currentNodeId: event.nodeId,
+    selectedBranches: [],
     activeBranches: [],
     completedBranches: [],
     iteration: 1,
     trace: [],
     history: [],
+    eventSnapshots: [],
     simulatedIssue: null,
   };
+  return recordEvent(run, { summary: "Run initialized" });
 }
 
-function snapshot(run) {
-  return {
-    status: run.status,
-    currentEventId: run.currentEventId,
-    currentNodeId: run.currentNodeId,
-    activeBranches: [...run.activeBranches],
-    completedBranches: [...run.completedBranches],
-    iteration: run.iteration,
-    trace: [...run.trace],
-    simulatedIssue: run.simulatedIssue,
-  };
-}
-
-function eventFor(run) {
-  return run.graph.events.find((event) => event.id === run.currentEventId);
-}
-
-function move(run, eventId, relation, detail = {}, iteration = run.iteration) {
-  const target = run.graph.events.find((event) => event.id === eventId);
-  if (!target) throw new Error(`Unknown target event: ${eventId}`);
-  return {
-    ...run,
-    status: "paused",
-    currentEventId: target.id,
-    currentNodeId: target.nodeId,
-    trace: [...run.trace, { from: run.currentEventId, to: target.id, relation, iteration, ...detail }],
-    history: [...run.history, snapshot(run)],
-  };
+export function latestSnapshotForNode(run, nodeId) {
+  return [...run.eventSnapshots].reverse().find((snapshot) => snapshot.nodeId === nodeId) ?? null;
 }
 
 export function transition(run, action) {
@@ -53,59 +101,103 @@ export function transition(run, action) {
     return previous ? { ...run, ...previous, history: run.history.slice(0, -1) } : run;
   }
   if (action.type === "RESET") return createRun(run.graph);
+  if (action.type === "RERUN_SNAPSHOT") {
+    const snapshot = run.eventSnapshots.find((item) => item.id === action.snapshotId);
+    if (!snapshot) throw new Error(`Unknown snapshot: ${action.snapshotId}`);
+    const replay = createRun(run.graph, snapshot.eventId);
+    return {
+      ...replay,
+      iteration: snapshot.iteration,
+      selectedBranches: cloneBranches(snapshot.selectedBranches),
+      activeBranches: cloneBranches(snapshot.selectedBranches),
+      completedBranches: cloneBranches(snapshot.completedBranches),
+      trace: cloneTrace(snapshot.trace),
+      eventSnapshots: run.eventSnapshots.slice(0, run.eventSnapshots.indexOf(snapshot) + 1),
+      recovery: { action: "rerun", reason: action.reason ?? "Historical snapshot replay" },
+    };
+  }
   if (TERMINAL.has(run.status)) throw new Error("Run is terminal");
+
+  if (action.type === "REPORT_ISSUE") {
+    const issue = action.issue;
+    if (!issue) throw new Error("Issue details are required");
+    const blocked = { ...run, status: issue.status ?? "blocked", simulatedIssue: issue };
+    return recordEvent(blocked, { output: issue.label?.zh ?? issue.id, summary: "Simulated issue recorded" });
+  }
+
+  if (action.type === "RECOVER") {
+    const recovery = { recovery: action.action, reason: action.reason ?? "Recovery requested" };
+    const cleared = resetIssue(run);
+    if (action.action === "retry") {
+      const retried = transition(cleared, { type: "RETRY", reason: recovery.reason });
+      return { ...retried, recovery: { action: "retry", reason: recovery.reason }, trace: retried.trace.map((entry, index) => index === retried.trace.length - 1 ? { ...entry, recovery: "retry" } : entry) };
+    }
+    if (action.action === "replan") {
+      const replanned = transition(cleared, { type: "REPLAN", reason: recovery.reason });
+      return { ...replanned, recovery: { action: "replan", reason: recovery.reason }, trace: replanned.trace.map((entry, index) => index === replanned.trace.length - 1 ? { ...entry, recovery: "replan" } : entry) };
+    }
+    if (action.action === "finish") {
+      return { ...move(cleared, "final-event", "decision", recovery), recovery: { action: "finish", reason: recovery.reason } };
+    }
+    if (action.action === "request") {
+      const requested = { ...run, simulatedIssue: { ...run.simulatedIssue, requested: true }, status: "blocked" };
+      const recorded = recordEvent(requested, { summary: "Permission requested" });
+      return { ...recorded, recovery: { action: "request", reason: recovery.reason }, trace: [...run.trace, { from: run.currentEventId, to: run.currentEventId, relation: "recovery", ...recovery, iteration: run.iteration }] };
+    }
+    if (action.action === "confirm") {
+      const retried = transition(cleared, { type: "RETRY", reason: recovery.reason });
+      return { ...retried, recovery: { action: "confirm", reason: recovery.reason }, trace: retried.trace.map((entry, index) => index === retried.trace.length - 1 ? { ...entry, recovery: "confirm" } : entry) };
+    }
+    if (action.action === "cancel") return { ...recordEvent(cleared, { summary: "Recovery cancelled" }), status: "cancelled", recovery: { action: "cancel", reason: recovery.reason } };
+    throw new Error(`Unknown recovery action: ${action.action}`);
+  }
+
   const event = eventFor(run);
-  if (action.type === "CANCEL") return { ...run, status: "cancelled" };
+  if (action.type === "CANCEL") return { ...recordEvent(run, { summary: "Run cancelled" }), status: "cancelled" };
   if (action.type === "CHOOSE_BRANCH") {
     const choice = event.choices?.[action.choice];
     if (!choice) throw new Error(`Unknown branch choice: ${action.choice}`);
     const iteration = ["retry", "replan"].includes(choice.relation) ? run.iteration + 1 : run.iteration;
     const next = move(run, choice.next, choice.relation ?? "decision", { choice: action.choice }, iteration);
-    return {
-      ...next,
-      activeBranches: choice.branches ?? [],
-      completedBranches: [],
-      iteration,
-    };
+    const selectedBranches = cloneBranches(choice.branches);
+    return { ...next, selectedBranches, activeBranches: selectedBranches, completedBranches: [], iteration };
   }
   if (action.type === "COMPLETE_BRANCH") {
-    if (!run.activeBranches.includes(action.branch)) throw new Error(`Inactive branch: ${action.branch}`);
+    if (!run.selectedBranches.includes(action.branch)) throw new Error(`Inactive branch: ${action.branch}`);
     const completedBranches = [...new Set([...run.completedBranches, action.branch])];
-    if (completedBranches.length < run.activeBranches.length) {
-      return { ...run, completedBranches, history: [...run.history, snapshot(run)] };
+    if (completedBranches.length < run.selectedBranches.length) {
+      const recorded = recordEvent(run, { summary: `${action.branch} completed` });
+      return { ...withHistory(recorded), completedBranches };
     }
-    return { ...move(run, event.join, "join", { branches: [...run.activeBranches] }), activeBranches: [], completedBranches };
+    return {
+      ...move(run, event.join, "join", { branches: cloneBranches(run.selectedBranches) }),
+      selectedBranches: cloneBranches(run.selectedBranches),
+      activeBranches: cloneBranches(run.selectedBranches),
+      completedBranches,
+    };
   }
   if (action.type === "REPLAN") {
     const planningEvent = run.graph.events.find((item) => item.id === "planning-event");
     if (!planningEvent) throw new Error("Planning event is required for replan");
-    return {
-      ...run,
-      currentEventId: planningEvent.id,
-      currentNodeId: "planning",
-      iteration: run.iteration + 1,
-      trace: [...run.trace, { from: event.id, to: planningEvent.id, relation: "replan", reason: action.reason, iteration: run.iteration + 1 }],
-      history: [...run.history, snapshot(run)],
-    };
+    return move(run, planningEvent.id, "replan", { reason: action.reason }, run.iteration + 1);
   }
   if (action.type === "RETRY") {
+    const recorded = recordEvent(run, { summary: "Retrying current event" });
+    const withSnapshot = withHistory(recorded);
+    const iteration = run.iteration + 1;
     return {
-      ...run,
-      iteration: run.iteration + 1,
-      trace: [...run.trace, { from: event.id, to: event.id, relation: "retry", iteration: run.iteration + 1 }],
-      history: [...run.history, snapshot(run)],
+      ...withSnapshot,
+      iteration,
+      status: "paused",
+      trace: [...run.trace, { from: event.id, to: event.id, relation: "retry", reason: action.reason, iteration }],
     };
   }
   if (action.type === "ADVANCE") {
     if (event.relation === "decision") throw new Error("Branch selection required");
     if (event.relation === "parallel") throw new Error("Parallel branches must complete");
     if (!event.next) {
-      return {
-        ...run,
-        status: "completed",
-        trace: [...run.trace, { from: event.id, to: null, relation: "complete", iteration: run.iteration }],
-        history: [...run.history, snapshot(run)],
-      };
+      const recorded = recordEvent(run, { summary: "Run completed" });
+      return { ...withHistory(recorded), status: "completed", trace: [...run.trace, { from: event.id, to: null, relation: "complete", iteration: run.iteration }] };
     }
     return move(run, event.next, event.relation);
   }

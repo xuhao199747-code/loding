@@ -38,7 +38,7 @@ describe("GraphView", () => {
     expect(vectorEdge.classList.contains("is-skipped")).toBe(true);
     expect(vectorEdge.classList.contains("is-complete")).toBe(false);
     expect(webEdge.classList.contains("is-live")).toBe(true);
-    expect(webEdge.classList.contains("is-complete")).toBe(true);
+    expect(webEdge.classList.contains("is-complete")).toBe(false);
   });
 
   it("keeps a web-only trace selected after its branch joins", () => {
@@ -49,7 +49,7 @@ describe("GraphView", () => {
     const webEdge = document.querySelector('[data-edge-id="e8"]');
     expect(webEdge.classList.contains("is-complete")).toBe(true);
     expect(vectorEdge.classList.contains("is-complete")).toBe(false);
-    expect(vectorEdge.classList.contains("is-skipped")).toBe(false);
+    expect(vectorEdge.classList.contains("is-skipped")).toBe(true);
   });
 
   it("completes only the chosen observation outcome", () => {
