@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { demoGraph } from "../src/data/demo-graph.js";
 
 const approvedPalette = new Set([
   "#050B14", "#081423", "#0D1B2D", "#1E3855", "#38D1FF",
@@ -41,5 +42,15 @@ describe("foundation shell", () => {
     const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
 
     expect(packageJson.scripts.check).toBe("npm run build && npm run test");
+  });
+
+  it("keeps the reference topology as presentation data beside executable graph data", () => {
+    expect(demoGraph).toMatchObject({
+      systemBoundary: expect.any(Object),
+      groups: expect.any(Array),
+      detailNodes: expect.any(Array),
+      topologyEdges: expect.any(Array),
+      retrievalBranches: expect.any(Array),
+    });
   });
 });
