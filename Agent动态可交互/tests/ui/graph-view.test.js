@@ -122,11 +122,14 @@ describe("GraphView", () => {
 
     const selected = document.querySelector(`[data-edge-id="${selectedEdgeId}"]`);
     const skipped = document.querySelector(`[data-edge-id="${skippedEdgeId}"]`);
+    const merge = document.querySelector('[data-node-id="rag-merge"]');
     expect(selected.classList.contains("is-live")).toBe(true);
     expect(selected.classList.contains("is-complete")).toBe(false);
     expect(skipped.classList.contains("is-skipped")).toBe(true);
     expect(skipped.classList.contains("is-live")).toBe(false);
     expect(skipped.classList.contains("is-complete")).toBe(false);
+    expect(merge.classList.contains("is-live")).toBe(true);
+    expect(merge.classList.contains("is-skipped")).toBe(false);
 
     run = transition(run, { type: "ADVANCE" });
     render({ run, viewport: createViewport("rag-context", "rag") });
@@ -134,6 +137,8 @@ describe("GraphView", () => {
     expect(document.querySelector(`[data-edge-id="${selectedEdgeId}"]`).classList.contains("is-live")).toBe(false);
     expect(document.querySelector(`[data-edge-id="${skippedEdgeId}"]`).classList.contains("is-skipped")).toBe(true);
     expect(document.querySelector(`[data-edge-id="${skippedEdgeId}"]`).classList.contains("is-complete")).toBe(false);
+    expect(document.querySelector('[data-node-id="rag-merge"]').classList.contains("is-complete")).toBe(true);
+    expect(document.querySelector('[data-node-id="rag-merge"]').classList.contains("is-skipped")).toBe(false);
   });
 
   it.each([

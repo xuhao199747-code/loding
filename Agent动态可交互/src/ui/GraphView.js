@@ -56,7 +56,7 @@ function edgePulse(edge, pathData, nodes) {
 
 function branchStatus(graph, run, nodeId) {
   const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
-  const branch = graph.edges.find((edge) => edge.branch && edge.to === nodeId)?.branch;
+  const branch = graph.edges.find((edge) => edge.type === "parallel" && edge.branch && edge.to === nodeId)?.branch;
   if (!branch) return null;
   if (selectedBranches.includes(branch)) return run.completedBranches.includes(branch) ? "success" : "running";
   return selectedBranches.length ? "skipped" : null;
@@ -135,7 +135,7 @@ export function renderGraph(container, { graph, run }) {
     if (node.id === run.currentNodeId) group.classList.add("is-live", `is-${run.status}`);
     if (endpoints.has(node.id)) group.classList.add("is-relation-endpoint");
     if (completedNodeIds.has(node.id) && !status) group.classList.add("is-complete");
-    if (status && node.id !== run.currentNodeId) group.classList.add(`is-${status}`);
+    if (status && node.id !== run.currentNodeId) group.classList.add(status === "completed" ? "is-complete" : `is-${status}`);
     const rect = svg("rect", { width: 130, height: 58, rx: 10 });
     const zh = svg("text", { x: 65, y: 25, "text-anchor": "middle", class: "primary-label" }); zh.textContent = node.label.zh;
     const en = svg("text", { x: 65, y: 42, "text-anchor": "middle", class: "node-en" }); en.textContent = node.label.en;
