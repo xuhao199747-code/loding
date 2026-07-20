@@ -74,6 +74,11 @@ body {
   stroke: #1E3855;
 }
 
+.module-en {
+  fill: #A88BFA;
+  font-size: 10px;
+}
+
 .graph-module.is-dimmed,
 .graph-node.is-dimmed {
   opacity: .2;

@@ -30,10 +30,31 @@ describe("GraphView", () => {
     expect(document.querySelector("[data-detail-step]").textContent).toContain("子目标拆解");
   });
 
-  it("keeps the chosen execution trace while marking unselected branches", () => {
+  it("completes only the selected RAG branch while marking unselected branches skipped", () => {
     const run = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "web" });
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, viewport: createViewport("rag-route", "rag"), onNodeSelect: vi.fn() });
-    expect(document.querySelector('[data-edge-id="e7"]').classList.contains("is-skipped")).toBe(true);
-    expect(document.querySelector('[data-edge-id="e8"]').classList.contains("is-live")).toBe(true);
+    const vectorEdge = document.querySelector('[data-edge-id="e7"]');
+    const webEdge = document.querySelector('[data-edge-id="e8"]');
+    expect(vectorEdge.classList.contains("is-skipped")).toBe(true);
+    expect(vectorEdge.classList.contains("is-complete")).toBe(false);
+    expect(webEdge.classList.contains("is-live")).toBe(true);
+    expect(webEdge.classList.contains("is-complete")).toBe(true);
+  });
+
+  it("completes only the chosen observation outcome", () => {
+    const run = transition(createRun(demoGraph, "observation-event"), { type: "CHOOSE_BRANCH", choice: "retry" });
+    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, viewport: createViewport("action", "tools"), onNodeSelect: vi.fn() });
+    expect(document.querySelector('[data-edge-id="e18"]').classList.contains("is-complete")).toBe(true);
+    expect(document.querySelector('[data-edge-id="e16"]').classList.contains("is-complete")).toBe(false);
+    expect(document.querySelector('[data-edge-id="e19"]').classList.contains("is-complete")).toBe(false);
+  });
+
+  it("renders Chinese module headers with a smaller English support label", () => {
+    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), onNodeSelect: vi.fn() });
+    const coreModule = document.querySelector('[data-module-id="core"]');
+    const support = coreModule.querySelector(".module-en");
+    expect(coreModule.textContent).toContain("Agent 核心");
+    expect(support.textContent).toBe("Agent Core");
+    expect(support.getAttribute("font-size")).toBe("10");
   });
 });

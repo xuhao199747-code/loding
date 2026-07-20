@@ -17,6 +17,22 @@ function edgePath(edge, nodes) {
   return `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
 }
 
+function completedEdgeIdsForTrace(graph, trace) {
+  const events = new Map(graph.events.map((event) => [event.id, event]));
+  const edges = new Map(graph.edges.map((edge) => [edge.id, edge]));
+  return new Set(trace.flatMap((entry) => {
+    const event = events.get(entry.from);
+    const choice = event?.choices?.[entry.choice];
+    if (!choice) return event?.edgeIds ?? [];
+    if (choice.branches) return event.edgeIds.filter((edgeId) => choice.branches.includes(edges.get(edgeId)?.branch));
+    const targetNodeId = events.get(entry.to)?.nodeId;
+    return event.edgeIds.filter((edgeId) => {
+      const edge = edges.get(edgeId);
+      return edge?.type === entry.relation && edge.to === targetNodeId;
+    });
+  }));
+}
+
 function cameraFor(graph, viewing) {
   if (viewing.level === "overview") return { x: 0, y: 0, scale: 1 };
   if (viewing.level === "module") {
@@ -49,7 +65,7 @@ export function renderGraph(container, { graph, run, viewport, onNodeSelect }) {
   const nodes = new Map(graph.nodes.map((node) => [node.id, node]));
   const currentEvent = graph.events.find((event) => event.id === run.currentEventId);
   const completedEvents = run.trace.map((entry) => graph.events.find((event) => event.id === entry.from)).filter(Boolean);
-  const completedEdgeIds = new Set(completedEvents.flatMap((event) => event.edgeIds ?? []));
+  const completedEdgeIds = completedEdgeIdsForTrace(graph, run.trace);
   const completedNodeIds = new Set(completedEvents.map((event) => event.nodeId));
   const camera = cameraFor(graph, viewport.viewing);
   const scene = svg("g", { "data-layer": "scene", transform: `translate(${camera.x} ${camera.y}) scale(${camera.scale})` });
@@ -60,6 +76,7 @@ export function renderGraph(container, { graph, run, viewport, onNodeSelect }) {
     if (focusedModule && focusedModule !== module.id) group.classList.add("is-dimmed");
     group.append(svg("rect", { width: module.w, height: module.h, rx: 18 }));
     const title = svg("text", { x: 16, y: 28 }); title.textContent = module.label.zh; group.append(title);
+    const support = svg("text", { x: 16, y: 45, class: "module-en", "font-size": 10 }); support.textContent = module.label.en; group.append(support);
     scene.append(group);
   }
 
