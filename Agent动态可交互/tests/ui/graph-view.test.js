@@ -49,6 +49,27 @@ describe("GraphView", () => {
     expect(document.querySelector('[data-edge-id="e19"]').classList.contains("is-complete")).toBe(false);
   });
 
+  it("completes only the direct replan edge from observation", () => {
+    const run = transition(createRun(demoGraph, "observation-event"), { type: "REPLAN", reason: "low score" });
+    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, viewport: createViewport("planning", "core"), onNodeSelect: vi.fn() });
+    expect(document.querySelector('[data-edge-id="e16"]').classList.contains("is-complete")).toBe(true);
+    expect(document.querySelector('[data-edge-id="e18"]').classList.contains("is-complete")).toBe(false);
+    expect(document.querySelector('[data-edge-id="e19"]').classList.contains("is-complete")).toBe(false);
+  });
+
+  it("does not complete unrelated edges for a direct retry without a matching source edge", () => {
+    const run = transition(createRun(demoGraph, "tool-event"), { type: "RETRY" });
+    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, viewport: createViewport("action", "tools"), onNodeSelect: vi.fn() });
+    expect(document.querySelector('[data-edge-id="e15"]').classList.contains("is-complete")).toBe(false);
+    expect(document.querySelectorAll(".graph-edge.is-complete")).toHaveLength(0);
+  });
+
+  it("renders a direct retry from an event without edge ids without completing any edge", () => {
+    const run = transition(createRun(demoGraph, "final-event"), { type: "RETRY" });
+    renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, viewport: createViewport("final-response", "response"), onNodeSelect: vi.fn() });
+    expect(document.querySelectorAll(".graph-edge.is-complete")).toHaveLength(0);
+  });
+
   it("renders Chinese module headers with a smaller English support label", () => {
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), onNodeSelect: vi.fn() });
     const coreModule = document.querySelector('[data-module-id="core"]');
