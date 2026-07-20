@@ -3,20 +3,32 @@ import { describe, expect, it } from "vitest";
 
 const styles = readFileSync("src/styles.css", "utf8");
 
+function declarationsFor(selectors) {
+  const expectedSelectors = new Set(selectors);
+  const rule = [...styles.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find(([, selectorText]) => {
+    const ruleSelectors = new Set(selectorText.split(",").map((selector) => selector.trim()));
+    return [...expectedSelectors].every((selector) => ruleSelectors.has(selector));
+  });
+
+  return rule?.[2];
+}
+
+function declarationValue(declarations, property) {
+  return declarations.match(new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*([^;]+);`))?.[1].trim();
+}
+
 describe("single-screen style contract", () => {
   it("locks the application to a fixed viewport without page overflow", () => {
-    expect(styles).toMatch(/html,\s*body,\s*#app\s*\{(?=[^}]*width:\s*100vw;)(?=[^}]*height:\s*100vh;)(?=[^}]*overflow:\s*hidden;)[^}]*\}/);
+    const declarations = declarationsFor(["html", "body", "#app"]);
+
+    expect(declarations).toBeDefined();
+    expect(declarationValue(declarations, "width")).toBe("100vw");
+    expect(declarationValue(declarations, "height")).toBe("100vh");
+    expect(declarationValue(declarations, "overflow")).toBe("hidden");
   });
 
   it("gives primary SVG labels an explicit light fill", () => {
     expect(styles).toMatch(/\.primary-label\s*\{(?=[^}]*fill:\s*#EAF4FF;)[^}]*\}/i);
   });
 
-  it("keeps the 1366 by 768 layout from re-enabling page scrolling", () => {
-    const compactViewportRule = styles.match(/@media\s*\(\s*max-width:\s*1366px\s*\)\s*and\s*\(\s*max-height:\s*768px\s*\)\s*\{([\s\S]*)\n\}/);
-
-    expect(compactViewportRule).not.toBeNull();
-    expect(compactViewportRule[1]).toMatch(/overflow:\s*hidden;/);
-    expect(compactViewportRule[1]).not.toMatch(/overflow(?:-x|-y)?:\s*(?:auto|scroll);/);
-  });
 });

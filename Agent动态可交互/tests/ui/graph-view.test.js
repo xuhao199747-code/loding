@@ -7,16 +7,69 @@ import { createViewport } from "../../src/domain/viewport.js";
 describe("GraphView", () => {
   beforeEach(() => { document.body.innerHTML = '<div id="graph"></div>'; });
 
-  it("draws modules, edges, and nodes in stable SVG layers with explicit primary labels", () => {
+  const moduleIds = demoGraph.modules.map((module) => module.id).sort();
+  const edgeIds = demoGraph.edges.map((edge) => edge.id).sort();
+
+  function render(state) {
+    renderGraph(document.querySelector("#graph"), { graph: demoGraph, ...state, onNodeSelect: vi.fn() });
+  }
+
+  function assertCompleteOverview() {
+    expect([...document.querySelectorAll("[data-module-id]")].map((module) => module.dataset.moduleId).sort()).toEqual(moduleIds);
+    expect([...document.querySelectorAll("[data-edge-id]")].map((edge) => edge.dataset.edgeId).sort()).toEqual(edgeIds);
+    expect(document.querySelector('[data-layer="scene"]')).toBeNull();
+    expect(document.querySelectorAll(".graph-module.is-dimmed, .graph-node.is-dimmed")).toHaveLength(0);
+  }
+
+  it("draws modules before edges before nodes while allowing unrelated layers", () => {
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), onNodeSelect: vi.fn() });
 
-    const layers = [...document.querySelectorAll(".architecture-graph > [data-layer]")];
-    expect(layers.map((layer) => layer.dataset.layer)).toEqual(["modules", "edges", "nodes"]);
-    const edges = document.querySelectorAll('[data-layer="edges"] [data-edge-id]');
+    const modulesLayer = document.querySelector('[data-layer="modules"]');
+    const edgesLayer = document.querySelector('[data-layer="edges"]');
+    const nodesLayer = document.querySelector('[data-layer="nodes"]');
+    expect(modulesLayer).not.toBeNull();
+    expect(edgesLayer).not.toBeNull();
+    expect(nodesLayer).not.toBeNull();
+    expect(modulesLayer.compareDocumentPosition(edgesLayer) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
+    expect(edgesLayer.compareDocumentPosition(nodesLayer) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
+    const edges = edgesLayer.querySelectorAll("[data-edge-id]");
     expect(edges).toHaveLength(demoGraph.edges.length);
     for (const edge of edges) expect(edge.getAttribute("marker-end")).toBeTruthy();
-    expect(document.querySelectorAll('[data-layer="modules"] .primary-label')).toHaveLength(demoGraph.modules.length);
-    expect(document.querySelectorAll('[data-layer="nodes"] .primary-label')).toHaveLength(demoGraph.nodes.length);
+  });
+
+  it("marks the Chinese module and node names as primary labels", () => {
+    render({ run: createRun(demoGraph), viewport: createViewport() });
+
+    for (const module of demoGraph.modules) {
+      const primary = document.querySelector(`[data-module-id="${module.id}"] .primary-label`);
+      expect(primary).not.toBeNull();
+      expect(primary.textContent).toBe(module.label.zh);
+    }
+    for (const node of demoGraph.nodes) {
+      const primary = document.querySelector(`[data-node-id="${node.id}"] .primary-label`);
+      expect(primary).not.toBeNull();
+      expect(primary.textContent).toBe(node.label.zh);
+    }
+  });
+
+  it.each([
+    ["initial", () => ({ run: createRun(demoGraph), viewport: createViewport() })],
+    ["historical node view", () => ({
+      run: createRun(demoGraph, "rag-context-event"),
+      viewport: { ...createViewport("rag-context-event", "rag"), viewing: { level: "node", moduleId: "rag", nodeId: "rag-context" }, isViewingLive: false },
+    })],
+    ["decision", () => ({ run: createRun(demoGraph, "rag-route"), viewport: createViewport("rag-route", "rag") })],
+    ["one of two parallel branches complete", () => {
+      const selected = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "parallel" });
+      return { run: transition(selected, { type: "COMPLETE_BRANCH", branch: "vector" }), viewport: createViewport("rag-retrieval", "rag") };
+    }],
+    ["callback", () => ({ run: createRun(demoGraph, "rag-callback"), viewport: createViewport("rag-context", "rag") })],
+    ["retry", () => ({ run: transition(createRun(demoGraph, "tool-event"), { type: "RETRY" }), viewport: createViewport("action", "tools") })],
+    ["replan", () => ({ run: transition(createRun(demoGraph, "observation-event"), { type: "REPLAN", reason: "low score" }), viewport: createViewport("planning", "core") })],
+  ])("keeps the full architecture visible for %s", (_state, stateForCase) => {
+    render(stateForCase());
+
+    assertCompleteOverview();
   });
 
   it("marks callback edges and live nodes", () => {

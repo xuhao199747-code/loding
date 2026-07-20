@@ -31,6 +31,9 @@ describe("AppView", () => {
     expect(document.querySelector(".inspector")).toBeNull();
     expect(document.querySelector(".flow-stage")).toBeTruthy();
     expect(document.querySelector(".step-rail")).toBeTruthy();
+    for (const action of ["overview", "follow", "return-live", "minimap-return-live", "minimap-toggle"]) {
+      expect(document.querySelectorAll(`[data-action="${action}"]`)).toHaveLength(0);
+    }
     expect(document.querySelector("[data-testid=breadcrumb]").textContent).toContain("RAG 检索增强");
   });
 
