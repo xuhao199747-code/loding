@@ -10,7 +10,7 @@
     "build": "vite build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run test && npm run build"
+    "check": "npm run build && npm run test"
   },
   "devDependencies": {
     "jsdom": "29.1.1",

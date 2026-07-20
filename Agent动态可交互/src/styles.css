@@ -198,6 +198,8 @@ body {
 .playback button:disabled { opacity: .35; }
 .decision-options { display: flex; gap: 6px; }
 .decision-options button { border-color: var(--branch, var(--muted)); }
+.run-progress { color: var(--muted); font-size: .78rem; white-space: nowrap; }
+.run-progress small { display: block; font-size: .65rem; }
 .edge-parallel.is-live { stroke: var(--live); animation: flow 1.2s linear infinite; }
 .edge-join.is-live { stroke: var(--done); }
 .edge-replan.is-live { stroke: var(--error, #FF6978); }

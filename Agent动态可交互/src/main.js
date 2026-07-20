@@ -4,8 +4,15 @@ import { createRun, transition } from "./domain/execution.js";
 import { createViewport, reduceViewport } from "./domain/viewport.js";
 import { createAppView } from "./ui/AppView.js";
 
-const state = { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), scenarioId: "normal" };
+const state = {
+  graph: demoGraph,
+  run: createRun(demoGraph),
+  viewport: reduceViewport(createViewport(), { type: "SHOW_INTRO_OVERVIEW" }),
+  scenarioId: "normal",
+  introActive: true,
+};
 let playbackTimer = null;
+let introTimer = null;
 const moduleForNode = (nodeId) => state.graph.nodes.find((node) => node.id === nodeId)?.moduleId;
 const render = () => view.render(state);
 const isTerminal = (status) => ["completed", "failed", "cancelled"].includes(status);
@@ -15,6 +22,34 @@ function cancelPlayback() {
     clearTimeout(playbackTimer);
     playbackTimer = null;
   }
+}
+
+function pausePlayback() {
+  cancelPlayback();
+  if (state.run.status === "running") state.run = { ...state.run, status: "paused" };
+}
+
+function cancelIntro(focusLive = true) {
+  if (introTimer !== null) {
+    clearTimeout(introTimer);
+    introTimer = null;
+  }
+  if (!state.introActive) return;
+  state.introActive = false;
+  if (focusLive) {
+    state.viewport = reduceViewport(state.viewport, {
+      type: "RETURN_TO_LIVE",
+      moduleId: moduleForNode(state.run.currentNodeId),
+    });
+  }
+}
+
+function scheduleIntro() {
+  introTimer = setTimeout(() => {
+    introTimer = null;
+    cancelIntro();
+    render();
+  }, 4000);
 }
 
 function advanceOne() {
@@ -63,53 +98,65 @@ function schedulePlayback() {
   }, 900 / (state.playbackSpeed ?? 1));
 }
 
-const view = createAppView(document.querySelector("#app"), {
+const handlers = {
   onNodeSelect(node) {
+    cancelIntro();
     state.viewport = reduceViewport(state.viewport, { type: "FOCUS_NODE", moduleId: node.moduleId, nodeId: node.id });
     render();
   },
   onCloseInspector() {
+    cancelIntro();
     state.viewport = reduceViewport(state.viewport, { type: "FOCUS_MODULE", moduleId: state.viewport.viewing.moduleId });
     render();
   },
   onOverview() {
+    cancelIntro(false);
+    pausePlayback();
     state.viewport = reduceViewport(state.viewport, { type: "SHOW_OVERVIEW" });
     render();
   },
   onModuleFocus(moduleId) {
+    cancelIntro();
     state.viewport = reduceViewport(state.viewport, { type: "FOCUS_MODULE", moduleId });
     render();
   },
   onToggleFollow() {
+    cancelIntro();
     state.viewport = reduceViewport(state.viewport, { type: "TOGGLE_FOLLOW" });
     render();
   },
   onReturnLive() {
+    cancelIntro();
     state.viewport = reduceViewport(state.viewport, { type: "RETURN_TO_LIVE", moduleId: moduleForNode(state.run.currentNodeId) });
     render();
   },
   onBranchChoice(choice) {
+    cancelIntro();
     cancelPlayback();
     state.run = transition(state.run, { type: "CHOOSE_BRANCH", choice });
     syncLive();
   },
   onPrimaryAction() {
+    cancelIntro();
     cancelPlayback();
     advanceOne();
     syncLive();
   },
   onRestart() {
+    cancelIntro();
     cancelPlayback();
     state.run = transition(state.run, { type: "RESET" });
     syncLive();
   },
   onScenarioChange(scenarioId) {
+    cancelIntro();
     cancelPlayback();
     state.scenarioId = scenarioId;
     state.run = transition(state.run, { type: "RESET" });
     syncLive();
   },
   onPlayPause() {
+    cancelIntro();
     if (isTerminal(state.run.status) || state.run.simulatedIssue) {
       render();
       return;
@@ -119,16 +166,44 @@ const view = createAppView(document.querySelector("#app"), {
     schedulePlayback();
   },
   onPrevious() {
+    cancelIntro();
     cancelPlayback();
     state.run = transition(state.run, { type: "PREVIOUS" });
     syncLive();
     schedulePlayback();
   },
   onSpeedChange(speed) {
+    cancelIntro();
     state.playbackSpeed = speed;
     render();
     schedulePlayback();
   },
-});
+};
+
+const view = createAppView(document.querySelector("#app"), handlers);
+
+const keyboardControllerKey = "__interactiveAgentFlowKeyboardController";
+globalThis[keyboardControllerKey]?.abort();
+const keyboardController = new AbortController();
+globalThis[keyboardControllerKey] = keyboardController;
+
+document.addEventListener("keydown", (event) => {
+  if (event.defaultPrevented || event.target.closest?.("input, textarea, select, button, [contenteditable='true'], [role='button']")) return;
+
+  if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    handlers.onPrevious();
+  } else if (event.key === "ArrowRight") {
+    event.preventDefault();
+    handlers.onPrimaryAction();
+  } else if (event.key === " " || event.code === "Space") {
+    event.preventDefault();
+    handlers.onPlayPause();
+  } else if (event.key === "Escape") {
+    event.preventDefault();
+    handlers.onOverview();
+  }
+}, { signal: keyboardController.signal });
 
 render();
+scheduleIntro();

@@ -1,13 +1,16 @@
 export function renderPlaybackControls(container, model, handlers) {
-  const { run, event, speed = 1 } = model;
+  const { run, event, speed = 1, eventNumber = 1, eventCount = 1 } = model;
   const needsChoice = event.relation === "decision" && run.activeBranches.length === 0;
+  const branchProgress = run.activeBranches.length === 0
+    ? "0 / 0"
+    : `${run.completedBranches.length} / ${run.activeBranches.length}`;
   const primaryLabel = event.relation === "parallel"
     ? "完成下一分支 · Complete Branch"
     : event.relation === "callback"
       ? "执行回传 · Callback"
       : "下一事件 · Next Event";
 
-  container.innerHTML = `<div class="playback"><button data-action="previous">← 上一步 <small>Previous</small></button><button data-action="play">${run.status === "running" ? "暂停 · Pause" : "播放 · Play"}</button><div class="decision-options"></div><button data-action="primary" ${needsChoice ? "disabled" : ""}>${primaryLabel}</button><button data-action="restart">重新开始 · Restart</button><select data-action="speed" aria-label="播放速度 Playback speed"><option value="1" ${speed === 1 ? "selected" : ""}>1×</option><option value="1.5" ${speed === 1.5 ? "selected" : ""}>1.5×</option><option value="2" ${speed === 2 ? "selected" : ""}>2×</option></select><span data-testid="branch-progress" aria-label="并行分支进度 Parallel branch progress">${run.completedBranches.length} / ${run.activeBranches.length || 0}</span></div>`;
+  container.innerHTML = `<div class="playback"><button data-action="previous">← 上一步 <small>Previous</small></button><button data-action="play">${run.status === "running" ? "暂停 · Pause" : "播放 · Play"}</button><div class="decision-options"></div><button data-action="primary" ${needsChoice ? "disabled" : ""}>${primaryLabel}</button><button data-action="restart">重新开始 · Restart</button><select data-action="speed" aria-label="播放速度 Playback speed"><option value="1" ${speed === 1 ? "selected" : ""}>1×</option><option value="1.5" ${speed === 1.5 ? "selected" : ""}>1.5×</option><option value="2" ${speed === 2 ? "selected" : ""}>2×</option></select><span class="run-progress" data-testid="run-progress" aria-label="当前轮次和事件 Current iteration and event">轮次 ${run.iteration} · 事件 ${eventNumber} / ${eventCount}<small>Iteration ${run.iteration} · Event ${eventNumber} / ${eventCount}</small></span><span data-testid="branch-progress" aria-label="并行分支进度 Parallel branch progress">${branchProgress}</span></div>`;
 
   const options = container.querySelector(".decision-options");
   for (const [choiceId, choice] of Object.entries(event.choices ?? {})) {

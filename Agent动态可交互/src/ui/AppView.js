@@ -33,7 +33,13 @@ export function createAppView(root, handlers) {
         onClose: handlers.onCloseInspector,
       });
       const event = state.graph.events.find((item) => item.id === state.run.currentEventId);
-      renderPlaybackControls(controls, { run: state.run, event, speed: state.playbackSpeed ?? 1 }, handlers);
+      renderPlaybackControls(controls, {
+        run: state.run,
+        event,
+        speed: state.playbackSpeed ?? 1,
+        eventNumber: state.graph.events.indexOf(event) + 1,
+        eventCount: state.graph.events.length,
+      }, handlers);
     },
   };
 }

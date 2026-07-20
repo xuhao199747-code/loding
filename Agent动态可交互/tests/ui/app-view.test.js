@@ -116,6 +116,84 @@ describe("AppView", () => {
     expect(document.querySelector("[data-testid=branch-progress]").textContent).toContain("1 / 2");
   });
 
+  it("resets branch progress after a parallel join completes", () => {
+    let run = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "parallel" });
+    run = transition(run, { type: "COMPLETE_BRANCH", branch: "vector" });
+    run = transition(run, { type: "COMPLETE_BRANCH", branch: "web" });
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run, viewport: createViewport("rag-merge", "rag") });
+
+    expect(document.querySelector("[data-testid=branch-progress]").textContent).toContain("0 / 0");
+  });
+
+  it("shows the current iteration and event number in playback controls", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport("rag-route", "rag") });
+
+    expect(document.querySelector("[data-testid=run-progress]").textContent).toContain("轮次 1");
+    expect(document.querySelector("[data-testid=run-progress]").textContent).toContain(`事件 5 / ${demoGraph.events.length}`);
+  });
+
+  it("holds the complete overview for four seconds before following the live node", async () => {
+    vi.useFakeTimers();
+    await import("../../src/main.js?intro-overview-test");
+
+    expect(document.querySelector('[data-layer="scene"]').getAttribute("transform")).toBe("translate(0 0) scale(1)");
+    expect(document.querySelector('[data-node-id="user-task"]').classList.contains("is-live")).toBe(true);
+    expect(document.querySelector('[data-action="follow"]').textContent).toContain("跟随中");
+
+    await vi.advanceTimersByTimeAsync(3999);
+    expect(document.querySelector('[data-layer="scene"]').getAttribute("transform")).toBe("translate(0 0) scale(1)");
+
+    await vi.advanceTimersByTimeAsync(1);
+    expect(document.querySelector('[data-layer="scene"]').getAttribute("transform")).not.toBe("translate(0 0) scale(1)");
+    expect(document.querySelector("[data-testid=breadcrumb]").textContent).toContain("用户任务");
+    expect(document.querySelector('[data-action="follow"]').textContent).toContain("跟随中");
+  });
+
+  it("cancels the intro and pauses active playback in Global View", async () => {
+    vi.useFakeTimers();
+    await import("../../src/main.js?global-view-pauses-test");
+
+    document.querySelector('[data-action="play"]').click();
+    expect(document.querySelector('[data-action="play"]').textContent).toContain("暂停 · Pause");
+
+    document.querySelector('[data-action="overview"]').click();
+    expect(document.querySelector('[data-action="play"]').textContent).toContain("播放 · Play");
+    expect(document.querySelector('[data-layer="scene"]').getAttribute("transform")).toBe("translate(0 0) scale(1)");
+    expect(vi.getTimerCount()).toBe(0);
+
+    await vi.advanceTimersByTimeAsync(4000);
+    expect(document.querySelector('[data-layer="scene"]').getAttribute("transform")).toBe("translate(0 0) scale(1)");
+  });
+
+  it("supports document keyboard shortcuts outside form controls and SVG buttons", async () => {
+    vi.useFakeTimers();
+    await import("../../src/main.js?keyboard-shortcuts-test");
+    await vi.advanceTimersByTimeAsync(4000);
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    expect(document.querySelector('[data-node-id="orchestrator"]').classList.contains("is-live")).toBe(true);
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+    expect(document.querySelector('[data-node-id="user-task"]').classList.contains("is-live")).toBe(true);
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+    expect(document.querySelector('[data-action="play"]').textContent).toContain("暂停 · Pause");
+
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    expect(document.querySelector('[data-action="play"]').textContent).toContain("播放 · Play");
+    expect(document.querySelector('[data-layer="scene"]').getAttribute("transform")).toBe("translate(0 0) scale(1)");
+
+    const select = document.querySelector('[data-action="scenario"]');
+    select.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    expect(document.querySelector('[data-layer="scene"]').getAttribute("transform")).toBe("translate(0 0) scale(1)");
+
+    const svgNode = document.querySelector('[data-node-id="user-task"]');
+    svgNode.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+    expect(document.querySelector('[data-action="play"]').textContent).toContain("播放 · Play");
+  });
+
   it("pauses autoplay immediately when advancement arrives at a decision", async () => {
     vi.useFakeTimers();
     await import("../../src/main.js?autoplay-decision-test");

@@ -9,6 +9,14 @@ export function createViewport(liveNodeId = "user-task", moduleId = "input") {
 }
 
 export function reduceViewport(state, action) {
+  if (action.type === "SHOW_INTRO_OVERVIEW") {
+    return {
+      ...state,
+      viewing: { level: "overview", moduleId: null, nodeId: null },
+      isViewingLive: false,
+    };
+  }
+
   if (action.type === "SHOW_OVERVIEW") {
     return {
       ...state,

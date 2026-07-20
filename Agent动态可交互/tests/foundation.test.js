@@ -36,4 +36,10 @@ describe("foundation shell", () => {
 
     expect(packageJson.engines).toEqual({ node: "^22.13.0 || >=24.0.0" });
   });
+
+  it("builds the standalone artifact before running its smoke test", () => {
+    const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
+
+    expect(packageJson.scripts.check).toBe("npm run build && npm run test");
+  });
 });
