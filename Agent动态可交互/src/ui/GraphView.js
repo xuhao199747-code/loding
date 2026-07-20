@@ -1,4 +1,4 @@
-import { completedEdgeIdsForTrace } from "./traceEdges.js";
+import { completedEdgeIdsForTrace, isCurrentLiveEdge } from "./traceEdges.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const svg = (tag, attributes = {}) => {
@@ -70,8 +70,7 @@ export function renderGraph(container, { graph, run, viewport, onNodeSelect }) {
     const path = svg("path", { d: edgePath(edge, nodes), "data-edge-id": edge.id });
     path.classList.add("graph-edge", `edge-${edge.type}`);
     if (["callback", "replan", "retry"].includes(edge.type)) path.classList.add("is-callback");
-    const selectedParallelEdge = currentEvent?.relation !== "parallel" || !edge.branch || run.activeBranches.includes(edge.branch);
-    if (currentEvent?.edgeIds?.includes(edge.id) && selectedParallelEdge) path.classList.add("is-live");
+    if (isCurrentLiveEdge(currentEvent, edge, run.activeBranches)) path.classList.add("is-live");
     if (completedEdgeIds.has(edge.id)) path.classList.add("is-complete");
     if (currentEvent?.relation === "parallel" && edge.branch && !run.activeBranches.includes(edge.branch)) path.classList.add("is-skipped");
     scene.append(path);

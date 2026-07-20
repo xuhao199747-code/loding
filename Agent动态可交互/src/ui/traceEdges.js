@@ -1,5 +1,10 @@
 const DIRECT_NONLINEAR_RELATIONS = new Set(["callback", "replan", "retry"]);
 
+export function isCurrentLiveEdge(currentEvent, edge, activeBranches = []) {
+  return currentEvent?.edgeIds?.includes(edge.id)
+    && (currentEvent.relation !== "parallel" || !edge.branch || activeBranches.includes(edge.branch));
+}
+
 export function completedEdgeIdsForTrace(graph, trace) {
   const events = new Map(graph.events.map((event) => [event.id, event]));
   const edges = new Map(graph.edges.map((edge) => [edge.id, edge]));

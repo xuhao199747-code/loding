@@ -74,4 +74,14 @@ describe("AppView", () => {
     expect(edges[completeIndex].classList.contains("is-complete")).toBe(true);
     expect(edges[incompleteIndex].classList.contains("is-complete")).toBe(false);
   });
+
+  it("marks only the active vector branch live in the minimap", () => {
+    const run = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "vector" });
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run, viewport: createViewport("rag-route", "rag") });
+    const edges = document.querySelectorAll(".minimap-edge");
+
+    expect(edges[6].classList.contains("is-live")).toBe(true);
+    expect(edges[7].classList.contains("is-live")).toBe(false);
+  });
 });

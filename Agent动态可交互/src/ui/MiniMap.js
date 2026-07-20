@@ -1,4 +1,4 @@
-import { completedEdgeIdsForTrace } from "./traceEdges.js";
+import { completedEdgeIdsForTrace, isCurrentLiveEdge } from "./traceEdges.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -42,7 +42,7 @@ export function renderMiniMap(container, { graph, run, viewport, handlers }) {
       "data-edge-type": edge.type,
     });
     if (complete.has(edge.id)) path.classList.add("is-complete");
-    if (currentEvent?.edgeIds?.includes(edge.id)) path.classList.add("is-live");
+    if (isCurrentLiveEdge(currentEvent, edge, run.activeBranches)) path.classList.add("is-live");
     map.append(path);
   }
 
