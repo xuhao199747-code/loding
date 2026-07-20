@@ -243,6 +243,10 @@ body {
 
 .detail-node.is-complete > rect { stroke: var(--done); }
 .detail-node.is-skipped { opacity: .68; }
+.context-gate.is-waiting > rect { stroke: #FFBD59; stroke-dasharray: 5 3; }
+.context-gate.is-ready > rect { stroke: #54D6AD; }
+.context-gate.is-independent > rect { stroke: #A88BFA; }
+.graph-edge.is-context-dependency { stroke: #A88BFA; stroke-dasharray: 4 4; }
 
 .detail-label {
   fill: #EAF4FF;
@@ -316,8 +320,8 @@ body {
 }
 
 .edge-arrow { fill: #38D1FF; }
-.graph-edge.is-complete + .relation-label,
-.relation-label { fill: #FFBD59; font-size: 10px; }
+.relation-label rect { fill: #081423E8; stroke: #1E3855; stroke-width: .8; }
+.relation-label text { fill: #FFBD59; font-size: 9px; font-weight: 600; }
 .retry-loop { fill: none; stroke: #FFBD59; stroke-width: 2; stroke-dasharray: 5 3; }
 
 [data-layer="guardrails"] rect {

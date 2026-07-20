@@ -151,7 +151,6 @@ describe("GraphView", () => {
   it.each([
     ["sequence", "e1", () => createRun(demoGraph)],
     ["module", "e3", () => createRun(demoGraph, "planning-event")],
-    ["decision", "e6", () => createRun(demoGraph, "llm-route-event")],
     ["parallel", "e7", () => transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "vector" })],
     ["join", "e9", () => transition(transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "vector" }), { type: "COMPLETE_BRANCH", branch: "vector" })],
     ["callback", "e12", () => createRun(demoGraph, "rag-callback")],

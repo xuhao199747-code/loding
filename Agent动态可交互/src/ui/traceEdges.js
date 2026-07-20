@@ -114,6 +114,11 @@ function executableState(graph, run, nodeId) {
 }
 
 export function referenceVisualState(graph, run, id) {
+  const lane = id === "rag-group" ? "rag" : id === "tools-group" ? "tools" : null;
+  if (lane && run.activeLanes?.includes(lane)) {
+    if (run.completedLanes?.includes(lane)) return { complete: true, status: "completed" };
+    return { live: true, status: "running" };
+  }
   const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
   const branch = graph.retrievalBranches.find((item) => item.detailNodeIds?.includes(id));
   if (branch) {
@@ -148,6 +153,10 @@ export function referenceEdgeState(graph, run, topologyEdge) {
   const meta = topologyEdgeMeta(topologyEdge);
   const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
   if (meta.branch && selectedBranches.length && !selectedBranches.includes(meta.branch)) return { ...meta, skipped: true };
+  if (meta.lane && run.activeLanes?.includes(meta.lane)) {
+    const complete = run.completedLanes?.includes(meta.lane);
+    return { ...meta, live: !complete, complete, relation: meta.presentationRelation ?? "parallel" };
+  }
 
   const legacyEdge = graph.edges.find((edge) => edge.id === meta.projectionId);
   if (!legacyEdge) return meta;

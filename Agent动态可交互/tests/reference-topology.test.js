@@ -167,22 +167,22 @@ describe("reference topology", () => {
       { id: "e16", from: "observation", to: "planning", type: "replan" },
       { id: "e17", from: "llm", to: "final-response", type: "sequence" },
       { id: "e18", from: "observation", to: "action", type: "retry" },
-      { id: "e19", from: "observation", to: "final-response", type: "decision" },
+      { id: "e19", from: "observation", to: "llm", type: "callback" },
     ]);
     expect(demoGraph.events.map(transitionProjection)).toEqual([
       { id: "input-event", nodeId: "user-task", relation: "sequence", edgeIds: ["e1"], next: "orchestrator-event", join: null, targetNodeId: null, choices: {} },
       { id: "orchestrator-event", nodeId: "orchestrator", relation: "sequence", edgeIds: ["e2"], next: "planning-event", join: null, targetNodeId: null, choices: {} },
-      { id: "planning-event", nodeId: "planning", relation: "module", edgeIds: ["e3", "e4"], next: "llm-route-event", join: null, targetNodeId: null, choices: {} },
-      { id: "llm-route-event", nodeId: "llm", relation: "sequence", edgeIds: ["e6"], next: "rag-route", join: null, targetNodeId: null, choices: {} },
+      { id: "planning-event", nodeId: "planning", relation: "module", edgeIds: ["e3", "e4"], next: "llm-dispatch-event", join: null, targetNodeId: null, choices: {} },
+      { id: "llm-dispatch-event", nodeId: "llm", relation: "decision", edgeIds: ["e6", "e13"], next: null, join: null, targetNodeId: null, choices: { rag: { branches: null, next: "rag-route", relation: null }, tools: { branches: null, next: "tool-select-event", relation: null }, parallel: { branches: null, next: "rag-route", relation: null } } },
       { id: "rag-route", nodeId: "rag-route", relation: "decision", edgeIds: ["e7", "e8"], next: null, join: null, targetNodeId: null, choices: { vector: { branches: ["vector"], next: "rag-retrieval", relation: null }, web: { branches: ["web"], next: "rag-retrieval", relation: null }, parallel: { branches: ["vector", "web"], next: "rag-retrieval", relation: null } } },
       { id: "rag-retrieval", nodeId: "rag-route", relation: "parallel", edgeIds: ["e7", "e8"], next: null, join: "rag-join", targetNodeId: null, choices: {} },
       { id: "rag-join", nodeId: "rag-merge", relation: "join", edgeIds: ["e9", "e10"], next: "rag-context-event", join: null, targetNodeId: null, choices: {} },
       { id: "rag-context-event", nodeId: "rag-context", relation: "module", edgeIds: ["e11"], next: "rag-callback", join: null, targetNodeId: null, choices: {} },
-      { id: "rag-callback", nodeId: "rag-context", relation: "callback", edgeIds: ["e12"], next: "llm-return-event", join: null, targetNodeId: "llm", choices: {} },
-      { id: "llm-return-event", nodeId: "llm", relation: "sequence", edgeIds: ["e13"], next: "tool-select-event", join: null, targetNodeId: null, choices: {} },
+      { id: "rag-callback", nodeId: "rag-context", relation: "callback", edgeIds: ["e12"], next: "llm-join-event", join: null, targetNodeId: "llm", choices: {} },
       { id: "tool-select-event", nodeId: "tool-select", relation: "sequence", edgeIds: ["e14"], next: "tool-event", join: null, targetNodeId: null, choices: {} },
       { id: "tool-event", nodeId: "action", relation: "module", edgeIds: ["e15"], next: "observation-event", join: null, targetNodeId: null, choices: {} },
-      { id: "observation-event", nodeId: "observation", relation: "decision", edgeIds: ["e16", "e18", "e19"], next: null, join: null, targetNodeId: null, choices: { finish: { branches: null, next: "final-event", relation: "decision" }, retry: { branches: null, next: "tool-event", relation: "retry" }, replan: { branches: null, next: "planning-event", relation: "replan" } } },
+      { id: "observation-event", nodeId: "observation", relation: "decision", edgeIds: ["e16", "e18", "e19"], next: null, join: null, targetNodeId: null, choices: { finish: { branches: null, next: "llm-join-event", relation: "callback" }, retry: { branches: null, next: "tool-event", relation: "retry" }, replan: { branches: null, next: "planning-event", relation: "replan" } } },
+      { id: "llm-join-event", nodeId: "llm", relation: "sequence", edgeIds: ["e17"], next: "final-event", join: null, targetNodeId: null, choices: {} },
       { id: "final-event", nodeId: "final-response", relation: "sequence", edgeIds: null, next: null, join: null, targetNodeId: null, choices: {} },
     ]);
   });

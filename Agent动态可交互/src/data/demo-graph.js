@@ -105,7 +105,7 @@ export const demoGraph = {
     { id: "e16", from: "observation", to: "planning", type: "replan" },
     { id: "e17", from: "llm", to: "final-response", type: "sequence" },
     { id: "e18", from: "observation", to: "action", type: "retry" },
-    { id: "e19", from: "observation", to: "final-response", type: "decision" },
+    { id: "e19", from: "observation", to: "llm", type: "callback" },
   ],
   guardrails: { id: "guardrails", scope: "global", layout: "full-width", bounds: bounds(0, 750, 1400, 50), label: label("权限 · 安全 · 评估 · 审计", "Permissions · Safety · Evaluation · Audit") },
   scenarios: [
@@ -118,8 +118,12 @@ export const demoGraph = {
   events: [
     { id: "input-event", nodeId: "user-task", label: label("接收用户任务", "Receive Task"), relation: "sequence", edgeIds: ["e1"], next: "orchestrator-event" },
     { id: "orchestrator-event", nodeId: "orchestrator", label: label("初始化编排", "Initialize Orchestration"), relation: "sequence", edgeIds: ["e2"], next: "planning-event" },
-    { id: "planning-event", nodeId: "planning", label: label("生成执行计划", "Build Execution Plan"), relation: "module", edgeIds: ["e3", "e4"], next: "llm-route-event" },
-    { id: "llm-route-event", nodeId: "llm", label: label("判断是否需要检索", "Assess Retrieval Need"), relation: "sequence", edgeIds: ["e6"], next: "rag-route" },
+    { id: "planning-event", nodeId: "planning", label: label("生成执行计划", "Build Execution Plan"), relation: "module", edgeIds: ["e3", "e4"], next: "llm-dispatch-event" },
+    { id: "llm-dispatch-event", nodeId: "llm", label: label("并行调度上下文与行动", "Dispatch Context and Action Lanes"), relation: "decision", edgeIds: ["e6", "e13"], choices: {
+      rag: { label: label("仅检索增强", "RAG Only"), lanes: ["rag"], next: "rag-route", contextRequired: true },
+      tools: { label: label("仅工具执行", "Tools Only"), lanes: ["tools"], next: "tool-select-event", contextRequired: false },
+      parallel: { label: label("检索与工具并行", "RAG + Tools in Parallel"), lanes: ["rag", "tools"], next: "rag-route", contextRequired: true },
+    } },
     { id: "rag-route", nodeId: "rag-route", label: label("选择检索路径", "Choose Retrieval Route"), relation: "decision", edgeIds: ["e7", "e8"], choices: {
       vector: { label: label("仅向量检索", "Vector Only"), branches: ["vector"], next: "rag-retrieval" },
       web: { label: label("仅联网搜索", "Web Only"), branches: ["web"], next: "rag-retrieval" },
@@ -128,15 +132,15 @@ export const demoGraph = {
     { id: "rag-retrieval", nodeId: "rag-route", label: label("执行多路检索", "Run Retrieval Branches"), relation: "parallel", edgeIds: ["e7", "e8"], join: "rag-join" },
     { id: "rag-join", nodeId: "rag-merge", label: label("汇合检索结果", "Join Retrieval Results"), relation: "join", edgeIds: ["e9", "e10"], next: "rag-context-event" },
     { id: "rag-context-event", nodeId: "rag-context", label: label("组装增强上下文", "Assemble Context"), relation: "module", edgeIds: ["e11"], next: "rag-callback" },
-    { id: "rag-callback", nodeId: "rag-context", label: label("回传增强上下文", "Return Augmented Context"), relation: "callback", edgeIds: ["e12"], targetNodeId: "llm", next: "llm-return-event" },
-    { id: "llm-return-event", nodeId: "llm", label: label("继续模型推理", "Resume Inference"), relation: "sequence", edgeIds: ["e13"], next: "tool-select-event" },
+    { id: "rag-callback", nodeId: "rag-context", label: label("回传增强上下文", "Return Augmented Context"), relation: "callback", edgeIds: ["e12"], targetNodeId: "llm", completeLane: "rag", nextByPendingLane: { tools: "tool-select-event" }, next: "llm-join-event" },
     { id: "tool-select-event", nodeId: "tool-select", label: label("选择执行工具", "Select Tool"), relation: "sequence", edgeIds: ["e14"], next: "tool-event" },
     { id: "tool-event", nodeId: "action", label: label("执行工具调用", "Execute Tool Call"), relation: "module", edgeIds: ["e15"], next: "observation-event" },
     { id: "observation-event", nodeId: "observation", label: label("评估执行结果", "Evaluate Result"), relation: "decision", edgeIds: ["e16", "e18", "e19"], choices: {
-      finish: { label: label("通过并输出", "Accept & Finish"), next: "final-event", relation: "decision" },
+      finish: { label: label("通过并回传", "Accept & Return"), next: "llm-join-event", relation: "callback", completeLane: "tools", nextByPendingLane: { rag: "rag-route" } },
       retry: { label: label("重试工具", "Retry Tool"), next: "tool-event", relation: "retry" },
       replan: { label: label("回到规划", "Replan"), next: "planning-event", relation: "replan" },
     } },
+    { id: "llm-join-event", nodeId: "llm", label: label("汇合上下文与观察结果", "Join Context and Observation"), relation: "sequence", edgeIds: ["e17"], next: "final-event" },
     { id: "final-event", nodeId: "final-response", label: label("生成最终响应", "Generate Final Response"), relation: "sequence", next: null },
   ],
 };

@@ -3,6 +3,49 @@ import { createRun, transition } from "../../src/domain/execution.js";
 import { demoGraph } from "../../src/data/demo-graph.js";
 
 describe("execution state machine", () => {
+  it("dispatches RAG and Tools as independent top-level lanes", () => {
+    let run = createRun(demoGraph, "llm-dispatch-event");
+    run = transition(run, { type: "CHOOSE_BRANCH", choice: "parallel" });
+    expect(run).toMatchObject({
+      dispatchMode: "parallel",
+      activeLanes: ["rag", "tools"],
+      completedLanes: [],
+      contextRequired: true,
+      currentEventId: "rag-route",
+    });
+  });
+
+  it("supports RAG-only and Tools-only dispatch without activating the other lane", () => {
+    const rag = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "rag" });
+    const tools = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "tools" });
+    expect(rag).toMatchObject({ dispatchMode: "rag", activeLanes: ["rag"], currentEventId: "rag-route" });
+    expect(tools).toMatchObject({ dispatchMode: "tools", activeLanes: ["tools"], currentEventId: "tool-select-event" });
+  });
+
+  it("marks the RAG lane complete at its callback and continues the pending Tools lane", () => {
+    let run = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "parallel" });
+    run = { ...run, currentEventId: "rag-callback", currentNodeId: "rag-context" };
+    run = transition(run, { type: "ADVANCE" });
+    expect(run).toMatchObject({ currentEventId: "tool-select-event", completedLanes: ["rag"], activeLanes: ["rag", "tools"] });
+    expect(run.trace.at(-1)).toMatchObject({ relation: "callback", completedLane: "rag" });
+  });
+
+  it("fans both lane callbacks into the LLM before final response", () => {
+    let run = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "tools" });
+    run = { ...run, currentEventId: "observation-event", currentNodeId: "observation" };
+    run = transition(run, { type: "CHOOSE_BRANCH", choice: "finish" });
+    expect(run).toMatchObject({ currentEventId: "llm-join-event", completedLanes: ["tools"] });
+    expect(run.trace.at(-1)).toMatchObject({ relation: "callback", completedLane: "tools" });
+    run = transition(run, { type: "ADVANCE" });
+    expect(run.currentEventId).toBe("final-event");
+  });
+
+  it("restores top-level lane state with Previous", () => {
+    let run = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "parallel" });
+    run = transition(run, { type: "PREVIOUS" });
+    expect(run).toMatchObject({ currentEventId: "llm-dispatch-event", activeLanes: [], completedLanes: [], dispatchMode: null });
+  });
+
   it("blocks a decision until a branch is selected", () => {
     let run = createRun(demoGraph, "rag-route");
     expect(() => transition(run, { type: "ADVANCE" })).toThrow("Branch selection required");
@@ -44,7 +87,7 @@ describe("execution state machine", () => {
 
   it("routes observation outcomes to finish, retry, or replan", () => {
     const base = createRun(demoGraph, "observation-event");
-    expect(transition(base, { type: "CHOOSE_BRANCH", choice: "finish" }).currentEventId).toBe("final-event");
+    expect(transition(base, { type: "CHOOSE_BRANCH", choice: "finish" }).currentEventId).toBe("llm-join-event");
     const retry = transition(base, { type: "CHOOSE_BRANCH", choice: "retry" });
     const replan = transition(base, { type: "CHOOSE_BRANCH", choice: "replan" });
     expect(retry).toMatchObject({ currentEventId: "tool-event", iteration: 2 });
@@ -61,8 +104,8 @@ describe("execution state machine", () => {
 
   it("advances callback events and records their trace", () => {
     const run = transition(createRun(demoGraph, "rag-callback"), { type: "ADVANCE" });
-    expect(run).toMatchObject({ currentEventId: "llm-return-event", currentNodeId: "llm" });
-    expect(run.trace.at(-1)).toMatchObject({ from: "rag-callback", to: "llm-return-event", relation: "callback", iteration: 1 });
+    expect(run).toMatchObject({ currentEventId: "llm-join-event", currentNodeId: "llm" });
+    expect(run.trace.at(-1)).toMatchObject({ from: "rag-callback", to: "llm-join-event", relation: "callback", iteration: 1 });
   });
 
   it("retries the current event directly", () => {

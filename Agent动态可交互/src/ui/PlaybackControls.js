@@ -30,6 +30,11 @@ export function renderPlaybackControls(container, model, handlers) {
   const branchProgress = selectedBranches.length === 0
     ? "0 / 0"
     : `${run.completedBranches.length} / ${selectedBranches.length}`;
+  const activeLanes = run.activeLanes ?? [];
+  const completedLaneCount = (run.completedLanes ?? []).length;
+  const laneProgress = activeLanes.length === 0
+    ? ""
+    : `主泳道 ${completedLaneCount} / ${activeLanes.length} · Lanes ${completedLaneCount} / ${activeLanes.length}　`;
   const primaryLabel = event.relation === "parallel"
     ? "完成下一分支 · Complete Branch"
     : event.relation === "callback"
@@ -38,7 +43,7 @@ export function renderPlaybackControls(container, model, handlers) {
 
   const blocked = Boolean(run.simulatedIssue);
   const terminal = ["completed", "failed", "cancelled"].includes(run.status);
-  container.innerHTML = `<div class="playback"><button data-action="previous">← 上一步 <small>Previous</small></button><div class="decision-options"></div><button data-action="primary" ${needsChoice || blocked || terminal ? "disabled" : ""}>${primaryLabel}</button><button data-action="restart">重新开始 · Restart</button><span class="run-progress" data-testid="run-progress" aria-label="当前轮次和事件 Current iteration and event">轮次 ${run.iteration} · 事件 ${eventNumber} / ${eventCount}<small>Iteration ${run.iteration} · Event ${eventNumber} / ${eventCount}</small></span><span data-testid="branch-progress" aria-label="并行分支进度 Parallel branch progress">${branchProgress}</span><div class="recovery-options"></div></div>`;
+  container.innerHTML = `<div class="playback"><button data-action="previous">← 上一步 <small>Previous</small></button><div class="decision-options"></div><button data-action="primary" ${needsChoice || blocked || terminal ? "disabled" : ""}>${primaryLabel}</button><button data-action="restart">重新开始 · Restart</button><span class="run-progress" data-testid="run-progress" aria-label="当前轮次和事件 Current iteration and event">轮次 ${run.iteration} · 事件 ${eventNumber} / ${eventCount}<small>Iteration ${run.iteration} · Event ${eventNumber} / ${eventCount}</small></span><span data-testid="branch-progress" aria-label="并行泳道与分支进度 Parallel lane and branch progress">${laneProgress}检索分支 ${branchProgress} · Retrieval ${branchProgress}</span><div class="recovery-options"></div></div>`;
 
   const options = container.querySelector(".decision-options");
   for (const [choiceId, choice] of blocked ? [] : Object.entries(event.choices ?? {})) {

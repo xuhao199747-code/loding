@@ -9,7 +9,8 @@ import { readFileSync } from "node:fs";
 
 const advanceToRag = () => {
   let run = createRun(demoGraph);
-  for (let index = 0; index < 4; index += 1) run = transition(run, { type: "ADVANCE" });
+  for (let index = 0; index < 3; index += 1) run = transition(run, { type: "ADVANCE" });
+  run = transition(run, { type: "CHOOSE_BRANCH", choice: "rag" });
   return run;
 };
 

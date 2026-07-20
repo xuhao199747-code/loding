@@ -158,6 +158,28 @@ describe("reference hierarchy layout", () => {
     expect(document.querySelector('[data-relation-label-for="e18"]').textContent).toContain("重试 · Retry");
   });
 
+  it("projects top-level fan-out and conditional gate state onto the architecture", () => {
+    let run = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "parallel" });
+    render(run);
+    for (const key of ["llm->rag-query", "llm->tools-group"]) {
+      expect(document.querySelector(`[data-topology-edge="${key}"]`).classList.contains("is-live")).toBe(true);
+      expect(document.querySelector(`[data-topology-edge-pulse-for="${key}"]`)).not.toBeNull();
+    }
+    expect(document.querySelector('[data-group-id="rag-group"]').classList.contains("is-live")).toBe(true);
+    expect(document.querySelector('[data-group-id="tools-group"]').classList.contains("is-live")).toBe(true);
+    expect(document.querySelector('[data-detail-node-id="context-dependency-gate"]').classList.contains("is-waiting")).toBe(true);
+
+    run = { ...run, currentEventId: "rag-callback", currentNodeId: "rag-context" };
+    run = transition(run, { type: "ADVANCE" });
+    render(run);
+    expect(document.querySelector('[data-detail-node-id="context-dependency-gate"]').classList.contains("is-ready")).toBe(true);
+    expect(document.querySelector('[data-projection-edge="rag-context-assembly->context-dependency-gate"]').classList.contains("is-complete")).toBe(true);
+
+    const toolsOnly = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "tools" });
+    render(toolsOnly);
+    expect(document.querySelector('[data-detail-node-id="context-dependency-gate"]').classList.contains("is-independent")).toBe(true);
+  });
+
   it("projects vector and web execution state onto every matching detail and path", () => {
     let vectorRun = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "vector" });
     render(vectorRun);

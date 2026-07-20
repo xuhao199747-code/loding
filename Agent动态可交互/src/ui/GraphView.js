@@ -66,17 +66,30 @@ function contextGateProjection(graph) {
   };
 }
 
+function contextGateState(run) {
+  if (!run.activeLanes?.includes("tools")) return {};
+  if (!run.contextRequired) return { independent: true };
+  if (run.completedLanes?.includes("rag")) return { ready: true, complete: true };
+  return { waiting: true, live: true, status: "waiting" };
+}
+
 const edgePresentation = {
   "llm->rag-query": { lane: "rag", label: "并行检索 · Parallel Retrieval", x: 712, y: 178 },
-  "llm->tools-group": { lane: "tools", label: "并行工具准备 · Parallel Tool Prep", x: 720, y: 516 },
-  "rag-context-assembly->llm": { callback: true, label: "上下文回传 · Context Callback", x: 846, y: 524 },
-  "observation->llm": { callback: true, label: "观察回传 · Observation Callback", x: 1184, y: 524 },
+  "llm->tools-group": { lane: "tools", label: "并行工具准备 · Parallel Tool Prep", x: 610, y: 520 },
+  "tools-group->action": { label: "无依赖：直接执行 · Independent: Continue", x: 1070, y: 576 },
+  "rag-context-assembly->llm": { callback: true, label: "上下文回传 · Context Callback", x: 860, y: 492 },
+  "observation->llm": { callback: true, label: "观察回传 · Observation Callback", x: 1190, y: 492 },
+  "observation->planning": { label: "评估失败：重规划 · Replan on Failure", x: 800, y: 548 },
 };
 
 function appendRelationLabel(layer, key, label, x, y) {
-  const text = svg("text", { x, y, class: "relation-label", "data-relation-label-for": key, "text-anchor": "middle" });
+  const width = Math.min(255, Math.max(72, label.length * 5.4));
+  const group = svg("g", { class: "relation-label", "data-relation-label-for": key, transform: `translate(${x} ${y})` });
+  group.append(svg("rect", { x: -width / 2, y: -11, width, height: 16, rx: 6 }));
+  const text = svg("text", { x: 0, y: 1, "text-anchor": "middle" });
   text.textContent = label;
-  layer.append(text);
+  group.append(text);
+  layer.append(group);
 }
 
 function createEndpointResolver(graph, projectionNodes = []) {
@@ -433,6 +446,7 @@ export function renderGraph(container, { graph, run }) {
       label: "就绪后执行 · Execute when ready",
     },
   ];
+  const gateState = contextGateState(run);
   for (const dependency of dependencyRoutes) {
     const route = routePath(dependency, resolve);
     const path = svg("path", {
@@ -444,15 +458,21 @@ export function renderGraph(container, { graph, run }) {
       "aria-label": dependency.label,
     });
     path.classList.add("graph-edge", "is-context-dependency", "is-feedback");
+    if (dependency.to === CONTEXT_GATE_ID && gateState.ready) path.classList.add("is-complete");
+    if (dependency.from === CONTEXT_GATE_ID && (gateState.ready || gateState.independent)) path.classList.add("is-live");
     edgesLayer.append(path);
+    if (path.classList.contains("is-live")) pulsesLayer.append(edgePulse({ key: dependency.key, pathData: route.d, start: route.start }));
   }
 
   for (const detail of graph.detailNodes) {
     nodesLayer.append(renderDetailNode(detail, referenceVisualState(graph, run, detail.id), endpoints.has(detail.id)));
   }
-  const renderedGate = renderDetailNode(contextGate, {}, false);
+  const renderedGate = renderDetailNode(contextGate, gateState, false);
   renderedGate.dataset.layoutSource = "tools-group";
   renderedGate.classList.add("context-gate");
+  if (gateState.waiting) renderedGate.classList.add("is-waiting");
+  if (gateState.ready) renderedGate.classList.add("is-ready");
+  if (gateState.independent) renderedGate.classList.add("is-independent");
   nodesLayer.append(renderedGate);
   for (const node of graph.nodes) {
     nodesLayer.append(renderExecutableNode(node, referenceVisualState(graph, run, node.id), endpoints.has(node.id)));

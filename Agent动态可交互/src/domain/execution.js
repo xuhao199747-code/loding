@@ -2,6 +2,7 @@ const TERMINAL = new Set(["completed", "cancelled", "failed"]);
 
 const cloneTrace = (trace) => trace.map((entry) => ({ ...entry, branches: entry.branches ? [...entry.branches] : undefined }));
 const cloneBranches = (branches) => [...(branches ?? [])];
+const cloneLanes = (lanes) => [...(lanes ?? [])];
 const tracesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 
 function eventFor(run, eventId = run.currentEventId) {
@@ -12,6 +13,8 @@ function createEventSnapshot(run, detail = {}) {
   const event = eventFor(run);
   const selectedBranches = Object.freeze(cloneBranches(run.selectedBranches));
   const completedBranches = Object.freeze(cloneBranches(run.completedBranches));
+  const activeLanes = Object.freeze(cloneLanes(run.activeLanes));
+  const completedLanes = Object.freeze(cloneLanes(run.completedLanes));
   const trace = Object.freeze(cloneTrace(run.trace).map((entry) => Object.freeze(entry)));
   const issue = run.simulatedIssue ? Object.freeze({ ...run.simulatedIssue }) : null;
   return Object.freeze({
@@ -25,6 +28,10 @@ function createEventSnapshot(run, detail = {}) {
     iteration: run.iteration,
     selectedBranches,
     completedBranches,
+    dispatchMode: run.dispatchMode,
+    activeLanes,
+    completedLanes,
+    contextRequired: run.contextRequired,
     issue,
     trace,
   });
@@ -42,6 +49,10 @@ function stateSnapshot(run) {
     selectedBranches: cloneBranches(run.selectedBranches),
     activeBranches: cloneBranches(run.activeBranches),
     completedBranches: cloneBranches(run.completedBranches),
+    dispatchMode: run.dispatchMode,
+    activeLanes: cloneLanes(run.activeLanes),
+    completedLanes: cloneLanes(run.completedLanes),
+    contextRequired: run.contextRequired,
     iteration: run.iteration,
     trace: cloneTrace(run.trace),
     eventSnapshots: [...run.eventSnapshots],
@@ -90,6 +101,10 @@ export function createRun(graph, startEventId = graph.events[0].id) {
     selectedBranches: [],
     activeBranches: [],
     completedBranches: [],
+    dispatchMode: null,
+    activeLanes: [],
+    completedLanes: [],
+    contextRequired: false,
     iteration: 1,
     trace: [],
     history: [],
@@ -126,6 +141,10 @@ export function transition(run, action) {
       selectedBranches: cloneBranches(priorState?.selectedBranches ?? snapshot.selectedBranches),
       activeBranches: cloneBranches(priorState?.activeBranches ?? snapshot.selectedBranches),
       completedBranches: cloneBranches(priorState?.completedBranches ?? snapshot.completedBranches),
+      dispatchMode: priorState?.dispatchMode ?? snapshot.dispatchMode ?? null,
+      activeLanes: cloneLanes(priorState?.activeLanes ?? snapshot.activeLanes),
+      completedLanes: cloneLanes(priorState?.completedLanes ?? snapshot.completedLanes),
+      contextRequired: priorState?.contextRequired ?? snapshot.contextRequired ?? false,
       trace: resumeTrace,
       history: historyIndex === -1 ? [] : run.history.slice(0, historyIndex + 1),
       eventSnapshots: run.eventSnapshots.slice(0, snapshotIndex),
@@ -179,7 +198,28 @@ export function transition(run, action) {
     const choice = event.choices?.[action.choice];
     if (!choice) throw new Error(`Unknown branch choice: ${action.choice}`);
     const iteration = ["retry", "replan"].includes(choice.relation) ? run.iteration + 1 : run.iteration;
+    if (choice.completeLane) {
+      const completedLanes = [...new Set([...run.completedLanes, choice.completeLane])];
+      const pendingLane = run.activeLanes.find((lane) => !completedLanes.includes(lane));
+      const target = choice.nextByPendingLane?.[pendingLane] ?? choice.next;
+      const next = move(run, target, choice.relation ?? "decision", { choice: action.choice, completedLane: choice.completeLane }, iteration);
+      return { ...next, completedLanes, iteration };
+    }
     const next = move(run, choice.next, choice.relation ?? "decision", { choice: action.choice }, iteration);
+    if (choice.lanes) {
+      const activeLanes = cloneLanes(choice.lanes);
+      return {
+        ...next,
+        dispatchMode: action.choice,
+        activeLanes,
+        completedLanes: [],
+        contextRequired: Boolean(choice.contextRequired),
+        selectedBranches: [],
+        activeBranches: [],
+        completedBranches: [],
+        iteration,
+      };
+    }
     const selectedBranches = cloneBranches(choice.branches);
     return { ...next, selectedBranches, activeBranches: selectedBranches, completedBranches: [], iteration };
   }
@@ -217,6 +257,13 @@ export function transition(run, action) {
   if (action.type === "ADVANCE") {
     if (event.relation === "decision") throw new Error("Branch selection required");
     if (event.relation === "parallel") throw new Error("Parallel branches must complete");
+    if (event.completeLane) {
+      const completedLanes = [...new Set([...run.completedLanes, event.completeLane])];
+      const pendingLane = run.activeLanes.find((lane) => !completedLanes.includes(lane));
+      const target = event.nextByPendingLane?.[pendingLane] ?? event.next;
+      const next = move(run, target, event.relation, { completedLane: event.completeLane });
+      return { ...next, completedLanes };
+    }
     if (!event.next) {
       const previous = stateSnapshot(run);
       const trace = [...run.trace, { from: event.id, to: null, relation: "complete", iteration: run.iteration }];

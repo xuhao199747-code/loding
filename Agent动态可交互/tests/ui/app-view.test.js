@@ -125,10 +125,13 @@ describe("AppView", () => {
   });
 
   it("moves keyboard focus from Next to a decision choice and then Complete Branch", () => {
-    createInteractiveView(createRun(demoGraph, "llm-route-event"));
+    createInteractiveView(createRun(demoGraph, "planning-event"));
     const next = document.querySelector('[data-action="primary"]');
     next.focus();
     activateWithKeyboard(next);
+
+    expect(document.activeElement).toBe(document.querySelector('[data-branch-choice="rag"]'));
+    activateWithKeyboard(document.activeElement);
 
     expect(document.activeElement).toBe(document.querySelector('[data-branch-choice="vector"]'));
     activateWithKeyboard(document.activeElement);
@@ -157,6 +160,21 @@ describe("AppView", () => {
     view.render({ graph: demoGraph, run, viewport: createViewport("rag-route", "rag") });
 
     expect(document.querySelector("[data-testid=branch-progress]").textContent).toContain("1 / 2");
+  });
+
+  it("shows top-level RAG and Tools lane progress separately from retrieval branches", () => {
+    const run = {
+      ...createRun(demoGraph, "tool-select-event"),
+      dispatchMode: "parallel",
+      activeLanes: ["rag", "tools"],
+      completedLanes: ["rag"],
+    };
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run, viewport: createViewport("tool-select", "tools") });
+
+    const progress = document.querySelector("[data-testid=branch-progress]").textContent;
+    expect(progress).toContain("主泳道 1 / 2");
+    expect(progress).toContain("检索分支 0 / 0");
   });
 
   it("preserves branch progress after a parallel join completes", () => {
@@ -207,7 +225,8 @@ describe("AppView", () => {
     select.value = "no-results";
     select.dispatchEvent(new Event("change"));
 
-    for (let index = 0; index < 4; index += 1) document.querySelector('[data-action="primary"]').click();
+    for (let index = 0; index < 3; index += 1) document.querySelector('[data-action="primary"]').click();
+    document.querySelector('[data-branch-choice="rag"]').click();
     document.querySelector('[data-branch-choice="vector"]').click();
     document.querySelector('[data-action="primary"]').click();
 
@@ -223,7 +242,8 @@ describe("AppView", () => {
     select.value = "no-results";
     select.dispatchEvent(new Event("change"));
 
-    for (let index = 0; index < 4; index += 1) document.querySelector('[data-action="primary"]').click();
+    for (let index = 0; index < 3; index += 1) document.querySelector('[data-action="primary"]').click();
+    document.querySelector('[data-branch-choice="rag"]').click();
     document.querySelector('[data-branch-choice="vector"]').click();
     document.querySelector('[data-action="primary"]').click();
     document.querySelector('[data-action="previous"]').click();
