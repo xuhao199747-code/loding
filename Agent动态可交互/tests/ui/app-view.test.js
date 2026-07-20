@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createAppView } from "../../src/ui/AppView.js";
-import { createRun } from "../../src/domain/execution.js";
+import { createRun, transition } from "../../src/domain/execution.js";
 import { createViewport } from "../../src/domain/viewport.js";
 import { demoGraph } from "../../src/data/demo-graph.js";
 
@@ -60,5 +60,18 @@ describe("AppView", () => {
     expect(viewHandlers.onToggleFollow).toHaveBeenCalledTimes(1);
     expect(viewHandlers.onReturnLive).toHaveBeenCalledTimes(1);
     expect(run).toEqual(runSnapshot);
+  });
+
+  it.each([
+    ["vector", 6, 7],
+    ["web", 7, 6],
+  ])("marks only the %s RAG branch complete in the minimap", (choice, completeIndex, incompleteIndex) => {
+    const run = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice });
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run, viewport: createViewport("rag-route", "rag") });
+    const edges = document.querySelectorAll(".minimap-edge");
+
+    expect(edges[completeIndex].classList.contains("is-complete")).toBe(true);
+    expect(edges[incompleteIndex].classList.contains("is-complete")).toBe(false);
   });
 });

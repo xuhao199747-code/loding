@@ -1,3 +1,5 @@
+import { completedEdgeIdsForTrace } from "./traceEdges.js";
+
 const SVG_NS = "http://www.w3.org/2000/svg";
 
 const svg = (tag, attributes = {}) => {
@@ -7,11 +9,6 @@ const svg = (tag, attributes = {}) => {
 };
 
 const nodeCenter = (node) => ({ x: node.x + 65, y: node.y + 29 });
-
-function completedEdgeIds(graph, run) {
-  const events = new Map(graph.events.map((event) => [event.id, event]));
-  return new Set(run.trace.flatMap((entry) => events.get(entry.from)?.edgeIds ?? []));
-}
 
 function viewportBox(graph, viewing) {
   if (viewing.level === "overview") return { x: 0, y: 0, w: 1200, h: 800 };
@@ -34,7 +31,7 @@ export function renderMiniMap(container, { graph, run, viewport, handlers }) {
   });
   const nodes = new Map(graph.nodes.map((node) => [node.id, node]));
   const currentEvent = graph.events.find((event) => event.id === run.currentEventId);
-  const complete = completedEdgeIds(graph, run);
+  const complete = completedEdgeIdsForTrace(graph, run.trace);
 
   for (const edge of graph.edges) {
     const from = nodeCenter(nodes.get(edge.from));
