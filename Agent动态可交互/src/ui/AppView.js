@@ -4,7 +4,7 @@ import { renderInspector } from "./Inspector.js";
 import { renderPlaybackControls } from "./PlaybackControls.js";
 
 export function createAppView(root, handlers) {
-  root.innerHTML = `<section class="app-shell"><header class="topbar"><div><span class="eyebrow">AGENT EXECUTION MAP</span><h1 data-lang="zh">智能代理执行流程</h1><p class="foundation-screen__support" data-lang="en">Interactive Agent Flow</p></div><nav data-testid="breadcrumb" aria-label="当前位置 Current location"></nav></header><div class="canvas-shell"><div class="graph-host"></div><aside class="minimap" data-testid="minimap"></aside><button class="return-live" data-action="return-live">回到当前执行 · Return Live</button><aside class="inspector"></aside></div><footer class="controls-host"></footer></section>`;
+  root.innerHTML = `<section class="app-shell"><header class="topbar"><div><span class="eyebrow">AGENT EXECUTION MAP</span><h1 data-lang="zh">智能代理执行流程</h1><p class="foundation-screen__support" data-lang="en">Interactive Agent Flow</p></div><label class="scenario-control">模拟场景 <small>Simulation</small><select data-action="scenario" aria-label="模拟场景 Simulation"></select></label><nav data-testid="breadcrumb" aria-label="当前位置 Current location"></nav></header><div class="canvas-shell"><div class="graph-host"></div><aside class="minimap" data-testid="minimap"></aside><button class="return-live" data-action="return-live">回到当前执行 · Return Live</button><aside class="inspector"></aside></div><footer class="controls-host"></footer></section>`;
 
   const graphHost = root.querySelector(".graph-host");
   const minimap = root.querySelector(".minimap");
@@ -12,9 +12,13 @@ export function createAppView(root, handlers) {
   const breadcrumb = root.querySelector('[data-testid="breadcrumb"]');
   const returnLive = root.querySelector('[data-action="return-live"]');
   const controls = root.querySelector(".controls-host");
+  const scenario = root.querySelector('[data-action="scenario"]');
 
   return {
     render(state) {
+      scenario.replaceChildren(...state.graph.scenarios.map((item) => new Option(`${item.label.zh} · ${item.label.en}`, item.id)));
+      scenario.value = state.scenarioId ?? "normal";
+      scenario.onchange = (event) => handlers.onScenarioChange?.(event.target.value);
       const module = state.graph.modules.find((item) => item.id === state.viewport.viewing.moduleId);
       const node = state.graph.nodes.find((item) => item.id === state.viewport.viewing.nodeId);
       breadcrumb.textContent = ["Agent 系统", module?.label.zh, node?.label.zh].filter(Boolean).join(" > ");

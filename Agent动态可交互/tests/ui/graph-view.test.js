@@ -89,4 +89,36 @@ describe("GraphView", () => {
     expect(support.textContent).toBe("Agent Core");
     expect(support.getAttribute("font-size")).toBe("10");
   });
+
+  it("adds textual status labels and keyboard-focusable nodes", () => {
+    renderGraph(document.querySelector("#graph"), {
+      graph: demoGraph,
+      run: { ...createRun(demoGraph), status: "failed" },
+      viewport: createViewport(),
+      onNodeSelect: vi.fn(),
+    });
+
+    const live = document.querySelector('[data-node-id="user-task"]');
+    expect(live.getAttribute("tabindex")).toBe("0");
+    expect(live.getAttribute("aria-label")).toContain("用户任务");
+    expect(live.classList.contains("is-failed")).toBe(true);
+    expect(live.querySelector(".status-label").textContent).toContain("失败");
+  });
+
+  it("activates a focused SVG node with Enter and Space", () => {
+    const onNodeSelect = vi.fn();
+    renderGraph(document.querySelector("#graph"), {
+      graph: demoGraph,
+      run: createRun(demoGraph),
+      viewport: createViewport(),
+      onNodeSelect,
+    });
+
+    const node = document.querySelector('[data-node-id="user-task"]');
+    node.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    node.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+
+    expect(onNodeSelect).toHaveBeenCalledTimes(2);
+    expect(onNodeSelect).toHaveBeenLastCalledWith(expect.objectContaining({ id: "user-task" }));
+  });
 });

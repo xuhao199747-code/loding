@@ -4,7 +4,7 @@ import { createRun, transition } from "./domain/execution.js";
 import { createViewport, reduceViewport } from "./domain/viewport.js";
 import { createAppView } from "./ui/AppView.js";
 
-const state = { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport() };
+const state = { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), scenarioId: "normal" };
 let playbackTimer = null;
 const moduleForNode = (nodeId) => state.graph.nodes.find((node) => node.id === nodeId)?.moduleId;
 const render = () => view.render(state);
@@ -18,7 +18,7 @@ function cancelPlayback() {
 }
 
 function advanceOne() {
-  if (isTerminal(state.run.status)) return false;
+  if (isTerminal(state.run.status) || state.run.simulatedIssue) return false;
   const event = state.graph.events.find((item) => item.id === state.run.currentEventId);
   if (event.relation === "decision") return false;
   if (event.relation === "parallel") {
@@ -27,6 +27,11 @@ function advanceOne() {
     state.run = transition(state.run, { type: "COMPLETE_BRANCH", branch });
   } else {
     state.run = transition(state.run, { type: "ADVANCE" });
+  }
+  const scenario = state.graph.scenarios.find((item) => item.id === state.scenarioId);
+  if (scenario?.trigger === state.run.currentEventId) {
+    state.run = { ...state.run, status: scenario.status, simulatedIssue: scenario.label };
+    return false;
   }
   return true;
 }
@@ -42,14 +47,14 @@ function syncLive() {
 
 function schedulePlayback() {
   cancelPlayback();
-  if (state.run.status !== "running" || isTerminal(state.run.status)) return;
+  if (state.run.status !== "running" || isTerminal(state.run.status) || state.run.simulatedIssue) return;
   playbackTimer = setTimeout(() => {
     playbackTimer = null;
     const progressed = advanceOne();
     const currentEvent = state.graph.events.find((item) => item.id === state.run.currentEventId);
     const shouldPause = !progressed || isTerminal(state.run.status) || currentEvent.relation === "decision";
     if (shouldPause) {
-      state.run = { ...state.run, status: isTerminal(state.run.status) ? state.run.status : "paused" };
+      state.run = { ...state.run, status: state.run.simulatedIssue || isTerminal(state.run.status) ? state.run.status : "paused" };
     } else {
       state.run = { ...state.run, status: "running" };
     }
@@ -98,8 +103,14 @@ const view = createAppView(document.querySelector("#app"), {
     state.run = transition(state.run, { type: "RESET" });
     syncLive();
   },
+  onScenarioChange(scenarioId) {
+    cancelPlayback();
+    state.scenarioId = scenarioId;
+    state.run = transition(state.run, { type: "RESET" });
+    syncLive();
+  },
   onPlayPause() {
-    if (isTerminal(state.run.status)) {
+    if (isTerminal(state.run.status) || state.run.simulatedIssue) {
       render();
       return;
     }

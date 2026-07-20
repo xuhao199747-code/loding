@@ -20,7 +20,7 @@ export const demoGraph = {
     { id: "rag-merge", moduleId: "rag", label: label("合并与重排序", "Merge & Rerank"), kind: "join", x: 880, y: 295 },
     { id: "rag-context", moduleId: "rag", label: label("上下文组装", "Context Assembly"), kind: "module", x: 880, y: 335, detailSteps: [label("结果去重", "Deduplicate"), label("相关性重排", "Rerank"), label("提示词注入", "Inject Context")] },
     { id: "tool-select", moduleId: "tools", label: label("工具选择", "Tool Selection"), kind: "decision", x: 555, y: 570 },
-    { id: "action", moduleId: "tools", label: label("动作执行", "Action"), kind: "module", x: 720, y: 570, detailSteps: [label("参数校验", "Validate Args"), label("隔离执行", "Sandbox Run"), label("结果标准化", "Normalize")] },
+    { id: "action", moduleId: "tools", label: label("动作执行", "Action"), kind: "module", x: 720, y: 570, detailSteps: [label("参数校验", "Validate Args"), label("隔离执行", "Sandbox Run"), label("结果标准化", "Normalize")], safety: { sideEffect: true, retryable: true, reversible: false, idempotencyKey: "demo-action-001" } },
     { id: "observation", moduleId: "tools", label: label("观察与评估", "Observation"), kind: "decision", x: 720, y: 660 },
     { id: "final-response", moduleId: "response", label: label("最终响应", "Final Response"), kind: "step", x: 90, y: 575 },
   ],
@@ -46,6 +46,13 @@ export const demoGraph = {
     { id: "e19", from: "observation", to: "final-response", type: "decision" },
   ],
   guardrails: { scope: "global", label: label("权限 · 安全 · 评估 · 审计", "Permissions · Safety · Evaluation · Audit") },
+  scenarios: [
+    { id: "normal", label: label("正常运行", "Normal Run") },
+    { id: "no-results", label: label("检索无结果", "No Retrieval Results"), trigger: "rag-join", status: "partial" },
+    { id: "tool-timeout", label: label("工具超时", "Tool Timeout"), trigger: "tool-event", status: "retrying" },
+    { id: "permission-denied", label: label("权限不足", "Permission Denied"), trigger: "tool-event", status: "blocked" },
+    { id: "evaluation-failed", label: label("评估不通过", "Evaluation Failed"), trigger: "observation-event", status: "paused" },
+  ],
   events: [
     { id: "input-event", nodeId: "user-task", label: label("接收用户任务", "Receive Task"), relation: "sequence", edgeIds: ["e1"], next: "orchestrator-event" },
     { id: "orchestrator-event", nodeId: "orchestrator", label: label("初始化编排", "Initialize Orchestration"), relation: "sequence", edgeIds: ["e2"], next: "planning-event" },

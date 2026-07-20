@@ -129,4 +129,76 @@ describe("AppView", () => {
     await vi.advanceTimersByTimeAsync(900 * 2);
     expect(document.querySelector('[data-node-id="rag-route"]').classList.contains("is-live")).toBe(true);
   });
+
+  it("exposes side-effect and retry metadata in the inspector", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    const viewport = {
+      ...createViewport("action", "tools"),
+      viewing: { level: "node", moduleId: "tools", nodeId: "action" },
+    };
+    view.render({ graph: demoGraph, run: createRun(demoGraph, "tool-event"), viewport });
+
+    expect(document.querySelector(".inspector").textContent).toContain("可重试");
+  });
+
+  it("offers bilingual failure simulations", () => {
+    const onScenarioChange = vi.fn();
+    const view = createAppView(document.querySelector("#app"), { onScenarioChange });
+    view.render({ graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), scenarioId: "normal" });
+
+    const select = document.querySelector('[data-action="scenario"]');
+    expect(select.options).toHaveLength(5);
+    select.value = "tool-timeout";
+    select.dispatchEvent(new Event("change"));
+    expect(onScenarioChange).toHaveBeenCalledWith("tool-timeout");
+  });
+
+  it("resets the run and clears scheduled playback when changing scenarios", async () => {
+    vi.useFakeTimers();
+    await import("../../src/main.js?scenario-reset-test");
+
+    document.querySelector('[data-action="play"]').click();
+    expect(vi.getTimerCount()).toBe(1);
+
+    const select = document.querySelector('[data-action="scenario"]');
+    select.value = "permission-denied";
+    select.dispatchEvent(new Event("change"));
+
+    expect(vi.getTimerCount()).toBe(0);
+    expect(document.querySelector('[data-node-id="user-task"]').classList.contains("is-live")).toBe(true);
+  });
+
+  it("pauses the no-results simulation at the RAG join without changing the graph", async () => {
+    await import("../../src/main.js?no-results-simulation-test");
+    const graphSnapshot = structuredClone(demoGraph);
+    const select = document.querySelector('[data-action="scenario"]');
+    select.value = "no-results";
+    select.dispatchEvent(new Event("change"));
+
+    for (let index = 0; index < 4; index += 1) document.querySelector('[data-action="primary"]').click();
+    document.querySelector('[data-branch-choice="vector"]').click();
+    document.querySelector('[data-action="primary"]').click();
+
+    const live = document.querySelector('[data-node-id="rag-merge"]');
+    expect(live.classList.contains("is-live")).toBe(true);
+    expect(live.classList.contains("is-partial")).toBe(true);
+    expect(document.querySelector('[data-action="play"]').textContent).toContain("播放 · Play");
+    expect(demoGraph).toEqual(graphSnapshot);
+  });
+
+  it("supports keyboard activation for minimap modules and inspector close", () => {
+    const viewHandlers = handlers();
+    const view = createAppView(document.querySelector("#app"), viewHandlers);
+    const viewport = {
+      ...createViewport("action", "tools"),
+      viewing: { level: "node", moduleId: "tools", nodeId: "action" },
+    };
+    view.render({ graph: demoGraph, run: createRun(demoGraph, "tool-event"), viewport, scenarioId: "normal" });
+
+    document.querySelector('[data-minimap-module="core"]').dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    document.querySelector('[data-action="close-inspector"]').dispatchEvent(new KeyboardEvent("click", { bubbles: true }));
+
+    expect(viewHandlers.onModuleFocus).toHaveBeenCalledWith("core");
+    expect(viewHandlers.onCloseInspector).toHaveBeenCalledTimes(1);
+  });
 });

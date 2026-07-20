@@ -1,6 +1,19 @@
 import { completedEdgeIdsForTrace, isCurrentLiveEdge } from "./traceEdges.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
+const statusLabels = {
+  waiting: "等待 · Waiting",
+  paused: "暂停 · Paused",
+  running: "执行中 · Running",
+  success: "成功 · Success",
+  completed: "完成 · Completed",
+  failed: "失败 · Failed",
+  skipped: "已跳过 · Skipped",
+  blocked: "已阻塞 · Blocked",
+  retrying: "重试中 · Retrying",
+  cancelled: "已取消 · Cancelled",
+  partial: "部分完成 · Partial",
+};
 const svg = (tag, attributes = {}) => {
   const element = document.createElementNS(SVG_NS, tag);
   for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, String(value));
@@ -80,14 +93,26 @@ export function renderGraph(container, { graph, run, viewport, onNodeSelect }) {
     const group = svg("g", { "data-node-id": node.id, transform: `translate(${node.x} ${node.y})`, tabindex: 0, role: "button", "aria-label": `${node.label.zh} ${node.label.en}` });
     group.classList.add("graph-node", `node-${node.kind}`);
     if (focusedModule && focusedModule !== node.moduleId) group.classList.add("is-dimmed");
-    if (node.id === run.currentNodeId) group.classList.add("is-live");
+    if (node.id === run.currentNodeId) {
+      group.classList.add("is-live", `is-${run.status}`);
+    }
     if (completedNodeIds.has(node.id)) group.classList.add("is-complete");
     const rect = svg("rect", { width: 130, height: 58, rx: 10 });
     const zh = svg("text", { x: 65, y: 25, "text-anchor": "middle" }); zh.textContent = node.label.zh;
     const en = svg("text", { x: 65, y: 42, "text-anchor": "middle", class: "node-en" }); en.textContent = node.label.en;
     group.append(rect, zh, en);
+    if (node.id === run.currentNodeId) {
+      const status = svg("text", { x: 65, y: 54, "text-anchor": "middle", class: "status-label" });
+      status.textContent = statusLabels[run.status] ?? run.status;
+      group.append(status);
+    }
     group.addEventListener("click", () => onNodeSelect(node));
-    group.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") onNodeSelect(node); });
+    group.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        onNodeSelect(node);
+      }
+    });
     scene.append(group);
   }
   root.append(scene);
