@@ -64,7 +64,8 @@ function branchStatus(graph, run, nodeId) {
   return selectedBranches.length ? "skipped" : null;
 }
 
-function relationEndpoints(graph, run) {
+function relationEndpoints(graph, run, currentEvent) {
+  if (currentEvent?.relation === "callback" && currentEvent.targetNodeId) return new Set([currentEvent.nodeId, currentEvent.targetNodeId]);
   const entry = run.trace.at(-1);
   if (!entry || entry.relation === "complete") return new Set();
   const source = graph.events.find((event) => event.id === entry.from)?.nodeId;
@@ -83,14 +84,15 @@ export function renderGraph(container, { graph, run, viewport, onNodeSelect }) {
   const completedEvents = run.trace.map((entry) => graph.events.find((event) => event.id === entry.from)).filter(Boolean);
   const completedEdgeIds = completedEdgeIdsForTrace(graph, run.trace);
   const completedNodeIds = new Set(completedEvents.map((event) => event.nodeId));
-  const endpoints = relationEndpoints(graph, run);
+  const endpoints = relationEndpoints(graph, run, currentEvent);
+  const endpointModuleIds = new Set([...endpoints].map((nodeId) => nodes.get(nodeId)?.moduleId).filter(Boolean));
   const camera = cameraFor(graph, viewport.viewing);
   const scene = svg("g", { "data-layer": "scene", transform: `translate(${camera.x} ${camera.y}) scale(${camera.scale})` });
 
   for (const module of graph.modules) {
     const group = svg("g", { "data-module-id": module.id, transform: `translate(${module.x} ${module.y})` });
     group.classList.add("graph-module");
-    if (focusedModule && focusedModule !== module.id) group.classList.add("is-dimmed");
+    if (focusedModule && focusedModule !== module.id && !endpointModuleIds.has(module.id)) group.classList.add("is-dimmed");
     group.append(svg("rect", { width: module.w, height: module.h, rx: 18 }));
     const title = svg("text", { x: 16, y: 28 }); title.textContent = module.label.zh; group.append(title);
     const support = svg("text", { x: 16, y: 45, class: "module-en", "font-size": 10 }); support.textContent = module.label.en; group.append(support);
@@ -101,7 +103,7 @@ export function renderGraph(container, { graph, run, viewport, onNodeSelect }) {
     const path = svg("path", { d: edgePath(edge, nodes), "data-edge-id": edge.id, "marker-end": "url(#arrow)", "aria-label": relationLabels[edge.type] ?? `流向 ${edge.from} 到 ${edge.to}` });
     path.classList.add("graph-edge", `edge-${edge.type}`, `is-${edge.type}`);
     if (relationLabels[edge.type]) path.classList.add("is-nonlinear");
-    if (isCurrentLiveEdge(currentEvent, edge, selectedBranches)) path.classList.add("is-live");
+    if (isCurrentLiveEdge(currentEvent, edge, selectedBranches, run.completedBranches)) path.classList.add("is-live");
     if (completedEdgeIds.has(edge.id)) path.classList.add("is-complete");
     if (edge.branch && run.completedBranches.includes(edge.branch)) path.classList.add("is-complete");
     if (edge.branch && selectedBranches.length && !selectedBranches.includes(edge.branch)) path.classList.add("is-skipped");
@@ -128,7 +130,7 @@ export function renderGraph(container, { graph, run, viewport, onNodeSelect }) {
     const suffix = status ? ` · ${statusLabels[status] ?? status}` : "";
     const group = svg("g", { "data-node-id": node.id, transform: `translate(${node.x} ${node.y})`, tabindex: 0, role: "button", "aria-label": `${node.label.zh} ${node.label.en}${suffix}` });
     group.classList.add("graph-node", `node-${node.kind}`);
-    if (focusedModule && focusedModule !== node.moduleId) group.classList.add("is-dimmed");
+    if (focusedModule && focusedModule !== node.moduleId && !endpoints.has(node.id)) group.classList.add("is-dimmed");
     if (node.id === run.currentNodeId) group.classList.add("is-live", `is-${run.status}`);
     if (endpoints.has(node.id)) group.classList.add("is-relation-endpoint");
     if (completedNodeIds.has(node.id) && !status) group.classList.add("is-complete");

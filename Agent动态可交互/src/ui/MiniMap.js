@@ -44,7 +44,7 @@ export function renderMiniMap(container, { graph, run, viewport, handlers }) {
     });
     if (complete.has(edge.id)) path.classList.add("is-complete");
     if (edge.branch && run.completedBranches.includes(edge.branch)) path.classList.add("is-complete");
-    if (isCurrentLiveEdge(currentEvent, edge, selectedBranches)) path.classList.add("is-live");
+    if (isCurrentLiveEdge(currentEvent, edge, selectedBranches, run.completedBranches)) path.classList.add("is-live");
     map.append(path);
   }
 

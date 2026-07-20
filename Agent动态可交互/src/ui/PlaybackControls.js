@@ -15,7 +15,7 @@ export function renderPlaybackControls(container, model, handlers) {
   container.innerHTML = `<div class="playback"><button data-action="previous">← 上一步 <small>Previous</small></button><button data-action="play" ${blocked ? "disabled" : ""}>${run.status === "running" ? "暂停 · Pause" : "播放 · Play"}</button><div class="decision-options"></div><button data-action="primary" ${needsChoice || blocked ? "disabled" : ""}>${primaryLabel}</button><button data-action="restart">重新开始 · Restart</button><select data-action="speed" aria-label="播放速度 Playback speed"><option value="1" ${speed === 1 ? "selected" : ""}>1×</option><option value="1.5" ${speed === 1.5 ? "selected" : ""}>1.5×</option><option value="2" ${speed === 2 ? "selected" : ""}>2×</option></select><span class="run-progress" data-testid="run-progress" aria-label="当前轮次和事件 Current iteration and event">轮次 ${run.iteration} · 事件 ${eventNumber} / ${eventCount}<small>Iteration ${run.iteration} · Event ${eventNumber} / ${eventCount}</small></span><span data-testid="branch-progress" aria-label="并行分支进度 Parallel branch progress">${branchProgress}</span><div class="recovery-options"></div></div>`;
 
   const options = container.querySelector(".decision-options");
-  for (const [choiceId, choice] of Object.entries(event.choices ?? {})) {
+  for (const [choiceId, choice] of blocked ? [] : Object.entries(event.choices ?? {})) {
     const button = document.createElement("button");
     button.dataset.branchChoice = choiceId;
     button.innerHTML = `${choice.label.zh}<small>${choice.label.en}</small>`;

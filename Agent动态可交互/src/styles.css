@@ -215,7 +215,7 @@ body {
 .run-progress small { display: block; font-size: .65rem; }
 .edge-parallel.is-live { stroke: var(--live); animation: flow 1.2s linear infinite; }
 .edge-join.is-live { stroke: var(--done); }
-.edge-replan.is-live { stroke: var(--error, #FF6978); }
+.edge-callback.is-live, .edge-retry.is-live, .edge-replan.is-live { stroke: var(--error, #FF6978); animation: flow 1.2s linear infinite; }
 @keyframes flow { to { stroke-dashoffset: -24; } }
 
 :focus-visible { outline: 2px solid var(--live); outline-offset: 3px; }

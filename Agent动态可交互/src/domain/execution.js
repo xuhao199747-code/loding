@@ -55,15 +55,22 @@ function withHistory(run) {
 function move(run, eventId, relation, detail = {}, iteration = run.iteration) {
   const target = eventFor(run, eventId);
   if (!target) throw new Error(`Unknown target event: ${eventId}`);
-  const recorded = recordEvent(run, detail);
-  const withSnapshot = withHistory(recorded);
+  const previous = stateSnapshot(run);
+  const trace = [...run.trace, { from: run.currentEventId, to: target.id, relation, iteration, ...detail }];
+  const executed = { ...run, status: "success", iteration, trace };
+  const recorded = recordEvent(executed, {
+    ...detail,
+    output: detail.output ?? `完成：${eventFor(run).label.zh}`,
+    summary: detail.summary ?? `Completed ${eventFor(run).label.en}`,
+  });
   return {
-    ...withSnapshot,
+    ...recorded,
+    history: [...run.history, previous],
     status: "paused",
     currentEventId: target.id,
     currentNodeId: target.nodeId,
     iteration,
-    trace: [...run.trace, { from: run.currentEventId, to: target.id, relation, iteration, ...detail }],
+    trace,
   };
 }
 
@@ -129,6 +136,10 @@ export function transition(run, action) {
     const recovery = { recovery: action.action, reason: action.reason ?? "Recovery requested" };
     const cleared = resetIssue(run);
     if (action.action === "retry") {
+      if (run.simulatedIssue?.id === "no-results") {
+        const retried = move({ ...cleared, completedBranches: [] }, "rag-retrieval", "retry", { reason: recovery.reason }, run.iteration + 1);
+        return { ...retried, selectedBranches: cloneBranches(run.selectedBranches), activeBranches: cloneBranches(run.selectedBranches), completedBranches: [], recovery: { action: "retry", reason: recovery.reason }, trace: retried.trace.map((entry, index) => index === retried.trace.length - 1 ? { ...entry, recovery: "retry" } : entry) };
+      }
       const retried = transition(cleared, { type: "RETRY", reason: recovery.reason });
       return { ...retried, recovery: { action: "retry", reason: recovery.reason }, trace: retried.trace.map((entry, index) => index === retried.trace.length - 1 ? { ...entry, recovery: "retry" } : entry) };
     }
@@ -166,8 +177,9 @@ export function transition(run, action) {
     if (!run.selectedBranches.includes(action.branch)) throw new Error(`Inactive branch: ${action.branch}`);
     const completedBranches = [...new Set([...run.completedBranches, action.branch])];
     if (completedBranches.length < run.selectedBranches.length) {
-      const recorded = recordEvent(run, { summary: `${action.branch} completed` });
-      return { ...withHistory(recorded), completedBranches };
+      const previous = stateSnapshot(run);
+      const recorded = recordEvent({ ...run, status: "success", completedBranches }, { output: `完成分支：${action.branch}`, summary: `${action.branch} completed` });
+      return { ...recorded, history: [...run.history, previous], status: "paused", completedBranches };
     }
     return {
       ...move(run, event.join, "join", { branches: cloneBranches(run.selectedBranches) }),
@@ -196,8 +208,10 @@ export function transition(run, action) {
     if (event.relation === "decision") throw new Error("Branch selection required");
     if (event.relation === "parallel") throw new Error("Parallel branches must complete");
     if (!event.next) {
-      const recorded = recordEvent(run, { summary: "Run completed" });
-      return { ...withHistory(recorded), status: "completed", trace: [...run.trace, { from: event.id, to: null, relation: "complete", iteration: run.iteration }] };
+      const previous = stateSnapshot(run);
+      const trace = [...run.trace, { from: event.id, to: null, relation: "complete", iteration: run.iteration }];
+      const recorded = recordEvent({ ...run, status: "completed", trace }, { output: `完成：${event.label.zh}`, summary: "Run completed" });
+      return { ...recorded, history: [...run.history, previous], status: "completed", trace };
     }
     return move(run, event.next, event.relation);
   }

@@ -3,6 +3,7 @@ import { createRun, transition } from "../src/domain/execution.js";
 import { demoGraph } from "../src/data/demo-graph.js";
 import { createViewport } from "../src/domain/viewport.js";
 import { renderGraph } from "../src/ui/GraphView.js";
+import { renderMiniMap } from "../src/ui/MiniMap.js";
 import { createAppView } from "../src/ui/AppView.js";
 import { readFileSync } from "node:fs";
 
@@ -34,13 +35,22 @@ describe("final review regressions", () => {
     expect(run.completedBranches).toEqual(["vector"]);
   });
 
-  it("records immutable event snapshots and intentionally reruns from a historical snapshot", () => {
+  it("records immutable successful event snapshots after real transitions", () => {
     let run = createRun(demoGraph);
     run = transition(run, { type: "ADVANCE" });
-    const initialSnapshot = run.eventSnapshots.find((snapshot) => snapshot.nodeId === "user-task");
+    const initialSnapshot = run.eventSnapshots.at(-1);
 
-    expect(initialSnapshot).toMatchObject({ eventId: "input-event", nodeId: "user-task", iteration: 1 });
+    expect(initialSnapshot).toMatchObject({ eventId: "input-event", nodeId: "user-task", status: "success", output: "完成：接收用户任务", iteration: 1 });
     expect(Object.isFrozen(initialSnapshot)).toBe(true);
+
+    let branchRun = transition(advanceToRag(), { type: "CHOOSE_BRANCH", choice: "parallel" });
+    branchRun = transition(branchRun, { type: "COMPLETE_BRANCH", branch: "vector" });
+    expect(branchRun.eventSnapshots.at(-1)).toMatchObject({ nodeId: "rag-route", status: "success", completedBranches: ["vector"] });
+  });
+
+  it("intentionally reruns from a real historical snapshot", () => {
+    let run = transition(createRun(demoGraph), { type: "ADVANCE" });
+    const initialSnapshot = run.eventSnapshots.find((snapshot) => snapshot.nodeId === "user-task");
 
     run = transition(run, { type: "RERUN_SNAPSHOT", snapshotId: initialSnapshot.id, reason: "review replay" });
     expect(run.currentEventId).toBe("input-event");
@@ -76,31 +86,72 @@ describe("final review regressions", () => {
     expect(host.querySelector('[data-node-id="vector-search"]').classList.contains("is-complete")).toBe(false);
   });
 
-  it("renders directional relation semantics and accessible graph navigation", () => {
-    const run = transition(createRun(demoGraph, "rag-callback"), { type: "ADVANCE" });
+  it("keeps completed parallel edges complete but not live in graph and minimap", () => {
+    let run = transition(advanceToRag(), { type: "CHOOSE_BRANCH", choice: "parallel" });
+    run = transition(run, { type: "COMPLETE_BRANCH", branch: "vector" });
+    const graphHost = document.createElement("div");
+    const minimapHost = document.createElement("div");
+    const viewport = createViewport("rag-route", "rag");
+    renderGraph(graphHost, { graph: demoGraph, run, viewport, onNodeSelect: vi.fn() });
+    renderMiniMap(minimapHost, { graph: demoGraph, run, viewport, handlers: { onModuleFocus: vi.fn(), onOverview: vi.fn(), onMiniMapToggle: vi.fn(), onToggleFollow: vi.fn(), onReturnLive: vi.fn() } });
+
+    const graphEdges = [graphHost.querySelector('[data-edge-id="e7"]'), graphHost.querySelector('[data-edge-id="e8"]')];
+    const minimapEdges = [...minimapHost.querySelectorAll(".minimap-edge")].slice(6, 8);
+    for (const edges of [graphEdges, minimapEdges]) {
+      expect(edges[0].classList.contains("is-complete")).toBe(true);
+      expect(edges[0].classList.contains("is-live")).toBe(false);
+      expect(edges[1].classList.contains("is-complete")).toBe(false);
+      expect(edges[1].classList.contains("is-live")).toBe(true);
+    }
+  });
+
+  it("highlights active callback endpoints before advance and keeps the target visible", () => {
+    const run = createRun(demoGraph, "rag-callback");
     const host = document.createElement("div");
-    renderGraph(host, { graph: demoGraph, run, viewport: createViewport("llm", "core"), onNodeSelect: vi.fn() });
+    renderGraph(host, { graph: demoGraph, run, viewport: createViewport("rag-context", "rag"), onNodeSelect: vi.fn() });
 
     expect(host.querySelector("svg").getAttribute("role")).toBe("group");
     expect(host.querySelector('[data-edge-id="e12"]').getAttribute("marker-end")).toContain("arrow");
     expect(host.querySelector('[data-edge-id="e12"]').getAttribute("aria-label")).toContain("回传");
     expect(host.querySelector('[data-node-id="rag-context"]').classList.contains("is-relation-endpoint")).toBe(true);
     expect(host.querySelector('[data-node-id="llm"]').classList.contains("is-relation-endpoint")).toBe(true);
+    expect(host.querySelector('[data-node-id="llm"]').classList.contains("is-dimmed")).toBe(false);
+
+    const css = readFileSync("src/styles.css", "utf8");
+    expect(css).toMatch(/\.edge-callback\.is-live[\s\S]*animation: flow/);
+    expect(css).toMatch(/prefers-reduced-motion/);
   });
 
   it("renders historical inspector data and explicit rerun action without moving live execution", () => {
     const onRerunSnapshot = vi.fn();
-    const run = {
-      ...createRun(demoGraph, "tool-event"),
-      eventSnapshots: [Object.freeze({ id: "history-action", eventId: "tool-event", nodeId: "action", status: "success", input: "参数", output: "结果", summary: "历史结果", iteration: 2, selectedBranches: [], completedBranches: [], issue: null, trace: [] })],
-    };
+    const run = transition(createRun(demoGraph, "tool-event"), { type: "ADVANCE" });
     const view = createAppView(document.body, { onRerunSnapshot, onNodeSelect: vi.fn(), onOverview: vi.fn(), onModuleFocus: vi.fn(), onToggleFollow: vi.fn(), onReturnLive: vi.fn(), onCloseInspector: vi.fn() });
     view.render({ graph: demoGraph, run, viewport: { ...createViewport("tool-select", "tools"), viewing: { level: "node", moduleId: "tools", nodeId: "action" }, isViewingLive: false } });
 
-    expect(document.querySelector(".inspector").textContent).toContain("历史结果");
+    expect(document.querySelector(".inspector").textContent).toContain("完成：执行工具调用");
     document.querySelector('[data-action="rerun-snapshot"]').click();
-    expect(onRerunSnapshot).toHaveBeenCalledWith("history-action");
-    expect(run.currentEventId).toBe("tool-event");
+    expect(onRerunSnapshot).toHaveBeenCalledWith(run.eventSnapshots.at(-1).id);
+    expect(run.currentEventId).toBe("observation-event");
+  });
+
+  it("retries no-results from retrieval with one iteration and resets branch completion", () => {
+    let run = transition(advanceToRag(), { type: "CHOOSE_BRANCH", choice: "parallel" });
+    run = transition(run, { type: "COMPLETE_BRANCH", branch: "vector" });
+    run = transition(run, { type: "COMPLETE_BRANCH", branch: "web" });
+    run = transition(run, { type: "REPORT_ISSUE", issue: demoGraph.scenarios.find((scenario) => scenario.id === "no-results") });
+    const recovered = transition(run, { type: "RECOVER", action: "retry", reason: "review retry" });
+
+    expect(recovered).toMatchObject({ currentEventId: "rag-retrieval", selectedBranches: ["vector", "web"], completedBranches: [], simulatedIssue: null, iteration: 2 });
+    expect(recovered.trace.at(-1)).toMatchObject({ from: "rag-join", to: "rag-retrieval", relation: "retry", iteration: 2 });
+  });
+
+  it("hides ordinary decision choices while an evaluation issue is active", () => {
+    const run = transition(createRun(demoGraph, "observation-event"), { type: "REPORT_ISSUE", issue: demoGraph.scenarios.find((scenario) => scenario.id === "evaluation-failed") });
+    const view = createAppView(document.body, { onRecovery: vi.fn(), onNodeSelect: vi.fn(), onOverview: vi.fn(), onModuleFocus: vi.fn(), onToggleFollow: vi.fn(), onReturnLive: vi.fn(), onCloseInspector: vi.fn() });
+    view.render({ graph: demoGraph, run, viewport: createViewport("observation", "tools"), scenarioId: "evaluation-failed" });
+
+    expect(document.querySelectorAll("[data-branch-choice]")).toHaveLength(0);
+    expect(document.querySelectorAll('[data-action="recovery"]')).toHaveLength(3);
   });
 
   it("keeps recovery controls available, collapses the minimap, and uses a full-width mobile inspector", () => {
