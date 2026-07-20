@@ -23,6 +23,18 @@
   box-sizing: border-box;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 html,
 body,
 #app {
@@ -260,6 +272,12 @@ body {
   outline: none;
 }
 
+.graph-node:focus-visible > rect,
+.detail-node:focus-visible > rect {
+  stroke: var(--live);
+  stroke-width: 3;
+}
+
 .graph-node.is-inspected > rect,
 .detail-node.is-inspected > rect {
   stroke: var(--live);
@@ -289,6 +307,10 @@ body {
 .graph-node--proxy > rect {
   fill: transparent;
   stroke: transparent;
+}
+
+.graph-node--proxy {
+  pointer-events: none;
 }
 
 .graph-node--proxy.is-live > rect,
@@ -365,22 +387,6 @@ body {
   vector-effect: non-scaling-stroke;
 }
 
-.graph-edge.is-live {
-  stroke: var(--live);
-  stroke-width: 3;
-  opacity: 1;
-}
-
-.graph-edge.is-complete {
-  stroke: var(--done);
-  opacity: .95;
-}
-
-.graph-edge.is-skipped {
-  opacity: .6;
-  stroke-dasharray: 3 5;
-}
-
 .graph-node.is-skipped {
   opacity: .68;
 }
@@ -392,6 +398,23 @@ body {
 
 .graph-edge.is-feedback {
   stroke-dasharray: 7 5;
+}
+
+.graph-edge.is-skipped {
+  stroke: var(--line-strong);
+  opacity: .6;
+  stroke-dasharray: 3 5;
+}
+
+.graph-edge.is-complete {
+  stroke: var(--done);
+  opacity: .95;
+}
+
+.graph-edge.is-live {
+  stroke: var(--live);
+  stroke-width: 3;
+  opacity: 1;
 }
 
 .edge-arrow { fill: var(--subtle); }
@@ -555,6 +578,11 @@ body {
   color: var(--muted);
   font-size: .64rem;
   line-height: 1.35;
+}
+
+.issue-banner .issue-ack {
+  color: var(--done);
+  font-weight: 600;
 }
 
 .node-connections {

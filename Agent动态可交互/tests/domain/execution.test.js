@@ -129,6 +129,19 @@ describe("execution state machine", () => {
     expect(run.simulatedIssue).toBeNull();
   });
 
+  it("treats repeated permission requests as one idempotent recovery action", () => {
+    const issue = demoGraph.scenarios.find((scenario) => scenario.id === "permission-denied");
+    let run = transition(createRun(demoGraph, "tool-event"), { type: "REPORT_ISSUE", issue });
+    run = transition(run, { type: "RECOVER", action: "request", reason: "ask once" });
+    const snapshotCount = run.eventSnapshots.length;
+    const traceCount = run.trace.length;
+
+    const repeated = transition(run, { type: "RECOVER", action: "request", reason: "ask twice" });
+    expect(repeated).toBe(run);
+    expect(repeated.eventSnapshots).toHaveLength(snapshotCount);
+    expect(repeated.trace).toHaveLength(traceCount);
+  });
+
   it("keeps terminal cancellation immutable", () => {
     let run = createRun(demoGraph);
     run = transition(run, { type: "CANCEL" });

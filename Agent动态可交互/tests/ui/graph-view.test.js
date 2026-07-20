@@ -107,7 +107,11 @@ describe("GraphView", () => {
     for (const node of demoGraph.nodes) {
       const rendered = document.querySelector(`[data-node-id="${node.id}"]`);
       expect(rendered).not.toBeNull();
-      expect(rendered.getAttribute("aria-label")).toContain(node.label.zh);
+      if (rendered.classList.contains("graph-node--proxy")) {
+        expect(rendered.getAttribute("aria-hidden")).toBe("true");
+      } else {
+        expect(rendered.getAttribute("aria-label")).toContain(node.label.zh);
+      }
     }
   });
 
@@ -224,6 +228,16 @@ describe("GraphView", () => {
     expect(document.querySelector('[data-edge-pulse-for="e18"]')).toBeNull();
   });
 
+  it("renders the terminal current node as complete rather than still live", () => {
+    const completed = transition(createRun(demoGraph, "final-event"), { type: "ADVANCE" });
+    render({ run: completed, viewport: createViewport() });
+
+    const finalResponse = document.querySelector('[data-node-id="final-response"]');
+    expect(finalResponse.classList.contains("is-complete")).toBe(true);
+    expect(finalResponse.classList.contains("is-live")).toBe(false);
+    expect(finalResponse.querySelector(".status-label").textContent).toContain("完成");
+  });
+
   it("completes only the chosen observation outcome", () => {
     const run = transition(createRun(demoGraph, "observation-event"), { type: "CHOOSE_BRANCH", choice: "retry" });
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, viewport: createViewport("action", "tools"), onNodeSelect: vi.fn() });
@@ -278,6 +292,22 @@ describe("GraphView", () => {
     expect(live.querySelector(".status-label").textContent).toContain("失败");
   });
 
+  it("keeps invisible executable projections out of keyboard and screen-reader navigation", () => {
+    renderGraph(document.querySelector("#graph"), {
+      graph: demoGraph,
+      run: createRun(demoGraph, "rag-route"),
+      viewport: createViewport(),
+      onNodeSelect: vi.fn(),
+    });
+
+    const proxy = document.querySelector('[data-node-id="rag-route"]');
+    expect(proxy.classList.contains("graph-node--proxy")).toBe(true);
+    expect(proxy.getAttribute("aria-hidden")).toBe("true");
+    expect(proxy.hasAttribute("role")).toBe(false);
+    expect(proxy.hasAttribute("tabindex")).toBe(false);
+    expect(document.querySelector('[data-detail-node-id="rag-routing"]').getAttribute("role")).toBe("button");
+  });
+
   it("opens SVG node detail by click, Enter, or Space", () => {
     const onNodeSelect = vi.fn();
     renderGraph(document.querySelector("#graph"), {
@@ -294,5 +324,50 @@ describe("GraphView", () => {
 
     expect(onNodeSelect).toHaveBeenCalledTimes(3);
     expect(onNodeSelect).toHaveBeenLastCalledWith(expect.objectContaining({ id: "user-task", type: "executable" }));
+  });
+
+  it("uses one graph tab stop and arrow keys to move focus between nodes", () => {
+    renderGraph(document.querySelector("#graph"), {
+      graph: demoGraph,
+      run: createRun(demoGraph),
+      viewport: createViewport(),
+      onNodeSelect: vi.fn(),
+    });
+
+    const userTask = document.querySelector('[data-node-id="user-task"]');
+    expect(userTask.getAttribute("tabindex")).toBe("0");
+    expect(document.querySelectorAll('.architecture-graph [role="button"][tabindex="0"]')).toHaveLength(1);
+
+    userTask.focus();
+    userTask.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    expect(document.activeElement).toBe(document.querySelector('[data-node-id="orchestrator"]'));
+    expect(userTask.getAttribute("tabindex")).toBe("-1");
+    expect(document.activeElement.getAttribute("tabindex")).toBe("0");
+  });
+
+  it("exposes concise keyboard instructions for the interactive graph", () => {
+    renderGraph(document.querySelector("#graph"), {
+      graph: demoGraph,
+      run: createRun(demoGraph),
+      viewport: createViewport(),
+      onNodeSelect: vi.fn(),
+    });
+
+    const graph = document.querySelector(".architecture-graph");
+    expect(graph.getAttribute("aria-describedby")).toBe("graph-keyboard-help");
+    expect(graph.querySelector("#graph-keyboard-help").textContent).toContain("方向键");
+    expect(graph.querySelector("#graph-keyboard-help").textContent).toContain("Arrow keys");
+  });
+
+  it("uses the visible detail alias as the graph tab stop for proxy execution nodes", () => {
+    renderGraph(document.querySelector("#graph"), {
+      graph: demoGraph,
+      run: createRun(demoGraph, "rag-route"),
+      viewport: createViewport(),
+      onNodeSelect: vi.fn(),
+    });
+
+    expect(document.querySelector('[data-detail-node-id="rag-routing"]').getAttribute("tabindex")).toBe("0");
+    expect(document.querySelector('[data-node-id="rag-route"]').getAttribute("aria-hidden")).toBe("true");
   });
 });

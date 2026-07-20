@@ -32,6 +32,16 @@ const detailEndpointAliases = new Map(Object.entries({
   "tool-select": ["external-environment-business-system"],
   action: ["code-execution-sandbox"],
 }));
+const focusAliases = new Map(Object.entries({
+  planning: "planning-subgoals",
+  memory: "memory-short-term",
+  "rag-route": "rag-routing",
+  "vector-search": "vector-store-retrieval",
+  "web-search": "rag-web-search",
+  "rag-merge": "result-merge-deduplicate",
+  "rag-context": "rag-context-assembly",
+  "tool-select": "external-environment-business-system",
+}));
 
 const svg = (tag, attributes = {}) => {
   const element = document.createElementNS(SVG_NS, tag);
@@ -124,7 +134,7 @@ function setNeighborhoodEmphasis(root, id, active) {
 
 function makeInteractive(group, item, type, root, onNodeSelect) {
   group.setAttribute("role", "button");
-  group.setAttribute("tabindex", "0");
+  group.setAttribute("tabindex", "-1");
   const selection = { ...item, type };
   const inspect = () => setNeighborhoodEmphasis(root, item.id, true);
   const clear = () => setNeighborhoodEmphasis(root, item.id, false);
@@ -140,6 +150,35 @@ function makeInteractive(group, item, type, root, onNodeSelect) {
     event.preventDefault();
     onNodeSelect?.(selection);
   });
+}
+
+function configureRovingFocus(root, currentEvent) {
+  const nodes = [...root.querySelectorAll('[role="button"]')];
+  if (!nodes.length) return;
+  const currentId = currentEvent?.nodeId;
+  const alias = focusAliases.get(currentId);
+  const initial = root.querySelector(`[data-node-id="${currentId}"][role="button"]`)
+    ?? (alias ? root.querySelector(`[data-detail-node-id="${alias}"]`) : null)
+    ?? nodes[0];
+
+  const selectTabStop = (selected) => {
+    for (const node of nodes) node.setAttribute("tabindex", node === selected ? "0" : "-1");
+  };
+  selectTabStop(initial);
+
+  for (const [index, node] of nodes.entries()) {
+    node.addEventListener("focus", () => selectTabStop(node));
+    node.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const targetIndex = event.key === "Home"
+        ? 0
+        : event.key === "End"
+          ? nodes.length - 1
+          : (index + (["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : -1) + nodes.length) % nodes.length;
+      nodes[targetIndex].focus();
+    });
+  }
 }
 
 function renderPanel(item, type, state = {}) {
@@ -203,18 +242,18 @@ function renderExecutableNode(node, state, isEndpoint, interaction) {
   const { x, y, w, h } = node.referencePosition;
   const status = state.status;
   const suffix = status ? ` · ${statusLabels[status] ?? status}` : "";
+  const proxy = !visibleExecutableIds.has(node.id);
   const group = svg("g", {
     "data-node-id": node.id,
     transform: `translate(${x} ${y})`,
-    role: "button",
-    tabindex: 0,
-    "aria-label": `${node.label.zh} ${node.label.en}${suffix}`,
+    ...(proxy
+      ? { "aria-hidden": "true" }
+      : { role: "button", tabindex: 0, "aria-label": `${node.label.zh} ${node.label.en}${suffix}` }),
   });
   group.classList.add("graph-node", `node-${node.kind}`);
   applyVisualState(group, state);
   if (isEndpoint) group.classList.add("is-relation-endpoint");
 
-  const proxy = !visibleExecutableIds.has(node.id);
   if (proxy) group.classList.add("graph-node--proxy");
   group.append(svg("rect", { width: w, height: h, rx: Math.min(10, h / 4) }));
   if (!proxy) {
@@ -229,7 +268,7 @@ function renderExecutableNode(node, state, isEndpoint, interaction) {
       group.append(statusText);
     }
   }
-  makeInteractive(group, node, "executable", interaction.root, interaction.onNodeSelect);
+  if (!proxy) makeInteractive(group, node, "executable", interaction.root, interaction.onNodeSelect);
   return group;
 }
 
@@ -264,8 +303,11 @@ function relationEndpoints(graph, run, currentEvent) {
 }
 
 export function renderGraph(container, { graph, run, onNodeSelect }) {
-  const root = svg("svg", { viewBox: "0 0 1400 800", preserveAspectRatio: "xMidYMid meet", role: "group", "aria-label": "Agent 架构与执行路径" });
+  const root = svg("svg", { viewBox: "0 0 1400 800", preserveAspectRatio: "xMidYMid meet", role: "group", "aria-label": "Agent 架构与执行路径", "aria-describedby": "graph-keyboard-help" });
   root.classList.add("architecture-graph");
+  const keyboardHelp = svg("desc", { id: "graph-keyboard-help" });
+  keyboardHelp.textContent = "Tab 进入主图，方向键浏览节点，Enter 或空格查看详情。Tab into the graph, use Arrow keys to browse nodes, and Enter or Space to open details.";
+  root.append(keyboardHelp);
   appendMarkers(root);
 
   const routingContext = createRoutingContext(graph);
@@ -392,6 +434,7 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
   for (const node of graph.nodes) {
     nodesLayer.append(renderExecutableNode(node, referenceVisualState(graph, run, node.id), endpoints.has(node.id), { root, onNodeSelect }));
   }
+  configureRovingFocus(root, currentEvent);
 
   const guardrails = renderPanel({ ...graph.guardrails, label: graph.guardrails.label }, "group");
   guardrails.removeAttribute("data-group-id");

@@ -108,6 +108,7 @@ function executableState(graph, run, nodeId) {
   if (branch && selectedBranches.length && !selectedBranches.includes(branch)) return { skipped: true, status: "skipped" };
   if (branch && run.completedBranches.includes(branch)) return { complete: true, status: "completed" };
   if (branch && selectedBranches.includes(branch) && currentEvent?.id === "rag-retrieval") return { live: true, status: "running" };
+  if (nodeId === run.currentNodeId && run.status === "completed") return { complete: true, status: "completed" };
   if (nodeId === run.currentNodeId) return { live: true, status: run.status };
   if (completedNodeIds.has(nodeId)) return { complete: true, status: "completed" };
   return {};

@@ -25,4 +25,8 @@ describe("Cursor-style neutral interface", () => {
     expect(styles).not.toMatch(/\.graph-node\.is-live[^}]*drop-shadow/s);
     expect(styles).not.toMatch(/\.reference-group\.is-live[^}]*drop-shadow/s);
   });
+
+  it("lets completed state color override callback type color", () => {
+    expect(styles.lastIndexOf(".graph-edge.is-complete")).toBeGreaterThan(styles.lastIndexOf(".graph-edge.is-callback"));
+  });
 });

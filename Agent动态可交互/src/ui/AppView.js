@@ -3,7 +3,7 @@ import { createNodeDetail, renderContextRail } from "./Inspector.js";
 import { renderPlaybackControls } from "./PlaybackControls.js";
 
 export function createAppView(root, handlers) {
-  root.innerHTML = `<section class="app-shell"><header class="topbar"><div class="title-lockup"><span class="eyebrow">AGENT EXECUTION MAP</span><h1 data-lang="zh">智能代理执行流程</h1><p class="foundation-screen__support" data-lang="en">Interactive Agent Flow</p></div><div class="scenario-block"><div class="scenario-row"><label class="scenario-control">模拟场景 <small>Simulation</small><select data-action="scenario" aria-label="模拟场景 Simulation"></select></label><span class="scenario-status" data-scenario-status></span></div><p data-scenario-summary></p></div><nav data-testid="breadcrumb" aria-label="当前步骤 Current step"></nav></header><main class="flow-stage"><div class="graph-host"></div><aside class="step-rail" aria-label="当前步骤说明 Current step details"></aside></main><footer class="controls-host"></footer></section>`;
+  root.innerHTML = `<section class="app-shell"><p class="sr-only" data-testid="run-announcement" aria-live="polite" aria-atomic="true"></p><header class="topbar"><div class="title-lockup"><span class="eyebrow">AGENT EXECUTION MAP</span><h1 data-lang="zh">智能代理执行流程</h1><p class="foundation-screen__support" data-lang="en">Interactive Agent Flow</p></div><div class="scenario-block"><div class="scenario-row"><label class="scenario-control">模拟场景 <small>Simulation</small><select data-action="scenario" aria-label="模拟场景 Simulation"></select></label><span class="scenario-status" data-scenario-status></span></div><p data-scenario-summary></p></div><nav data-testid="breadcrumb" aria-label="当前步骤 Current step"></nav></header><main class="flow-stage"><div class="graph-host"></div><aside class="step-rail" aria-label="当前步骤说明 Current step details"></aside></main><footer class="controls-host"></footer></section>`;
 
   const graphHost = root.querySelector(".graph-host");
   const stepRail = root.querySelector(".step-rail");
@@ -12,6 +12,7 @@ export function createAppView(root, handlers) {
   const scenario = root.querySelector('[data-action="scenario"]');
   const scenarioStatus = root.querySelector("[data-scenario-status]");
   const scenarioSummary = root.querySelector("[data-scenario-summary]");
+  const runAnnouncement = root.querySelector('[data-testid="run-announcement"]');
   let activeRailTab = "current";
   let inspectedNode = null;
   let currentRailModel = null;
@@ -51,7 +52,10 @@ export function createAppView(root, handlers) {
       const currentEvent = state.graph.events.find((item) => item.id === state.run.currentEventId);
       const currentNode = state.graph.nodes.find((item) => item.id === currentEvent.nodeId);
       const currentModule = state.graph.modules.find((item) => item.id === currentNode.moduleId);
-      breadcrumb.textContent = ["Agent 系统", currentModule.label.zh, currentNode.label.zh].join(" > ");
+      breadcrumb.textContent = ["Agent 系统", currentModule.label.zh, currentNode.label.zh]
+        .filter((label, index, labels) => index === 0 || label !== labels[index - 1])
+        .join(" > ");
+      runAnnouncement.textContent = `${currentEvent.label.zh} · ${currentEvent.label.en}，${state.run.status}`;
 
       const cursorKey = `${state.run.currentEventId}:${state.run.trace.length}:${state.run.iteration}`;
       if (cursorKey !== lastCursorKey) {

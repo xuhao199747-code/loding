@@ -3,6 +3,7 @@ import { createAppView } from "../../src/ui/AppView.js";
 import { createRun, transition } from "../../src/domain/execution.js";
 import { createViewport } from "../../src/domain/viewport.js";
 import { demoGraph } from "../../src/data/demo-graph.js";
+import { saveSession } from "../../src/domain/session.js";
 
 const handlers = () => ({
   onNodeSelect: vi.fn(),
@@ -46,7 +47,10 @@ function activateWithKeyboard(button) {
 }
 
 describe("AppView", () => {
-  beforeEach(() => { document.body.innerHTML = '<main id="app"></main>'; });
+  beforeEach(() => {
+    document.body.innerHTML = '<main id="app"></main>';
+    sessionStorage.clear();
+  });
   afterEach(() => { vi.useRealTimers(); vi.resetModules(); });
 
   it("renders a fixed flow stage and step rail without spatial navigation", () => {
@@ -69,6 +73,13 @@ describe("AppView", () => {
     expect(document.querySelector("[data-testid=breadcrumb]").textContent).toContain("RAG 检索增强");
   });
 
+  it("removes adjacent duplicate labels from the current-step breadcrumb", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: createRun(demoGraph, "final-event"), viewport: createViewport() });
+
+    expect(document.querySelector("[data-testid=breadcrumb]").textContent).toBe("Agent 系统 > 最终响应");
+  });
+
   it("shows fixed Current Step and Node Detail tabs in the right rail", () => {
     const view = createAppView(document.querySelector("#app"), handlers());
     view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport() });
@@ -76,6 +87,31 @@ describe("AppView", () => {
     expect([...document.querySelectorAll("[data-rail-tab]")].map((tab) => tab.dataset.railTab)).toEqual(["current", "node"]);
     expect(document.querySelector('[data-rail-tab="current"]').getAttribute("aria-selected")).toBe("true");
     expect(document.querySelector('[data-rail-tab="node"]').disabled).toBe(true);
+  });
+
+  it("announces the current step and renders a bilingual status", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: createRun(demoGraph), viewport: createViewport() });
+
+    const announcement = document.querySelector('[data-testid="run-announcement"]');
+    expect(announcement.getAttribute("aria-live")).toBe("polite");
+    expect(announcement.textContent).toContain("接收用户任务");
+    expect(announcement.textContent).toContain("Receive Task");
+    expect(document.querySelector(".status-chip").textContent).toContain("已暂停");
+    expect(document.querySelector(".status-chip").textContent).toContain("Paused");
+  });
+
+  it("supports arrow-key navigation between enabled inspector tabs", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: createRun(demoGraph), viewport: createViewport() });
+    document.querySelector('[data-detail-node-id="rag-query"]').dispatchEvent(new MouseEvent("click", { bubbles: true }));
+
+    const nodeTab = document.querySelector('[data-rail-tab="node"]');
+    nodeTab.focus();
+    nodeTab.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+
+    expect(document.activeElement).toBe(document.querySelector('[data-rail-tab="current"]'));
+    expect(document.querySelector('[data-rail-tab="current"]').getAttribute("aria-selected")).toBe("true");
   });
 
   it("opens clicked graph content in Node Detail without changing the execution cursor", () => {
@@ -145,7 +181,21 @@ describe("AppView", () => {
     view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport("rag-route", "rag") });
 
     expect(document.querySelectorAll("[data-branch-choice]")).toHaveLength(3);
-    expect(document.querySelector('[data-action="primary"]').disabled).toBe(true);
+    expect(document.querySelector('[data-action="primary"]').hidden).toBe(true);
+  });
+
+  it("disables unavailable history navigation and labels terminal completion accurately", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: createRun(demoGraph), viewport: createViewport() });
+    expect(document.querySelector('[data-action="previous"]').disabled).toBe(true);
+
+    const completed = { ...createRun(demoGraph, "final-event"), status: "completed" };
+    view.render({ graph: demoGraph, run: completed, viewport: createViewport() });
+    const primary = document.querySelector('[data-action="primary"]');
+    expect(primary.disabled).toBe(true);
+    expect(primary.hidden).toBe(false);
+    expect(primary.textContent).toContain("流程已完成");
+    expect(primary.textContent).toContain("Complete");
   });
 
   it("does not let RAG branch history resolve the observation decision", () => {
@@ -170,6 +220,46 @@ describe("AppView", () => {
 
     expect(document.activeElement).toBe(document.querySelector('[data-action="primary"]'));
     expect(document.activeElement.textContent).toContain("下一事件");
+  });
+
+  it("consumes a stale Next control only once during a rapid double activation", () => {
+    const state = createInteractiveView();
+    const staleNext = document.querySelector('[data-action="primary"]');
+
+    staleNext.click();
+    staleNext.click();
+
+    expect(state.run.currentEventId).toBe("orchestrator-event");
+    expect(state.run.trace).toHaveLength(1);
+  });
+
+  it("ignores the second click when a double-click lands on the newly rendered Next control", () => {
+    const state = createInteractiveView();
+    document.querySelector('[data-action="primary"]').dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 1 }));
+    document.querySelector('[data-action="primary"]').dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 2 }));
+
+    expect(state.run.currentEventId).toBe("orchestrator-event");
+    expect(state.run.trace).toHaveLength(1);
+  });
+
+  it("consumes a stale decision control only once during a rapid double activation", () => {
+    const state = createInteractiveView(createRun(demoGraph, "llm-dispatch-event"));
+    const staleChoice = document.querySelector('[data-branch-choice="rag"]');
+
+    staleChoice.click();
+    expect(() => staleChoice.click()).not.toThrow();
+
+    expect(state.run.currentEventId).toBe("rag-route");
+    expect(state.run.trace).toHaveLength(1);
+  });
+
+  it("does not let a second click spill into the next decision's first choice", () => {
+    const state = createInteractiveView(createRun(demoGraph, "llm-dispatch-event"));
+    document.querySelector('[data-branch-choice="rag"]').dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 1 }));
+    document.querySelector('[data-branch-choice="vector"]').dispatchEvent(new MouseEvent("click", { bubbles: true, detail: 2 }));
+
+    expect(state.run.currentEventId).toBe("rag-route");
+    expect(state.run.selectedBranches).toEqual([]);
   });
 
   it("moves keyboard focus from Next to a decision choice and then Complete Branch", () => {
@@ -197,9 +287,32 @@ describe("AppView", () => {
     const view = createAppView(document.querySelector("#app"), handlers());
     view.render({ graph: demoGraph, run, viewport: createViewport("rag-merge", "rag"), scenarioId: "no-results" });
 
-    expect(document.querySelector('[data-action="primary"]').disabled).toBe(true);
+    expect(document.querySelector('[data-action="primary"]').hidden).toBe(true);
     expect([...document.querySelectorAll('[data-action="recovery"]')].map((button) => button.dataset.recovery))
       .toEqual(["retry", "replan"]);
+  });
+
+  it("shows permission-request acknowledgement and prevents duplicate requests", () => {
+    const issue = demoGraph.scenarios.find((scenario) => scenario.id === "permission-denied");
+    let run = transition(createRun(demoGraph, "tool-event"), { type: "REPORT_ISSUE", issue });
+    run = transition(run, { type: "RECOVER", action: "request", reason: "request access" });
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run, viewport: createViewport(), scenarioId: issue.id });
+
+    expect(document.querySelector(".issue-banner").textContent).toContain("确认请求已发送");
+    expect(document.querySelector(".issue-banner").textContent).toContain("Confirmation requested");
+    expect(document.querySelector('[data-recovery="request"]').disabled).toBe(true);
+  });
+
+  it.each([
+    ["cancelled", "流程已取消", "Cancelled"],
+    ["failed", "执行失败", "Failed"],
+  ])("uses an accurate %s terminal action label", (status, zh, en) => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: { ...createRun(demoGraph, "final-event"), status }, viewport: createViewport() });
+    const primary = document.querySelector('[data-action="primary"]');
+    expect(primary.textContent).toContain(zh);
+    expect(primary.textContent).toContain(en);
   });
 
   it("shows branch completion counts for parallel work", () => {
@@ -284,6 +397,27 @@ describe("AppView", () => {
     select.dispatchEvent(new Event("change"));
 
     expect(document.querySelector('[data-node-id="user-task"]').classList.contains("is-live")).toBe(true);
+  });
+
+  it("restores the last in-progress run after a reload", async () => {
+    const run = transition(createRun(demoGraph), { type: "ADVANCE" });
+    saveSession(sessionStorage, { scenarioId: "tool-timeout", run });
+
+    await import("../../src/main.js?session-restore-test");
+
+    expect(document.querySelector('[data-action="scenario"]').value).toBe("tool-timeout");
+    expect(document.querySelector('[data-node-id="orchestrator"]').classList.contains("is-live")).toBe(true);
+    expect(document.querySelector("[data-testid=run-progress]").textContent).toContain("事件 2");
+  });
+
+  it("ignores held-arrow key repeats while preserving deliberate keyboard stepping", async () => {
+    await import("../../src/main.js?keyboard-repeat-test");
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", repeat: true, bubbles: true }));
+    expect(document.querySelector('[data-node-id="user-task"]').classList.contains("is-live")).toBe(true);
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", repeat: false, bubbles: true }));
+    expect(document.querySelector('[data-node-id="orchestrator"]').classList.contains("is-live")).toBe(true);
   });
 
   it("pauses the no-results simulation at the RAG join without changing the graph", async () => {

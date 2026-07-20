@@ -3,7 +3,6 @@ import { createRun, latestSnapshotForNode, transition } from "../src/domain/exec
 import { demoGraph } from "../src/data/demo-graph.js";
 import { createViewport } from "../src/domain/viewport.js";
 import { renderGraph } from "../src/ui/GraphView.js";
-import { renderMiniMap } from "../src/ui/MiniMap.js";
 import { createAppView } from "../src/ui/AppView.js";
 import { readFileSync } from "node:fs";
 
@@ -109,23 +108,18 @@ describe("final review regressions", () => {
     expect(host.querySelector('[data-node-id="vector-search"]').classList.contains("is-complete")).toBe(false);
   });
 
-  it("keeps completed parallel edges complete but not live in graph and minimap", () => {
+  it("keeps completed parallel edges complete but not live in the graph", () => {
     let run = transition(advanceToRag(), { type: "CHOOSE_BRANCH", choice: "parallel" });
     run = transition(run, { type: "COMPLETE_BRANCH", branch: "vector" });
     const graphHost = document.createElement("div");
-    const minimapHost = document.createElement("div");
     const viewport = createViewport("rag-route", "rag");
     renderGraph(graphHost, { graph: demoGraph, run, viewport, onNodeSelect: vi.fn() });
-    renderMiniMap(minimapHost, { graph: demoGraph, run, viewport, handlers: { onModuleFocus: vi.fn(), onOverview: vi.fn(), onMiniMapToggle: vi.fn(), onToggleFollow: vi.fn(), onReturnLive: vi.fn() } });
 
     const graphEdges = [graphHost.querySelector('[data-edge-id="e7"]'), graphHost.querySelector('[data-edge-id="e8"]')];
-    const minimapEdges = [...minimapHost.querySelectorAll(".minimap-edge")].slice(6, 8);
-    for (const edges of [graphEdges, minimapEdges]) {
-      expect(edges[0].classList.contains("is-complete")).toBe(true);
-      expect(edges[0].classList.contains("is-live")).toBe(false);
-      expect(edges[1].classList.contains("is-complete")).toBe(false);
-      expect(edges[1].classList.contains("is-live")).toBe(true);
-    }
+    expect(graphEdges[0].classList.contains("is-complete")).toBe(true);
+    expect(graphEdges[0].classList.contains("is-live")).toBe(false);
+    expect(graphEdges[1].classList.contains("is-complete")).toBe(false);
+    expect(graphEdges[1].classList.contains("is-live")).toBe(true);
   });
 
   it("highlights active callback endpoints before advance and keeps the target visible", () => {

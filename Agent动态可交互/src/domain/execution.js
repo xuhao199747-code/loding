@@ -162,6 +162,7 @@ export function transition(run, action) {
   }
 
   if (action.type === "RECOVER") {
+    if (action.action === "request" && run.simulatedIssue?.requested) return run;
     const recovery = { recovery: action.action, reason: action.reason ?? "Recovery requested" };
     const cleared = resetIssue(run);
     if (action.action === "retry") {

@@ -46,7 +46,7 @@ describe("reference hierarchy layout", () => {
       expect(rendered.classList.contains("detail-node")).toBe(true);
       expect(rendered.classList.contains(`in-${detail.groupId}`)).toBe(true);
       expect(rendered.getAttribute("role")).toBe("button");
-      expect(rendered.getAttribute("tabindex")).toBe("0");
+      expect(["-1", "0"]).toContain(rendered.getAttribute("tabindex"));
       expect(rendered.getAttribute("aria-label")).toContain(`${detail.label.zh} ${detail.label.en}`);
       expect(rendered.textContent).toContain(detail.label.zh);
       expect(rendered.textContent).toContain(detail.label.en);
@@ -61,6 +61,7 @@ describe("reference hierarchy layout", () => {
       expect(rendered.textContent).toContain(detail.description.en);
     }
     expect(document.querySelectorAll('[data-detail-node-id][role="button"]')).toHaveLength(demoGraph.detailNodes.length + 1);
+    expect(document.querySelectorAll('.architecture-graph [role="button"][tabindex="0"]')).toHaveLength(1);
   });
 
   it("uses only the explicit 1400 by 800 reference positions for the required hierarchy", () => {
@@ -133,7 +134,7 @@ describe("reference hierarchy layout", () => {
 
     const gate = document.querySelector('[data-detail-node-id="context-dependency-gate"]');
     expect(gate.getAttribute("role")).toBe("button");
-    expect(gate.getAttribute("tabindex")).toBe("0");
+    expect(gate.getAttribute("tabindex")).toBe("-1");
     expect(gate.getAttribute("data-layout-source")).toBe("tools-group");
     expect(gate.textContent).toContain("上下文依赖门");
     expect(gate.textContent).toContain("Context Gate");

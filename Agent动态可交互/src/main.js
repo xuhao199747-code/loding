@@ -1,15 +1,23 @@
 import "./styles.css";
 import { demoGraph } from "./data/demo-graph.js";
 import { createRun, transition } from "./domain/execution.js";
+import { restoreSession, saveSession } from "./domain/session.js";
 import { createAppView } from "./ui/AppView.js";
 
-const state = {
+const storage = (() => {
+  try { return globalThis.sessionStorage; } catch { return null; }
+})();
+const restored = restoreSession(storage, demoGraph);
+const state = restored ? { graph: demoGraph, ...restored } : {
   graph: demoGraph,
   run: createRun(demoGraph),
   scenarioId: "normal",
 };
 
-const render = () => view.render(state);
+const render = () => {
+  view.render(state);
+  saveSession(storage, state);
+};
 const isTerminal = (status) => ["completed", "failed", "cancelled"].includes(status);
 
 function advanceOne() {
@@ -37,12 +45,14 @@ const handlers = {
     render();
   },
   onPrimaryAction() {
+    const previousRun = state.run;
     advanceOne();
-    render();
+    if (state.run !== previousRun) render();
   },
   onPrevious() {
-    state.run = transition(state.run, { type: "PREVIOUS" });
-    render();
+    const previousRun = state.run;
+    state.run = transition(previousRun, { type: "PREVIOUS" });
+    if (state.run !== previousRun) render();
   },
   onRestart() {
     state.run = transition(state.run, { type: "RESET" });
@@ -54,8 +64,9 @@ const handlers = {
     render();
   },
   onRecovery(action) {
-    state.run = transition(state.run, { type: "RECOVER", action, reason: `Scenario recovery: ${action}` });
-    render();
+    const previousRun = state.run;
+    state.run = transition(previousRun, { type: "RECOVER", action, reason: `Scenario recovery: ${action}` });
+    if (state.run !== previousRun) render();
   },
 };
 
@@ -67,7 +78,7 @@ const keyboardController = new AbortController();
 globalThis[keyboardControllerKey] = keyboardController;
 
 document.addEventListener("keydown", (event) => {
-  if (event.defaultPrevented || event.target.closest?.("input, textarea, select, button, [contenteditable='true'], [role='button']")) return;
+  if (event.defaultPrevented || event.repeat || event.target.closest?.("input, textarea, select, button, [contenteditable='true'], [role='button']")) return;
 
   if (event.key === "ArrowLeft") {
     event.preventDefault();
