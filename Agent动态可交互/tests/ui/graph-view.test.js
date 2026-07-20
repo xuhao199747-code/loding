@@ -7,7 +7,7 @@ import { createViewport } from "../../src/domain/viewport.js";
 describe("GraphView", () => {
   beforeEach(() => { document.body.innerHTML = '<div id="graph"></div>'; });
 
-  const moduleIds = demoGraph.modules.map((module) => module.id).sort();
+  const groupIds = demoGraph.groups.map((group) => group.id).sort();
   const edgeIds = demoGraph.edges.map((edge) => edge.id).sort();
 
   function render(state) {
@@ -15,26 +15,33 @@ describe("GraphView", () => {
   }
 
   function assertCompleteOverview() {
-    expect([...document.querySelectorAll("[data-module-id]")].map((module) => module.dataset.moduleId).sort()).toEqual(moduleIds);
+    expect([...document.querySelectorAll("[data-group-id]")].map((group) => group.dataset.groupId).sort()).toEqual(groupIds);
+    expect(document.querySelectorAll("[data-topology-edge]")).toHaveLength(demoGraph.topologyEdges.length);
     expect([...document.querySelectorAll("[data-edge-id]")].map((edge) => edge.dataset.edgeId).sort()).toEqual(edgeIds);
     expect(document.querySelector('[data-layer="scene"]')).toBeNull();
     expect(document.querySelectorAll(".graph-module.is-dimmed, .graph-node.is-dimmed")).toHaveLength(0);
   }
 
-  it("draws modules before edges before nodes while allowing unrelated layers", () => {
+  it("draws the six reference layers in their exact visual order", () => {
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), onNodeSelect: vi.fn() });
 
-    const modulesLayer = document.querySelector('[data-layer="modules"]');
-    const edgesLayer = document.querySelector('[data-layer="edges"]');
+    const root = document.querySelector("svg");
+    const edgesLayer = document.querySelector('[data-layer="topology-edges"]');
     const nodesLayer = document.querySelector('[data-layer="nodes"]');
-    expect(modulesLayer).not.toBeNull();
-    expect(edgesLayer).not.toBeNull();
-    expect(nodesLayer).not.toBeNull();
-    expect(modulesLayer.compareDocumentPosition(edgesLayer) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
-    expect(edgesLayer.compareDocumentPosition(nodesLayer) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
-    const edges = edgesLayer.querySelectorAll("[data-edge-id]");
-    expect(edges).toHaveLength(demoGraph.edges.length);
+    expect(root.getAttribute("viewBox")).toBe("0 0 1400 800");
+    expect([...root.children].filter((child) => child.hasAttribute("data-layer")).map((child) => child.dataset.layer)).toEqual([
+      "system-boundary",
+      "groups",
+      "topology-edges",
+      "nodes",
+      "guardrails",
+      "live-pulses",
+    ]);
+    const edges = edgesLayer.querySelectorAll("[data-topology-edge]");
+    expect(edges).toHaveLength(demoGraph.topologyEdges.length);
     for (const edge of edges) expect(edge.getAttribute("marker-end")).toBeTruthy();
+    expect(nodesLayer).not.toBeNull();
+    expect(document.querySelectorAll("[data-module-id]")).toHaveLength(0);
   });
 
   it("anchors a straight edge to node rectangle boundaries rather than centers", () => {
@@ -45,22 +52,22 @@ describe("GraphView", () => {
       .match(/-?\d+(?:\.\d+)?/g)
       .map(Number);
 
-    expect(coordinates).toEqual([490, 193, 490, 225]);
-    expect(coordinates).not.toEqual([490, 164, 490, 254]);
+    expect(coordinates).toEqual([510, 211, 510, 235]);
+    expect(coordinates).not.toEqual([510, 188, 510, 258]);
   });
 
-  it("marks the Chinese module and node names as primary labels", () => {
+  it("marks the Chinese group and visible node names as primary labels", () => {
     render({ run: createRun(demoGraph), viewport: createViewport() });
 
-    for (const module of demoGraph.modules) {
-      const primary = document.querySelector(`[data-module-id="${module.id}"] .primary-label`);
+    for (const group of demoGraph.groups) {
+      const primary = document.querySelector(`[data-group-id="${group.id}"] .primary-label`);
       expect(primary).not.toBeNull();
-      expect(primary.textContent).toBe(module.label.zh);
+      expect(primary.textContent).toBe(group.label.zh);
     }
     for (const node of demoGraph.nodes) {
-      const primary = document.querySelector(`[data-node-id="${node.id}"] .primary-label`);
-      expect(primary).not.toBeNull();
-      expect(primary.textContent).toBe(node.label.zh);
+      const rendered = document.querySelector(`[data-node-id="${node.id}"]`);
+      expect(rendered).not.toBeNull();
+      expect(rendered.getAttribute("aria-label")).toContain(node.label.zh);
     }
   });
 
@@ -158,8 +165,13 @@ describe("GraphView", () => {
     expect(edge.classList.contains("is-live")).toBe(true);
     expect(pulse).not.toBeNull();
     expect(pulse.querySelector("animateMotion").getAttribute("path")).toBe(edge.getAttribute("d"));
-    expect([...document.querySelectorAll("[data-edge-pulse-for]")].map((item) => item.dataset.edgePulseFor).sort())
-      .toEqual([...document.querySelectorAll(".graph-edge.is-live")].map((item) => item.dataset.edgeId).sort());
+    for (const livePath of document.querySelectorAll(".graph-edge.is-live")) {
+      const livePulse = livePath.dataset.topologyEdge
+        ? document.querySelector(`[data-topology-edge-pulse-for="${livePath.dataset.topologyEdge}"]`)
+        : document.querySelector(`[data-edge-pulse-for="${livePath.dataset.edgeId}"]`);
+      expect(livePulse).not.toBeNull();
+      expect(livePulse.querySelector("animateMotion").getAttribute("path")).toBe(livePath.getAttribute("d"));
+    }
   });
 
   it("removes the pulse when a completed edge is no longer active", () => {
@@ -202,13 +214,13 @@ describe("GraphView", () => {
     expect(document.querySelectorAll(".graph-edge.is-complete")).toHaveLength(0);
   });
 
-  it("renders Chinese module headers with a smaller English support label", () => {
+  it("renders Chinese group headers with a smaller English support label", () => {
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run: createRun(demoGraph), viewport: createViewport(), onNodeSelect: vi.fn() });
-    const coreModule = document.querySelector('[data-module-id="core"]');
-    const support = coreModule.querySelector(".module-en");
-    expect(coreModule.textContent).toContain("Agent 核心");
-    expect(support.textContent).toBe("Agent Core");
-    expect(support.getAttribute("font-size")).toBe("10");
+    const coreGroup = document.querySelector('[data-group-id="core-group"]');
+    const support = coreGroup.querySelector(".group-en");
+    expect(coreGroup.textContent).toContain("核心");
+    expect(support.textContent).toBe("Core");
+    expect(support.getAttribute("font-size")).toBe("9");
   });
 
   it("renders informative SVG nodes with accessible labels and textual status", () => {
@@ -220,7 +232,7 @@ describe("GraphView", () => {
     });
 
     const live = document.querySelector('[data-node-id="user-task"]');
-    expect(live.getAttribute("role")).toBeNull();
+    expect(live.getAttribute("role")).toBe("group");
     expect(live.getAttribute("tabindex")).toBeNull();
     expect(live.getAttribute("aria-label")).toContain("用户任务");
     expect(live.classList.contains("is-failed")).toBe(true);

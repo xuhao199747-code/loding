@@ -1,4 +1,12 @@
-import { activeTransitionEdgeIds, completedEdgeIdsForTrace, isCurrentLiveEdge } from "./traceEdges.js";
+import {
+  activeTransitionEdgeIds,
+  completedEdgeIdsForTrace,
+  isCurrentLiveEdge,
+  referenceEdgeState,
+  referenceVisualState,
+  topologyEdgeKey,
+  topologyEdgeMeta,
+} from "./traceEdges.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const statusLabels = {
@@ -6,150 +14,461 @@ const statusLabels = {
   completed: "完成 · Completed", failed: "失败 · Failed", skipped: "跳过 · Skipped", blocked: "已阻塞 · Blocked",
   retrying: "重试中 · Retrying", cancelled: "已取消 · Cancelled", partial: "部分完成 · Partial",
 };
-const relationLabels = { callback: "回传 ↑ Callback", retry: "重试 ↻ Retry", replan: "重规划 ↶ Replan" };
+const relationLabels = {
+  callback: "回传 · Callback",
+  retry: "重试 · Retry",
+  replan: "重规划 · Replan",
+  decision: "决策 · Decision",
+};
+const visibleExecutableIds = new Set(["user-task", "orchestrator", "llm", "action", "observation", "final-response"]);
+const CONTEXT_GATE_ID = "context-dependency-gate";
+const detailEndpointAliases = new Map(Object.entries({
+  "rag-route": ["rag-routing"],
+  "vector-search": ["vector-store-retrieval"],
+  "web-search": ["rag-web-search"],
+  "rag-merge": ["result-merge-deduplicate"],
+  "rag-context": ["rag-context-assembly"],
+  "tool-select": ["external-environment-business-system"],
+  action: ["code-execution-sandbox"],
+}));
+
 const svg = (tag, attributes = {}) => {
   const element = document.createElementNS(SVG_NS, tag);
   for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, String(value));
   return element;
 };
-const nodeCenter = (node) => ({ x: node.x + 65, y: node.y + 29 });
 
-function nodeBoundaryPoints(fromNode, toNode) {
-  const from = nodeCenter(fromNode);
-  const to = nodeCenter(toNode);
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  const boundaryScale = Math.min(65 / Math.abs(dx || 1), 29 / Math.abs(dy || 1));
-  const reverseScale = Math.min(65 / Math.abs(dx || 1), 29 / Math.abs(dy || 1));
+const center = ({ x, y, w, h }) => ({ x: x + w / 2, y: y + h / 2 });
+const pointOnSide = (bounds, side, fraction = .5) => {
+  if (side === "top") return { x: bounds.x + bounds.w * fraction, y: bounds.y };
+  if (side === "bottom") return { x: bounds.x + bounds.w * fraction, y: bounds.y + bounds.h };
+  if (side === "left") return { x: bounds.x, y: bounds.y + bounds.h * fraction };
+  return { x: bounds.x + bounds.w, y: bounds.y + bounds.h * fraction };
+};
 
+function boundaryToward(bounds, target) {
+  const origin = center(bounds);
+  const dx = target.x - origin.x;
+  const dy = target.y - origin.y;
+  if (!dx && !dy) return origin;
+  const scale = 1 / Math.max(Math.abs(dx) / (bounds.w / 2), Math.abs(dy) / (bounds.h / 2));
+  return { x: origin.x + dx * scale, y: origin.y + dy * scale };
+}
+
+function contextGateProjection(graph) {
+  const tools = graph.groups.find((group) => group.id === "tools-group").bounds;
   return {
-    from: { x: from.x + dx * boundaryScale, y: from.y + dy * boundaryScale },
-    to: { x: to.x - dx * reverseScale, y: to.y - dy * reverseScale },
+    id: CONTEXT_GATE_ID,
+    groupId: "tools-group",
+    bounds: { x: tools.x + 330, y: tools.y + 98, w: 165, h: 42 },
+    label: { zh: "上下文依赖门", en: "Context Gate" },
+    description: { zh: "依赖:等待 · 无依赖:并发", en: "Dependent: Wait · Independent: Continue" },
   };
 }
 
-function edgePath(edge, nodes) {
-  const { from, to } = nodeBoundaryPoints(nodes.get(edge.from), nodes.get(edge.to));
-  if (["callback", "replan", "retry"].includes(edge.type)) {
-    const bend = Math.max(54, Math.abs(to.x - from.x) * .28);
-    return `M ${from.x} ${from.y} Q ${(from.x + to.x) / 2} ${Math.min(from.y, to.y) - bend} ${to.x} ${to.y}`;
+const edgePresentation = {
+  "llm->rag-query": { lane: "rag", label: "并行检索 · Parallel Retrieval", x: 712, y: 178 },
+  "llm->tools-group": { lane: "tools", label: "并行工具准备 · Parallel Tool Prep", x: 720, y: 516 },
+  "rag-context-assembly->llm": { callback: true, label: "上下文回传 · Context Callback", x: 846, y: 524 },
+  "observation->llm": { callback: true, label: "观察回传 · Observation Callback", x: 1184, y: 524 },
+};
+
+function appendRelationLabel(layer, key, label, x, y) {
+  const text = svg("text", { x, y, class: "relation-label", "data-relation-label-for": key, "text-anchor": "middle" });
+  text.textContent = label;
+  layer.append(text);
+}
+
+function createEndpointResolver(graph, projectionNodes = []) {
+  const endpoints = new Map();
+  const register = (id, bounds) => {
+    if (!id || !bounds || endpoints.has(id)) throw new Error(`Invalid or duplicate reference endpoint: ${id}`);
+    endpoints.set(id, bounds);
+  };
+
+  register(graph.systemBoundary.id, graph.systemBoundary.bounds);
+  for (const group of graph.groups) register(group.id, group.bounds);
+  for (const detail of graph.detailNodes) register(detail.id, detail.bounds);
+  for (const node of graph.nodes) register(node.id, node.referencePosition);
+  for (const projection of projectionNodes) register(projection.id, projection.bounds);
+
+  return (id) => {
+    const bounds = endpoints.get(id);
+    if (!bounds) throw new Error(`Unknown reference endpoint: ${id}`);
+    return bounds;
+  };
+}
+
+const polyline = (start, waypoints, end) => `M ${start.x} ${start.y} ${[...waypoints, end].map((point) => `L ${point.x} ${point.y}`).join(" ")}`;
+
+function routePath(edge, resolve) {
+  const key = topologyEdgeKey(edge);
+  const from = resolve(edge.from);
+  const to = resolve(edge.to);
+  const fromCenter = center(from);
+  const toCenter = center(to);
+  const direct = () => {
+    const start = boundaryToward(from, toCenter);
+    const end = boundaryToward(to, fromCenter);
+    return { d: `M ${start.x} ${start.y} L ${end.x} ${end.y}`, start };
+  };
+
+  if (key === "planning->llm") {
+    const start = pointOnSide(from, "top");
+    const end = pointOnSide(to, "bottom", .38);
+    return { d: `M ${start.x} ${start.y} C ${start.x} ${start.y - 22}, ${end.x - 24} ${end.y + 18}, ${end.x} ${end.y}`, start };
   }
-  return `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
+  if (key === "memory->llm") {
+    const start = pointOnSide(from, "top");
+    const end = pointOnSide(to, "bottom", .72);
+    return { d: `M ${start.x} ${start.y} C ${start.x} ${start.y - 26}, ${end.x + 28} ${end.y + 18}, ${end.x} ${end.y}`, start };
+  }
+  if (key === "rag-context-assembly->llm") {
+    const core = resolve("core-group");
+    const rag = resolve("rag-group");
+    const corridorX = (core.x + core.w + rag.x) / 2;
+    const corridorY = rag.y + rag.h + 20;
+    const start = pointOnSide(from, "left");
+    const end = pointOnSide(to, "right");
+    return { d: polyline(start, [{ x: corridorX, y: corridorY }, { x: corridorX, y: end.y }], end), start };
+  }
+  if (key === "observation->llm") {
+    const system = resolve("agent-system");
+    const core = resolve("core-group");
+    const rag = resolve("rag-group");
+    const outerX = system.x + system.w - 40;
+    const corridorX = (core.x + core.w + rag.x) / 2;
+    const corridorY = rag.y + rag.h + 20;
+    const start = pointOnSide(from, "right");
+    const end = pointOnSide(to, "right");
+    return { d: polyline(start, [{ x: outerX, y: start.y }, { x: outerX, y: corridorY }, { x: corridorX, y: corridorY }, { x: corridorX, y: end.y }], end), start };
+  }
+  if (key === "observation->planning") {
+    const rag = resolve("rag-group");
+    const start = pointOnSide(from, "left");
+    const end = pointOnSide(to, "bottom");
+    const corridorY = rag.y + rag.h + 20;
+    return { d: polyline(start, [{ x: start.x - 45, y: corridorY }, { x: end.x, y: corridorY }], end), start };
+  }
+  if (key === "memory->action") {
+    const rag = resolve("rag-group");
+    const start = pointOnSide(from, "bottom");
+    const end = pointOnSide(to, "top");
+    const corridorY = rag.y + rag.h + 20;
+    return { d: polyline(start, [{ x: start.x, y: corridorY }, { x: end.x, y: corridorY }], end), start };
+  }
+  if (key === "llm->final-response") {
+    const core = resolve("core-group");
+    const start = pointOnSide(from, "left");
+    const end = pointOnSide(to, "right");
+    const corridorX = core.x - 50;
+    return { d: polyline(start, [{ x: corridorX, y: start.y }, { x: corridorX, y: end.y }], end), start };
+  }
+  if (key === "llm->rag-query") {
+    const core = resolve("core-group");
+    const rag = resolve("rag-group");
+    const start = pointOnSide(from, "right");
+    const end = pointOnSide(to, "left");
+    const corridorX = (core.x + core.w + rag.x) / 2;
+    return { d: polyline(start, [{ x: corridorX, y: start.y }, { x: corridorX, y: end.y }], end), start };
+  }
+  if (key === "llm->tools-group") {
+    const core = resolve("core-group");
+    const rag = resolve("rag-group");
+    const start = pointOnSide(from, "right");
+    const end = pointOnSide(to, "top");
+    const corridorX = (core.x + core.w + rag.x) / 2;
+    const corridorY = rag.y + rag.h + 20;
+    return { d: polyline(start, [{ x: corridorX, y: start.y }, { x: corridorX, y: corridorY }, { x: end.x, y: corridorY }], end), start };
+  }
+  if (key === "tools-group->action") {
+    const start = pointOnSide(from, "top", .66);
+    const end = pointOnSide(to, "top");
+    return { d: polyline(start, [{ x: start.x, y: end.y - 15 }, { x: end.x, y: end.y - 15 }], end), start };
+  }
+  if (edge.from === "rag-routing" && ["embedding-vectorization", "keyword-search", "rag-web-search"].includes(edge.to)) {
+    const start = pointOnSide(from, "bottom");
+    const end = pointOnSide(to, "top");
+    const corridorY = (from.y + from.h + to.y) / 2;
+    return { d: polyline(start, [{ x: start.x, y: corridorY }, { x: end.x, y: corridorY }], end), start };
+  }
+  if (["vector-top-k", "database-top-k", "web-top-k"].includes(edge.from) && edge.to === "result-merge-deduplicate") {
+    const start = pointOnSide(from, "bottom");
+    const end = pointOnSide(to, "top");
+    const corridorY = (from.y + from.h + to.y) / 2;
+    return { d: polyline(start, [{ x: start.x, y: corridorY }, { x: end.x, y: corridorY }], end), start };
+  }
+  return direct();
+}
+
+function retryPath(resolve) {
+  const from = resolve("observation");
+  const to = resolve("action");
+  const start = pointOnSide(from, "bottom");
+  const end = pointOnSide(to, "bottom");
+  const bendY = Math.min(resolve("guardrails").y - 14, Math.max(start.y, end.y) + 52);
+  return { d: `M ${start.x} ${start.y} C ${start.x} ${bendY}, ${end.x} ${bendY}, ${end.x} ${end.y}`, start };
 }
 
 function appendMarkers(root) {
   const defs = svg("defs");
   const marker = svg("marker", { id: "arrow", viewBox: "0 0 8 8", refX: 7, refY: 4, markerWidth: 6, markerHeight: 6, orient: "auto-start-reverse" });
   marker.append(svg("path", { d: "M 0 0 L 8 4 L 0 8 z", class: "edge-arrow" }));
-  defs.append(marker); root.append(defs);
+  defs.append(marker);
+  root.append(defs);
 }
 
-function edgePulse(edge, pathData, nodes) {
-  const { from } = nodeBoundaryPoints(nodes.get(edge.from), nodes.get(edge.to));
-  const pulse = svg("g", { class: "edge-pulse", "data-edge-pulse-for": edge.id, "aria-hidden": true });
-  const moving = svg("circle", { class: "edge-pulse__moving", r: 4 });
+function applyVisualState(element, state) {
+  if (state.live) element.classList.add("is-live", `is-${state.status ?? "running"}`);
+  if (state.complete) element.classList.add("is-complete");
+  if (state.skipped) element.classList.add("is-skipped");
+  if (state.status && !state.live && !state.complete && !state.skipped) element.classList.add(`is-${state.status}`);
+}
+
+function renderPanel(item, type, state = {}) {
+  const { x, y, w, h } = item.bounds;
+  const attributes = {
+    transform: `translate(${x} ${y})`,
+    role: "group",
+    "aria-label": `${item.label.zh} ${item.label.en}`,
+  };
+  if (type === "system") attributes["data-system-boundary"] = item.id;
+  else attributes["data-group-id"] = item.id;
+  const group = svg("g", attributes);
+  group.classList.add(type === "system" ? "system-boundary" : "reference-group");
+  if (type === "group") group.classList.add(`parent-${item.parentId}`, `layout-${item.layout}`);
+  applyVisualState(group, state);
+  group.append(svg("rect", { width: w, height: h, rx: type === "system" ? 20 : 14 }));
+  const title = svg("text", { x: 14, y: 20, class: "primary-label group-title" });
+  title.textContent = item.label.zh;
+  const support = svg("text", { x: 14, y: 33, class: "group-en", "font-size": 9 });
+  support.textContent = item.label.en;
+  group.append(title, support);
+  return group;
+}
+
+function renderDetailNode(detail, state, isEndpoint) {
+  const { x, y, w, h } = detail.bounds;
+  const group = svg("g", {
+    "data-detail-node-id": detail.id,
+    transform: `translate(${x} ${y})`,
+    role: "group",
+    "aria-label": `${detail.label.zh} ${detail.label.en}${detail.description ? ` ${detail.description.zh} ${detail.description.en}` : ""}`,
+  });
+  group.classList.add("detail-node", `in-${detail.groupId}`);
+  applyVisualState(group, state);
+  if (isEndpoint) group.classList.add("is-relation-endpoint");
+  group.append(svg("rect", { width: w, height: h, rx: h > 30 ? 8 : 5 }));
+
+  if (detail.description) {
+    const label = svg("text", { x: w / 2, y: 13, "text-anchor": "middle", class: "detail-label" });
+    label.textContent = detail.label.zh;
+    const support = svg("text", { x: w / 2, y: 22, "text-anchor": "middle", class: "detail-en" });
+    support.textContent = detail.label.en;
+    const zh = svg("text", { x: w / 2, y: 32, "text-anchor": "middle", class: "detail-description" });
+    zh.textContent = detail.description.zh;
+    const en = svg("text", { x: w / 2, y: 41, "text-anchor": "middle", class: "detail-description detail-description--en" });
+    en.textContent = detail.description.en;
+    group.append(label, support, zh, en);
+  } else {
+    const zh = svg("text", { x: w / 2, y: 10, "text-anchor": "middle", class: "detail-label" });
+    zh.textContent = detail.label.zh;
+    const en = svg("text", { x: w / 2, y: 18, "text-anchor": "middle", class: "detail-en" });
+    en.textContent = detail.label.en;
+    group.append(zh, en);
+  }
+  return group;
+}
+
+function renderExecutableNode(node, state, isEndpoint) {
+  const { x, y, w, h } = node.referencePosition;
+  const status = state.status;
+  const suffix = status ? ` · ${statusLabels[status] ?? status}` : "";
+  const group = svg("g", {
+    "data-node-id": node.id,
+    transform: `translate(${x} ${y})`,
+    role: "group",
+    "aria-label": `${node.label.zh} ${node.label.en}${suffix}`,
+  });
+  group.classList.add("graph-node", `node-${node.kind}`);
+  applyVisualState(group, state);
+  if (isEndpoint) group.classList.add("is-relation-endpoint");
+
+  const proxy = !visibleExecutableIds.has(node.id);
+  if (proxy) group.classList.add("graph-node--proxy");
+  group.append(svg("rect", { width: w, height: h, rx: Math.min(10, h / 4) }));
+  if (!proxy) {
+    const zh = svg("text", { x: w / 2, y: 17, "text-anchor": "middle", class: "primary-label node-label" });
+    zh.textContent = node.label.zh;
+    const en = svg("text", { x: w / 2, y: 31, "text-anchor": "middle", class: "node-en" });
+    en.textContent = node.label.en;
+    group.append(zh, en);
+    if (status) {
+      const statusText = svg("text", { x: w / 2, y: h - 4, "text-anchor": "middle", class: "status-label" });
+      statusText.textContent = statusLabels[status] ?? status;
+      group.append(statusText);
+    }
+  }
+  return group;
+}
+
+function edgePulse({ key, edgeId, pathData, start, topology = true }) {
+  const attributes = { class: "edge-pulse", "aria-hidden": true };
+  if (topology) attributes["data-topology-edge-pulse-for"] = key;
+  if (edgeId) attributes["data-edge-pulse-for"] = edgeId;
+  const pulse = svg("g", attributes);
+  const moving = svg("circle", { class: "edge-pulse__moving", r: 3.5 });
   moving.append(svg("animateMotion", { path: pathData, dur: "1.2s", repeatCount: "indefinite" }));
-  const staticPulse = svg("circle", { class: "edge-pulse__static", cx: from.x, cy: from.y, r: 4 });
+  const staticPulse = svg("circle", { class: "edge-pulse__static", cx: start.x, cy: start.y, r: 3.5 });
   pulse.append(moving, staticPulse);
   return pulse;
 }
 
-function branchStatus(graph, run, nodeId) {
-  const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
-  const branch = graph.edges.find((edge) => edge.type === "parallel" && edge.branch && edge.to === nodeId)?.branch;
-  if (!branch) return null;
-  if (selectedBranches.includes(branch)) return run.completedBranches.includes(branch) ? "success" : "running";
-  return selectedBranches.length ? "skipped" : null;
-}
-
 function relationEndpoints(graph, run, currentEvent) {
-  if (currentEvent?.relation === "callback" && currentEvent.targetNodeId) return new Set([currentEvent.nodeId, currentEvent.targetNodeId]);
-  const entry = run.trace.at(-1);
-  if (!entry || entry.relation === "complete") return new Set();
-  const source = graph.events.find((event) => event.id === entry.from)?.nodeId;
-  const target = graph.events.find((event) => event.id === entry.to)?.nodeId;
-  return new Set([source, target].filter(Boolean));
+  const endpoints = new Set();
+  if (currentEvent?.relation === "callback" && currentEvent.targetNodeId) {
+    endpoints.add(currentEvent.nodeId);
+    endpoints.add(currentEvent.targetNodeId);
+  } else {
+    const entry = run.trace.at(-1);
+    if (entry && entry.relation !== "complete") {
+      const source = graph.events.find((event) => event.id === entry.from)?.nodeId;
+      const target = graph.events.find((event) => event.id === entry.to)?.nodeId;
+      if (source) endpoints.add(source);
+      if (target) endpoints.add(target);
+    }
+  }
+  for (const id of [...endpoints]) for (const alias of detailEndpointAliases.get(id) ?? []) endpoints.add(alias);
+  return endpoints;
 }
 
 export function renderGraph(container, { graph, run }) {
-  const root = svg("svg", { viewBox: "0 0 1200 800", preserveAspectRatio: "xMidYMid meet", role: "group", "aria-label": "Agent 架构与执行路径" });
+  const root = svg("svg", { viewBox: "0 0 1400 800", preserveAspectRatio: "xMidYMid meet", role: "group", "aria-label": "Agent 架构与执行路径" });
   root.classList.add("architecture-graph");
   appendMarkers(root);
-  const nodes = new Map(graph.nodes.map((node) => [node.id, node]));
+
+  const contextGate = contextGateProjection(graph);
+  const resolve = createEndpointResolver(graph, [contextGate]);
   const currentEvent = graph.events.find((event) => event.id === run.currentEventId);
-  const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
-  const completedEvents = run.trace.map((entry) => graph.events.find((event) => event.id === entry.from)).filter(Boolean);
-  const completedEdgeIds = completedEdgeIdsForTrace(graph, run.trace);
-  const transitionEdgeIds = activeTransitionEdgeIds(graph, run.trace);
-  const completedNodeIds = new Set(completedEvents.map((event) => event.nodeId));
   const endpoints = relationEndpoints(graph, run, currentEvent);
-  const modulesLayer = svg("g", { "data-layer": "modules" });
-  const edgesLayer = svg("g", { "data-layer": "edges" });
+  const systemLayer = svg("g", { "data-layer": "system-boundary" });
+  const groupsLayer = svg("g", { "data-layer": "groups" });
+  const edgesLayer = svg("g", { "data-layer": "topology-edges" });
   const nodesLayer = svg("g", { "data-layer": "nodes" });
-  root.append(modulesLayer, edgesLayer, nodesLayer);
+  const guardrailsLayer = svg("g", { "data-layer": "guardrails" });
+  const pulsesLayer = svg("g", { "data-layer": "live-pulses" });
+  root.append(systemLayer, groupsLayer, edgesLayer, nodesLayer, guardrailsLayer, pulsesLayer);
 
-  for (const module of graph.modules) {
-    const group = svg("g", { "data-module-id": module.id, transform: `translate(${module.x} ${module.y})` });
-    group.classList.add("graph-module");
-    group.append(svg("rect", { width: module.w, height: module.h, rx: 18 }));
-    const title = svg("text", { x: 16, y: 28, class: "primary-label" }); title.textContent = module.label.zh; group.append(title);
-    const support = svg("text", { x: 16, y: 45, class: "module-en", "font-size": 10 }); support.textContent = module.label.en; group.append(support);
-    modulesLayer.append(group);
-  }
+  systemLayer.append(renderPanel(graph.systemBoundary, "system"));
+  for (const group of graph.groups) groupsLayer.append(renderPanel(group, "group", referenceVisualState(graph, run, group.id)));
 
-  for (const edge of graph.edges) {
-    const pathData = edgePath(edge, nodes);
-    const path = svg("path", { d: pathData, "data-edge-id": edge.id, "marker-end": "url(#arrow)", "aria-label": relationLabels[edge.type] ?? `流向 ${edge.from} 到 ${edge.to}` });
-    path.classList.add("graph-edge", `edge-${edge.type}`, `is-${edge.type}`);
-    if (relationLabels[edge.type]) path.classList.add("is-nonlinear");
-    const selected = !edge.branch || selectedBranches.includes(edge.branch);
-    const live = isCurrentLiveEdge(currentEvent, edge, selectedBranches, run.completedBranches) || transitionEdgeIds.has(edge.id);
-    if (live) path.classList.add("is-live");
-    if (selected && completedEdgeIds.has(edge.id)) path.classList.add("is-complete");
-    if (edge.type === "parallel" && edge.branch && run.completedBranches.includes(edge.branch)) path.classList.add("is-complete");
-    if (edge.branch && selectedBranches.length && !selected) path.classList.add("is-skipped");
+  for (const edge of graph.topologyEdges) {
+    const key = topologyEdgeKey(edge);
+    const meta = topologyEdgeMeta(edge);
+    const state = referenceEdgeState(graph, run, edge);
+    const route = routePath(edge, resolve);
+    const attributes = {
+      d: route.d,
+      "data-topology-edge": key,
+      "data-from": edge.from,
+      "data-to": edge.to,
+      "marker-end": "url(#arrow)",
+      "aria-label": edgePresentation[key]?.label ?? relationLabels[state.relation] ?? `流向 ${edge.from} 到 ${edge.to}`,
+    };
+    if (meta.edgeId) attributes["data-edge-id"] = meta.edgeId;
+    if (meta.branch) attributes["data-branch"] = meta.branch;
+    const path = svg("path", attributes);
+    path.classList.add("graph-edge", `edge-${state.relation ?? "topology"}`);
+    if (state.relation) path.classList.add(`is-${state.relation}`);
+    if (meta.feedback) path.classList.add("is-feedback", "is-nonlinear");
+    const presentation = edgePresentation[key];
+    if (presentation?.lane) {
+      path.classList.add("is-parallel-lane");
+      path.dataset.fanoutOrigin = "llm";
+      path.dataset.lane = presentation.lane;
+    }
+    if (presentation?.callback) path.classList.add("is-callback");
+    if (key === "orchestrator->llm") path.classList.add("feeds-parallel-fanout");
+    if (state.live) path.classList.add("is-live");
+    if (state.complete) path.classList.add("is-complete");
+    if (state.skipped) path.classList.add("is-skipped");
     edgesLayer.append(path);
-    if (live) edgesLayer.append(edgePulse(edge, pathData, nodes));
-    if (relationLabels[edge.type]) {
-      const from = nodeCenter(nodes.get(edge.from)); const to = nodeCenter(nodes.get(edge.to));
-      const label = svg("text", { class: "relation-label", x: (from.x + to.x) / 2, y: Math.min(from.y, to.y) - 20, "text-anchor": "middle" });
-      label.textContent = edge.type === "replan" && run.trace.at(-1)?.relation === "replan" ? `${relationLabels[edge.type]} · ${run.trace.at(-1).reason ?? ""}` : relationLabels[edge.type];
-      edgesLayer.append(label);
-    }
+    if (presentation?.label) appendRelationLabel(edgesLayer, key, presentation.label, presentation.x, presentation.y);
+    if (state.live) pulsesLayer.append(edgePulse({ key, edgeId: meta.edgeId, pathData: route.d, start: route.start }));
   }
 
-  const retryTrace = run.trace.at(-1);
-  if (retryTrace?.relation === "retry" && retryTrace.from === retryTrace.to) {
-    const node = nodes.get(graph.events.find((event) => event.id === retryTrace.from)?.nodeId);
-    if (node) {
-      const loop = svg("path", { class: "retry-loop", d: `M ${node.x + 108} ${node.y + 12} C ${node.x + 160} ${node.y - 34}, ${node.x + 160} ${node.y + 80}, ${node.x + 108} ${node.y + 46}`, "marker-end": "url(#arrow)", "aria-label": `重试 Attempt ${retryTrace.iteration}` });
-      edgesLayer.append(loop);
-    }
+  const retryEdge = graph.edges.find((edge) => edge.id === "e18");
+  if (retryEdge) {
+    const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
+    const completedEdgeIds = completedEdgeIdsForTrace(graph, run.trace);
+    const transitionEdgeIds = activeTransitionEdgeIds(graph, run.trace);
+    const live = isCurrentLiveEdge(currentEvent, retryEdge, selectedBranches, run.completedBranches) || transitionEdgeIds.has(retryEdge.id);
+    const route = retryPath((id) => id === "guardrails" ? graph.guardrails.bounds : resolve(id));
+    const retry = svg("path", {
+      d: route.d,
+      "data-edge-id": retryEdge.id,
+      "data-runtime-edge": "observation->action",
+      "marker-end": "url(#arrow)",
+      "aria-label": relationLabels.retry,
+    });
+    retry.classList.add("graph-edge", "edge-retry", "is-retry", "is-feedback", "is-nonlinear");
+    if (live) retry.classList.add("is-live");
+    if (completedEdgeIds.has(retryEdge.id)) retry.classList.add("is-complete");
+    edgesLayer.append(retry);
+    appendRelationLabel(edgesLayer, retryEdge.id, relationLabels.retry, 1080, 726);
+    if (live) pulsesLayer.append(edgePulse({ key: retryEdge.id, edgeId: retryEdge.id, pathData: route.d, start: route.start, topology: false }));
   }
 
+  const dependencyRoutes = [
+    {
+      key: "rag-context-assembly->context-dependency-gate",
+      from: "rag-context-assembly",
+      to: CONTEXT_GATE_ID,
+      label: "需要上下文 · Context required",
+    },
+    {
+      key: "context-dependency-gate->action",
+      from: CONTEXT_GATE_ID,
+      to: "action",
+      label: "就绪后执行 · Execute when ready",
+    },
+  ];
+  for (const dependency of dependencyRoutes) {
+    const route = routePath(dependency, resolve);
+    const path = svg("path", {
+      d: route.d,
+      "data-projection-edge": dependency.key,
+      "data-from": dependency.from,
+      "data-to": dependency.to,
+      "marker-end": "url(#arrow)",
+      "aria-label": dependency.label,
+    });
+    path.classList.add("graph-edge", "is-context-dependency", "is-feedback");
+    edgesLayer.append(path);
+  }
+
+  for (const detail of graph.detailNodes) {
+    nodesLayer.append(renderDetailNode(detail, referenceVisualState(graph, run, detail.id), endpoints.has(detail.id)));
+  }
+  const renderedGate = renderDetailNode(contextGate, {}, false);
+  renderedGate.dataset.layoutSource = "tools-group";
+  renderedGate.classList.add("context-gate");
+  nodesLayer.append(renderedGate);
   for (const node of graph.nodes) {
-    const status = node.id === run.currentNodeId ? run.status : branchStatus(graph, run, node.id) ?? (completedNodeIds.has(node.id) ? "completed" : null);
-    const suffix = status ? ` · ${statusLabels[status] ?? status}` : "";
-    const group = svg("g", { "data-node-id": node.id, transform: `translate(${node.x} ${node.y})`, "aria-label": `${node.label.zh} ${node.label.en}${suffix}` });
-    group.classList.add("graph-node", `node-${node.kind}`);
-    if (node.id === run.currentNodeId) group.classList.add("is-live", `is-${run.status}`);
-    if (endpoints.has(node.id)) group.classList.add("is-relation-endpoint");
-    if (completedNodeIds.has(node.id) && !status) group.classList.add("is-complete");
-    if (status && node.id !== run.currentNodeId) group.classList.add(status === "completed" ? "is-complete" : `is-${status}`);
-    const rect = svg("rect", { width: 130, height: 58, rx: 10 });
-    const zh = svg("text", { x: 65, y: 25, "text-anchor": "middle", class: "primary-label" }); zh.textContent = node.label.zh;
-    const en = svg("text", { x: 65, y: 42, "text-anchor": "middle", class: "node-en" }); en.textContent = node.label.en;
-    group.append(rect, zh, en);
-    if (status) {
-      const statusText = svg("text", { x: 65, y: 54, "text-anchor": "middle", class: "status-label" });
-      statusText.textContent = statusLabels[status] ?? status; group.append(statusText);
-    }
-    nodesLayer.append(group);
+    nodesLayer.append(renderExecutableNode(node, referenceVisualState(graph, run, node.id), endpoints.has(node.id)));
   }
-  const guardrails = svg("g", { "data-layer": "guardrails", transform: "translate(30 752)" });
-  guardrails.append(svg("rect", { width: 1140, height: 34, rx: 9 }));
-  const guardrailLabel = svg("text", { x: 570, y: 22, "text-anchor": "middle" });
-  guardrailLabel.textContent = `${graph.guardrails.label.zh} · ${graph.guardrails.label.en}`;
-  guardrails.append(guardrailLabel); modulesLayer.append(guardrails);
+
+  const guardrails = renderPanel({ ...graph.guardrails, label: graph.guardrails.label }, "group");
+  guardrails.removeAttribute("data-group-id");
+  guardrails.classList.remove("reference-group", "parent-undefined", "layout-undefined");
+  guardrails.classList.add("guardrails-band");
+  guardrails.setAttribute("aria-label", `${graph.guardrails.label.zh} ${graph.guardrails.label.en}`);
+  guardrails.querySelector(".group-title").textContent = `${graph.guardrails.label.zh} · ${graph.guardrails.label.en}`;
+  guardrails.querySelector(".group-title").setAttribute("x", graph.guardrails.bounds.w / 2);
+  guardrails.querySelector(".group-title").setAttribute("y", 30);
+  guardrails.querySelector(".group-title").setAttribute("text-anchor", "middle");
+  guardrails.querySelector(".group-en").remove();
+  guardrailsLayer.append(guardrails);
+
   container.replaceChildren(root);
 }

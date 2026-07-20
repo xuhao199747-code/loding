@@ -159,49 +159,142 @@ body {
   fill: #EAF4FF;
 }
 
-.graph-module rect {
-  fill: #0D1B2D;
-  stroke: #1E3855;
-}
-
-.module-en,
-.node-en {
-  fill: #A88BFA;
-  font-size: 10px;
-}
-
-.graph-node rect {
-  fill: #0D1B2D;
-  stroke: #1E3855;
-}
-
-.graph-node.is-live rect {
-  stroke: #38D1FF;
-  filter: drop-shadow(0 0 8px #38D1FF66);
-}
-
-.graph-node.is-complete rect {
-  stroke: #54D6AD;
-}
-
-.graph-node.is-running rect { stroke-width: 3; stroke-dasharray: 3 2; }
-.graph-node.is-success rect { stroke: #54D6AD; stroke-width: 3; }
-.graph-node.is-relation-endpoint rect { stroke-width: 4; stroke-dasharray: 7 3; }
-
-.graph-edge {
+.system-boundary > rect {
   fill: none;
   stroke: #1E3855;
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
 
+.reference-group > rect {
+  fill: #0D1B2DDD;
+  stroke: #1E3855;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.reference-group.layout-branch > rect {
+  fill: #081423;
+  stroke-dasharray: 5 4;
+}
+
+.reference-group.parent-core-group > rect {
+  fill: #0D1B2D;
+}
+
+.reference-group.is-live > rect,
+.reference-group.is-relation-endpoint > rect {
+  stroke: var(--live);
+  stroke-width: 2.5;
+}
+
+.reference-group.is-complete > rect { stroke: var(--done); }
+.reference-group.is-skipped { opacity: .68; }
+
+.group-title {
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.group-en,
+.node-en {
+  fill: #A88BFA;
+  font-size: 9px;
+}
+
+.graph-node > rect {
+  fill: #0D1B2D;
+  stroke: #1E3855;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.graph-node--proxy > rect {
+  fill: transparent;
+  stroke: transparent;
+}
+
+.graph-node--proxy.is-live > rect,
+.graph-node--proxy.is-relation-endpoint > rect {
+  stroke: var(--live);
+  stroke-width: 2.5;
+}
+
+.graph-node--proxy.is-complete > rect { stroke: var(--done); }
+
+.node-label {
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.detail-node > rect {
+  fill: #0D1B2D;
+  stroke: #1E3855;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.detail-node.is-live > rect,
+.detail-node.is-relation-endpoint > rect {
+  stroke: var(--live);
+  stroke-width: 2.25;
+  filter: drop-shadow(0 0 5px #38D1FF55);
+}
+
+.detail-node.is-complete > rect { stroke: var(--done); }
+.detail-node.is-skipped { opacity: .68; }
+
+.detail-label {
+  fill: #EAF4FF;
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+.detail-en {
+  fill: #A88BFA;
+  font-size: 7.5px;
+}
+
+.detail-description {
+  fill: #EAF4FF;
+  font-size: 8px;
+}
+
+.detail-description--en {
+  fill: #A88BFA;
+  font-size: 7px;
+}
+
+.graph-node.is-live > rect {
+  stroke: #38D1FF;
+  filter: drop-shadow(0 0 8px #38D1FF66);
+}
+
+.graph-node.is-complete > rect {
+  stroke: #54D6AD;
+}
+
+.graph-node.is-running > rect { stroke-width: 3; stroke-dasharray: 3 2; }
+.graph-node.is-success > rect { stroke: #54D6AD; stroke-width: 3; }
+.graph-node.is-relation-endpoint > rect { stroke-width: 3; stroke-dasharray: 7 3; }
+
+.graph-edge {
+  fill: none;
+  stroke: #1E3855;
+  stroke-width: 1.6;
+  opacity: .88;
+  vector-effect: non-scaling-stroke;
+}
+
 .graph-edge.is-live {
   stroke: #38D1FF;
   stroke-width: 3;
+  opacity: 1;
 }
 
 .graph-edge.is-complete {
   stroke: #54D6AD;
+  opacity: .95;
 }
 
 .graph-edge.is-skipped {
@@ -218,6 +311,10 @@ body {
   stroke-dasharray: 8 6;
 }
 
+.graph-edge.is-feedback {
+  stroke-dasharray: 7 5;
+}
+
 .edge-arrow { fill: #38D1FF; }
 .graph-edge.is-complete + .relation-label,
 .relation-label { fill: #FFBD59; font-size: 10px; }
@@ -227,11 +324,14 @@ body {
   fill: #081423;
   stroke: #FFBD59;
   stroke-dasharray: 4 4;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
 }
 
 [data-layer="guardrails"] text {
   fill: #54D6AD;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 650;
 }
 
 .step-rail {
