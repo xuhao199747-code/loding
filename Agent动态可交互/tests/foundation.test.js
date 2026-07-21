@@ -6,6 +6,7 @@ const approvedPalette = new Set([
   "#0C0C0C", "#111111", "#151515", "#1B1B1B", "#242424",
   "#2A2A2A", "#3A3A3A", "#4A4A4A", "#666666", "#9B9B9B", "#EDEDED",
   "#6E8BFF", "#6FCF97", "#467A5D", "#9B8AFB", "#D6A85F", "#E06C75",
+  "#6F95E8", "#9B83E7", "#55B6C2", "#D5A34F", "#E58A62", "#C27ADC", "#D5D9E2",
 ]);
 
 describe("foundation shell", () => {

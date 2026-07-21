@@ -8,6 +8,12 @@ import {
   topologyEdgeMeta,
 } from "./traceEdges.js";
 import { createRoutingContext, routeRetryEdge, routeTopologyEdge } from "./edgeRouting.js";
+import {
+  flowModuleForDetail,
+  flowModuleForGroup,
+  flowModuleForNode,
+  flowPresentationForConnection,
+} from "./flowPresentation.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const statusLabels = {
@@ -92,6 +98,15 @@ function applyVisualState(element, state) {
   if (state.complete) element.classList.add("is-complete");
   if (state.skipped) element.classList.add("is-skipped");
   if (state.status && !state.live && !state.complete && !state.skipped) element.classList.add(`is-${state.status}`);
+}
+
+function applyFlowIdentity(element, presentation) {
+  element.dataset.flowModule = presentation.module;
+  if (presentation.level) {
+    element.dataset.flowLevel = presentation.level;
+    element.classList.add(`flow-${presentation.level}`);
+  }
+  return element;
 }
 
 function appendCompletionIndicator(group, width) {
@@ -318,11 +333,12 @@ function renderExecutableNode(node, state, isEndpoint, interaction) {
   return group;
 }
 
-function edgePulse({ key, edgeId, pathData, start, topology = true }) {
+function edgePulse({ key, edgeId, pathData, start, topology = true, presentation }) {
   const attributes = { class: "edge-pulse", "aria-hidden": true };
   if (topology) attributes["data-topology-edge-pulse-for"] = key;
   if (edgeId) attributes["data-edge-pulse-for"] = edgeId;
   const pulse = svg("g", attributes);
+  if (presentation) applyFlowIdentity(pulse, presentation);
   const moving = svg("circle", { class: "edge-pulse__moving", r: 3.5 });
   moving.append(svg("animateMotion", { path: pathData, dur: "1.2s", repeatCount: "indefinite" }));
   const staticPulse = svg("circle", { class: "edge-pulse__static", cx: start.x, cy: start.y, r: 3.5 });
@@ -369,13 +385,18 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
   const pulsesLayer = svg("g", { "data-layer": "live-pulses" });
   root.append(groupsLayer, edgesLayer, labelsLayer, nodesLayer, guardrailsLayer, pulsesLayer);
 
-  for (const group of graph.groups) groupsLayer.append(renderPanel(group, "group", referenceVisualState(graph, run, group.id)));
+  for (const group of graph.groups) {
+    const rendered = renderPanel(group, "group", referenceVisualState(graph, run, group.id));
+    applyFlowIdentity(rendered, { module: flowModuleForGroup(group.id) });
+    groupsLayer.append(rendered);
+  }
 
   for (const edge of graph.topologyEdges) {
     const key = topologyEdgeKey(edge);
     const meta = topologyEdgeMeta(edge);
     const state = referenceEdgeState(graph, run, edge);
     const route = routeTopologyEdge(edge, routingContext);
+    const flowPresentation = flowPresentationForConnection(edge.from, edge.to);
     const attributes = {
       d: route.d,
       "data-topology-edge": key,
@@ -384,12 +405,14 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
       "marker-end": "url(#arrow)",
       "aria-label": route.label?.text ?? relationLabels[state.relation] ?? `流向 ${edge.from} 到 ${edge.to}`,
       "data-route-kind": route.kind,
+      "data-flow-module": flowPresentation.module,
+      "data-flow-level": flowPresentation.level,
     };
     if (route.corridor) attributes["data-route-corridor"] = route.corridor;
     if (meta.edgeId) attributes["data-edge-id"] = meta.edgeId;
     if (meta.branch) attributes["data-branch"] = meta.branch;
     const path = svg("path", attributes);
-    path.classList.add("graph-edge", `edge-${state.relation ?? "topology"}`);
+    path.classList.add("graph-edge", `edge-${state.relation ?? "topology"}`, `flow-${flowPresentation.level}`);
     if (state.relation) path.classList.add(`is-${state.relation}`);
     if (meta.feedback) path.classList.add("is-feedback", "is-nonlinear");
     const presentation = edgePresentation[key];
@@ -405,7 +428,7 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
     if (state.skipped) path.classList.add("is-skipped");
     edgesLayer.append(path);
     if (route.label) appendRelationLabel(labelsLayer, key, route.label.text, route.label.x, route.label.y);
-    if (state.live) pulsesLayer.append(edgePulse({ key, edgeId: meta.edgeId, pathData: route.d, start: route.start }));
+    if (state.live) pulsesLayer.append(edgePulse({ key, edgeId: meta.edgeId, pathData: route.d, start: route.start, presentation: flowPresentation }));
   }
 
   const retryEdge = graph.edges.find((edge) => edge.id === "e18");
@@ -415,6 +438,7 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
     const transitionEdgeIds = activeTransitionEdgeIds(graph, run.trace);
     const live = isCurrentLiveEdge(currentEvent, retryEdge, selectedBranches, run.completedBranches) || transitionEdgeIds.has(retryEdge.id);
     const route = routeRetryEdge(routingContext);
+    const retryPresentation = flowPresentationForConnection("observation", "action");
     const retry = svg("path", {
       d: route.d,
       "data-edge-id": retryEdge.id,
@@ -423,13 +447,15 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
       "aria-label": relationLabels.retry,
       "data-route-kind": route.kind,
       "data-route-corridor": route.corridor,
+      "data-flow-module": retryPresentation.module,
+      "data-flow-level": retryPresentation.level,
     });
-    retry.classList.add("graph-edge", "edge-retry", "is-retry", "is-feedback", "is-nonlinear");
+    retry.classList.add("graph-edge", "edge-retry", "is-retry", "is-feedback", "is-nonlinear", `flow-${retryPresentation.level}`);
     if (live) retry.classList.add("is-live");
     if (completedEdgeIds.has(retryEdge.id)) retry.classList.add("is-complete");
     edgesLayer.append(retry);
     appendRelationLabel(labelsLayer, retryEdge.id, relationLabels.retry, 1080, 730);
-    if (live) pulsesLayer.append(edgePulse({ key: retryEdge.id, edgeId: retryEdge.id, pathData: route.d, start: route.start, topology: false }));
+    if (live) pulsesLayer.append(edgePulse({ key: retryEdge.id, edgeId: retryEdge.id, pathData: route.d, start: route.start, topology: false, presentation: retryPresentation }));
   }
 
   const dependencyRoutes = [
@@ -445,6 +471,7 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
   const gateState = contextGateState(run);
   for (const dependency of dependencyRoutes) {
     const route = routeTopologyEdge(dependency, routingContext);
+    const flowPresentation = flowPresentationForConnection(dependency.from, dependency.to);
     const path = svg("path", {
       d: route.d,
       "data-projection-edge": dependency.key,
@@ -454,8 +481,10 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
       "aria-label": dependency.label,
       "data-route-kind": route.kind,
       "data-route-corridor": route.corridor,
+      "data-flow-module": flowPresentation.module,
+      "data-flow-level": flowPresentation.level,
     });
-    path.classList.add("graph-edge", "is-context-dependency", "is-feedback");
+    path.classList.add("graph-edge", "is-context-dependency", "is-feedback", `flow-${flowPresentation.level}`);
     if (dependency.tool) path.dataset.tool = dependency.tool;
     if (dependency.to === CONTEXT_GATE_ID && gateState.ready) path.classList.add("is-complete");
     if (dependency.tool && run.parallelWork?.kind === "tools") {
@@ -466,21 +495,26 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
       if (!selected) path.classList.add("is-skipped");
     }
     edgesLayer.append(path);
-    if (path.classList.contains("is-live")) pulsesLayer.append(edgePulse({ key: dependency.key, pathData: route.d, start: route.start }));
+    if (path.classList.contains("is-live")) pulsesLayer.append(edgePulse({ key: dependency.key, pathData: route.d, start: route.start, presentation: flowPresentation }));
   }
 
   for (const detail of graph.detailNodes) {
-    nodesLayer.append(renderDetailNode(detail, referenceVisualState(graph, run, detail.id), endpoints.has(detail.id), { root, onNodeSelect }));
+    const rendered = renderDetailNode(detail, referenceVisualState(graph, run, detail.id), endpoints.has(detail.id), { root, onNodeSelect });
+    applyFlowIdentity(rendered, { module: flowModuleForDetail(detail) });
+    nodesLayer.append(rendered);
   }
   const renderedGate = renderDetailNode(contextGate, gateState, false, { root, onNodeSelect });
   renderedGate.dataset.layoutSource = "tools-group";
+  applyFlowIdentity(renderedGate, { module: flowModuleForDetail(contextGate) });
   renderedGate.classList.add("context-gate");
   if (gateState.waiting) renderedGate.classList.add("is-waiting");
   if (gateState.ready) renderedGate.classList.add("is-ready");
   if (gateState.independent) renderedGate.classList.add("is-independent");
   nodesLayer.append(renderedGate);
   for (const node of graph.nodes) {
-    nodesLayer.append(renderExecutableNode(node, referenceVisualState(graph, run, node.id), endpoints.has(node.id), { root, onNodeSelect }));
+    const rendered = renderExecutableNode(node, referenceVisualState(graph, run, node.id), endpoints.has(node.id), { root, onNodeSelect });
+    applyFlowIdentity(rendered, { module: flowModuleForNode(node.id) });
+    nodesLayer.append(rendered);
   }
   configureRovingFocus(root, currentEvent);
 

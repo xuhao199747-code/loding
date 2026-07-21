@@ -3,6 +3,7 @@ import { renderGraph } from "../../src/ui/GraphView.js";
 import { demoGraph } from "../../src/data/demo-graph.js";
 import { createRun, transition } from "../../src/domain/execution.js";
 import { createViewport } from "../../src/domain/viewport.js";
+import { readFileSync } from "node:fs";
 
 describe("GraphView", () => {
   beforeEach(() => { document.body.innerHTML = '<div id="graph"></div>'; });
@@ -103,6 +104,59 @@ describe("GraphView", () => {
     for (const edge of edges) expect(edge.getAttribute("marker-end")).toBeTruthy();
     expect(nodesLayer).not.toBeNull();
     expect(document.querySelectorAll("[data-module-id]")).toHaveLength(0);
+  });
+
+  it("separates macro routes from internal routes with a distinct module identity", () => {
+    render({ run: createRun(demoGraph, "planning-event"), viewport: createViewport() });
+
+    const expected = [
+      ["user-task->orchestrator", "orchestration", "macro"],
+      ["llm->planning", "planning", "macro"],
+      ["llm->memory", "memory", "macro"],
+      ["llm->rag-query", "rag", "macro"],
+      ["rag-query->rag-routing", "rag", "micro"],
+      ["llm->tools-group", "tools", "macro"],
+      ["code-execution-sandbox->action", "tools", "micro"],
+      ["action->observation", "feedback", "macro"],
+      ["llm->final-response", "output", "macro"],
+    ];
+
+    for (const [key, module, level] of expected) {
+      const edge = document.querySelector(`[data-topology-edge="${key}"]`);
+      expect(edge.dataset.flowModule).toBe(module);
+      expect(edge.dataset.flowLevel).toBe(level);
+      expect(edge.classList.contains(`flow-${level}`)).toBe(true);
+    }
+  });
+
+  it("carries module identity through groups, nodes, dependency routes, and live pulses", () => {
+    let run = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "parallel" });
+    render({ run, viewport: createViewport() });
+
+    expect(document.querySelector('[data-group-id="planning-group"]').dataset.flowModule).toBe("planning");
+    expect(document.querySelector('[data-group-id="memory-group"]').dataset.flowModule).toBe("memory");
+    expect(document.querySelector('[data-group-id="rag-group"]').dataset.flowModule).toBe("rag");
+    expect(document.querySelector('[data-group-id="tools-group"]').dataset.flowModule).toBe("tools");
+    expect(document.querySelector('[data-node-id="observation"]').dataset.flowModule).toBe("feedback");
+    expect(document.querySelector('[data-node-id="final-response"]').dataset.flowModule).toBe("output");
+
+    const dependency = document.querySelector('[data-projection-edge="rag-context-assembly->context-dependency-gate"]');
+    expect(dependency.dataset.flowModule).toBe("rag");
+    expect(dependency.dataset.flowLevel).toBe("macro");
+    const pulse = document.querySelector('[data-topology-edge-pulse-for="llm->rag-query"]');
+    expect(pulse.dataset.flowModule).toBe("rag");
+    expect(pulse.dataset.flowLevel).toBe("macro");
+  });
+
+  it("defines seven dark-theme module colors and lets completion green override live module color", () => {
+    const css = readFileSync("src/styles.css", "utf8");
+    for (const module of ["orchestration", "planning", "memory", "rag", "tools", "feedback", "output"]) {
+      expect(css).toContain(`--flow-${module}:`);
+      expect(css).toContain(`[data-flow-module="${module}"]`);
+    }
+    expect(css).toMatch(/\.graph-edge\.flow-macro\s*\{[^}]*stroke-width:\s*1\.9/s);
+    expect(css).toMatch(/\.graph-edge\.flow-micro\s*\{[^}]*stroke-width:\s*1\.1/s);
+    expect(css.indexOf(".graph-edge[data-flow-module].is-complete")).toBeGreaterThan(css.indexOf(".graph-edge[data-flow-module].is-live"));
   });
 
   it("anchors a straight edge to node rectangle boundaries rather than centers", () => {
