@@ -60,7 +60,7 @@ export function createAppView(root, handlers) {
       const cursorKey = `${state.run.currentEventId}:${state.run.trace.length}:${state.run.iteration}`;
       if (cursorKey !== lastCursorKey) {
         activeRailTab = "current";
-        inspectedNode = null;
+        inspectedNode = createNodeDetail(state.graph, { id: currentNode.id, type: "executable" });
         lastCursorKey = cursorKey;
       }
       currentGraph = state.graph;

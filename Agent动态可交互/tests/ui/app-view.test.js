@@ -80,13 +80,20 @@ describe("AppView", () => {
     expect(document.querySelector("[data-testid=breadcrumb]").textContent).toBe("Agent 系统 > 最终响应");
   });
 
-  it("shows fixed Current Step and Node Detail tabs in the right rail", () => {
+  it("opens the current execution node from Node Detail without requiring a graph click", () => {
     const view = createAppView(document.querySelector("#app"), handlers());
     view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport() });
 
     expect([...document.querySelectorAll("[data-rail-tab]")].map((tab) => tab.dataset.railTab)).toEqual(["current", "node"]);
     expect(document.querySelector('[data-rail-tab="current"]').getAttribute("aria-selected")).toBe("true");
-    expect(document.querySelector('[data-rail-tab="node"]').disabled).toBe(true);
+    const nodeTab = document.querySelector('[data-rail-tab="node"]');
+    expect(nodeTab.disabled).toBe(false);
+
+    nodeTab.click();
+
+    expect(document.querySelector('[data-rail-tab="node"]').getAttribute("aria-selected")).toBe("true");
+    expect(document.querySelector(".step-rail").textContent).toContain("检索路由");
+    expect(document.querySelector(".step-rail").textContent).toContain("Retrieval Routing");
   });
 
   it("announces the current step and renders a bilingual status", () => {
