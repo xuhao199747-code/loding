@@ -97,6 +97,16 @@ function applyVisualState(element, state) {
   if (state.status && !state.live && !state.complete && !state.skipped) element.classList.add(`is-${state.status}`);
 }
 
+function appendCompletionIndicator(group, width) {
+  group.append(svg("circle", {
+    cx: width - 10,
+    cy: 10,
+    r: 4,
+    class: "completion-indicator",
+    "aria-hidden": "true",
+  }));
+}
+
 function relatedEndpointIds(id) {
   const ids = new Set([id]);
   for (const [executableId, aliases] of detailEndpointAliases) {
@@ -248,6 +258,7 @@ function renderDetailNode(detail, state, isEndpoint, interaction) {
   applyVisualState(group, state);
   if (isEndpoint) group.classList.add("is-relation-endpoint");
   group.append(svg("rect", { width: w, height: h, rx: h > 30 ? 8 : 5 }));
+  if (state.complete) appendCompletionIndicator(group, w);
 
   if (detail.description) {
     const lineYs = [-13.5, -4.5, 4.5, 13.5].map((offset) => h / 2 + offset);
@@ -274,6 +285,7 @@ function renderDetailNode(detail, state, isEndpoint, interaction) {
 function renderExecutableNode(node, state, isEndpoint, interaction) {
   const { x, y, w, h } = node.referencePosition;
   const status = state.status;
+  const showTextStatus = status && status !== "completed";
   const suffix = status ? ` · ${statusLabels[status] ?? status}` : "";
   const proxy = !visibleExecutableIds.has(node.id);
   const parentGroupId = ["core", "rag", "tools"].includes(node.moduleId) ? `${node.moduleId}-group` : null;
@@ -292,13 +304,14 @@ function renderExecutableNode(node, state, isEndpoint, interaction) {
   if (proxy) group.classList.add("graph-node--proxy");
   if (!proxy) {
     group.append(svg("rect", { width: w, height: h, rx: Math.min(10, h / 4) }));
-    const lineYs = status ? [h / 2 - 13, h / 2, h / 2 + 13] : [h / 2 - 7, h / 2 + 7];
+    if (state.complete) appendCompletionIndicator(group, w);
+    const lineYs = showTextStatus ? [h / 2 - 13, h / 2, h / 2 + 13] : [h / 2 - 7, h / 2 + 7];
     const zh = svg("text", { x: w / 2, y: lineYs[0], "text-anchor": "middle", "dominant-baseline": "middle", class: "primary-label node-label" });
     zh.textContent = node.label.zh;
     const en = svg("text", { x: w / 2, y: lineYs[1], "text-anchor": "middle", "dominant-baseline": "middle", class: "node-en" });
     en.textContent = node.label.en;
     group.append(zh, en);
-    if (status) {
+    if (showTextStatus) {
       const statusText = svg("text", { x: w / 2, y: lineYs[2], "text-anchor": "middle", "dominant-baseline": "middle", class: "status-label" });
       statusText.textContent = statusLabels[status] ?? status;
       group.append(statusText);

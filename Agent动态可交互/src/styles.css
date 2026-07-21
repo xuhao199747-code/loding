@@ -761,6 +761,13 @@ body {
 .is-blocked rect { stroke: var(--warn) !important; stroke-dasharray: 5 4; }
 .is-partial rect { stroke: var(--branch) !important; }
 .status-label { fill: var(--text); font-size: 10px; }
+.completion-indicator {
+  fill: var(--done);
+  stroke: var(--bg);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }

@@ -256,7 +256,12 @@ describe("GraphView", () => {
     const finalResponse = document.querySelector('[data-node-id="final-response"]');
     expect(finalResponse.classList.contains("is-complete")).toBe(true);
     expect(finalResponse.classList.contains("is-live")).toBe(false);
-    expect(finalResponse.querySelector(".status-label").textContent).toContain("完成");
+    expect(finalResponse.querySelector(".status-label")).toBeNull();
+    expect(finalResponse.textContent).not.toContain("Completed");
+    expect(finalResponse.querySelector(".completion-indicator")).not.toBeNull();
+    expect(finalResponse.querySelector(".completion-indicator").getAttribute("cx")).toBe("170");
+    expect(finalResponse.querySelector(".completion-indicator").getAttribute("cy")).toBe("10");
+    expect(finalResponse.getAttribute("aria-label")).toContain("完成");
   });
 
   it("completes only the chosen observation outcome", () => {
