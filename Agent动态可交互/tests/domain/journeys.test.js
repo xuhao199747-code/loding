@@ -16,6 +16,12 @@ function finishResponse(run) {
   return next;
 }
 
+function finishTools(run, choice = "external") {
+  let next = transition(run, { type: "CHOOSE_BRANCH", choice });
+  for (const item of next.parallelWork.selected) next = transition(next, { type: "COMPLETE_PARALLEL_ITEM", item });
+  return transition(next, { type: "ADVANCE" });
+}
+
 describe("complete product journeys", () => {
   it.each(["vector", "web", "parallel"])("completes a RAG-only run through %s retrieval", (retrievalChoice) => {
     let run = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "rag" });
@@ -28,8 +34,7 @@ describe("complete product journeys", () => {
 
   it("completes a Tools-only run through observation feedback", () => {
     let run = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "tools" });
-    run = transition(run, { type: "ADVANCE" });
-    run = transition(run, { type: "ADVANCE" });
+    run = finishTools(run);
     run = transition(run, { type: "CHOOSE_BRANCH", choice: "finish" });
     expect(run).toMatchObject({ currentEventId: "llm-join-event", completedLanes: ["tools"] });
     run = finishResponse(run);
@@ -40,8 +45,7 @@ describe("complete product journeys", () => {
     let run = transition(createRun(demoGraph, "llm-dispatch-event"), { type: "CHOOSE_BRANCH", choice: "parallel" });
     run = finishRetrieval(run, "parallel");
     expect(run).toMatchObject({ currentEventId: "tool-select-event", completedLanes: ["rag"] });
-    run = transition(run, { type: "ADVANCE" });
-    run = transition(run, { type: "ADVANCE" });
+    run = finishTools(run, "parallel");
     run = transition(run, { type: "CHOOSE_BRANCH", choice: "finish" });
     expect(run).toMatchObject({ currentEventId: "llm-join-event", completedLanes: ["rag", "tools"] });
     run = finishResponse(run);

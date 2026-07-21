@@ -28,6 +28,10 @@ function advanceOne() {
     const branch = state.run.activeBranches.find((item) => !state.run.completedBranches.includes(item));
     if (!branch) return false;
     state.run = transition(state.run, { type: "COMPLETE_BRANCH", branch });
+  } else if (event.relation === "parallel-work") {
+    const item = state.run.parallelWork?.selected.find((candidate) => !state.run.parallelWork.completed.includes(candidate));
+    if (!item) return false;
+    state.run = transition(state.run, { type: "COMPLETE_PARALLEL_ITEM", item });
   } else {
     state.run = transition(state.run, { type: "ADVANCE" });
   }

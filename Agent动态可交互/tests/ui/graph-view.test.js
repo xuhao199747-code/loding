@@ -239,8 +239,11 @@ describe("GraphView", () => {
   });
 
   it("removes the pulse when a completed edge is no longer active", () => {
-    let run = transition(createRun(demoGraph, "observation-event"), { type: "CHOOSE_BRANCH", choice: "retry" });
+    let run = transition(createRun(demoGraph, "tool-select-event"), { type: "CHOOSE_BRANCH", choice: "external" });
+    run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "external" });
     run = transition(run, { type: "ADVANCE" });
+    run = transition(run, { type: "CHOOSE_BRANCH", choice: "retry" });
+    run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "external" });
     render({ run, viewport: createViewport() });
 
     const retry = document.querySelector('[data-edge-id="e18"]');

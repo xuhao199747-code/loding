@@ -102,12 +102,40 @@ describe("execution state machine", () => {
     expect(run.trace.at(-1)).toMatchObject({ relation: "sequence", iteration: 1 });
   });
 
-  it("passes through memory retrieval between planning and parallel dispatch", () => {
-    let run = transition(createRun(demoGraph, "planning-event"), { type: "ADVANCE" });
-    expect(run).toMatchObject({ currentEventId: "memory-event", currentNodeId: "memory" });
+  it("joins planning and memory only after both parallel modules complete", () => {
+    let run = createRun(demoGraph, "planning-event");
+    expect(run.parallelWork).toEqual({ kind: "cognition", selected: ["planning", "memory"], completed: [] });
 
-    run = transition(run, { type: "ADVANCE" });
+    run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "planning" });
+    expect(run).toMatchObject({ currentEventId: "planning-event" });
+    expect(run.parallelWork.completed).toEqual(["planning"]);
+
+    run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "memory" });
     expect(run).toMatchObject({ currentEventId: "llm-dispatch-event", currentNodeId: "llm" });
+    expect(run.parallelWork.completed).toEqual(["planning", "memory"]);
+  });
+
+  it.each([
+    ["sandbox", ["sandbox"]],
+    ["external", ["external"]],
+    ["parallel", ["sandbox", "external"]],
+  ])("selects %s tool execution work", (choice, selected) => {
+    let run = transition(createRun(demoGraph, "tool-select-event"), { type: "CHOOSE_BRANCH", choice });
+    expect(run).toMatchObject({ currentEventId: "tool-event" });
+    expect(run.parallelWork).toEqual({ kind: "tools", selected, completed: [] });
+
+    for (const item of selected) run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item });
+    expect(run).toMatchObject({ currentEventId: "action-event", currentNodeId: "action" });
+  });
+
+  it("retries the selected tools from an incomplete state", () => {
+    let run = transition(createRun(demoGraph, "tool-select-event"), { type: "CHOOSE_BRANCH", choice: "external" });
+    run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "external" });
+    run = transition(run, { type: "ADVANCE" });
+    run = transition(run, { type: "CHOOSE_BRANCH", choice: "retry" });
+
+    expect(run).toMatchObject({ currentEventId: "tool-event", iteration: 2 });
+    expect(run.parallelWork).toEqual({ kind: "tools", selected: ["external"], completed: [] });
   });
 
   it("advances callback events and records their trace", () => {

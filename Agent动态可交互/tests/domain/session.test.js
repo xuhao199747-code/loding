@@ -21,6 +21,16 @@ describe("run session persistence", () => {
     expect(restored.run.history).toEqual(run.history);
   });
 
+  it("restores partially completed parallel work", () => {
+    let run = createRun(demoGraph, "planning-event");
+    run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "planning" });
+
+    expect(saveSession(sessionStorage, { scenarioId: "normal", run })).toBe(true);
+    const restored = restoreSession(sessionStorage, demoGraph);
+
+    expect(restored.run.parallelWork).toEqual({ kind: "cognition", selected: ["planning", "memory"], completed: ["planning"] });
+  });
+
   it.each([
     ["invalid json", "{"],
     ["unknown version", JSON.stringify({ version: 99, scenarioId: "normal", run: {} })],

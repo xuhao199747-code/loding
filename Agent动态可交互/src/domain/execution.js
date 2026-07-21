@@ -3,6 +3,11 @@ const TERMINAL = new Set(["completed", "cancelled", "failed"]);
 const cloneTrace = (trace) => trace.map((entry) => ({ ...entry, branches: entry.branches ? [...entry.branches] : undefined }));
 const cloneBranches = (branches) => [...(branches ?? [])];
 const cloneLanes = (lanes) => [...(lanes ?? [])];
+const cloneParallelWork = (work) => work ? {
+  kind: work.kind,
+  selected: [...(work.selected ?? [])],
+  completed: [...(work.completed ?? [])],
+} : null;
 const tracesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 
 function eventFor(run, eventId = run.currentEventId) {
@@ -15,6 +20,12 @@ function createEventSnapshot(run, detail = {}) {
   const completedBranches = Object.freeze(cloneBranches(run.completedBranches));
   const activeLanes = Object.freeze(cloneLanes(run.activeLanes));
   const completedLanes = Object.freeze(cloneLanes(run.completedLanes));
+  const parallelWork = cloneParallelWork(run.parallelWork);
+  if (parallelWork) {
+    Object.freeze(parallelWork.selected);
+    Object.freeze(parallelWork.completed);
+    Object.freeze(parallelWork);
+  }
   const trace = Object.freeze(cloneTrace(run.trace).map((entry) => Object.freeze(entry)));
   const issue = run.simulatedIssue ? Object.freeze({ ...run.simulatedIssue }) : null;
   return Object.freeze({
@@ -31,6 +42,7 @@ function createEventSnapshot(run, detail = {}) {
     dispatchMode: run.dispatchMode,
     activeLanes,
     completedLanes,
+    parallelWork,
     contextRequired: run.contextRequired,
     issue,
     trace,
@@ -52,6 +64,7 @@ function stateSnapshot(run) {
     dispatchMode: run.dispatchMode,
     activeLanes: cloneLanes(run.activeLanes),
     completedLanes: cloneLanes(run.completedLanes),
+    parallelWork: cloneParallelWork(run.parallelWork),
     contextRequired: run.contextRequired,
     iteration: run.iteration,
     trace: cloneTrace(run.trace),
@@ -83,6 +96,9 @@ function move(run, eventId, relation, detail = {}, iteration = run.iteration) {
     currentNodeId: target.nodeId,
     iteration,
     trace,
+    parallelWork: target.parallelWork
+      ? { kind: target.parallelWork.kind, selected: [...target.parallelWork.items], completed: [] }
+      : run.parallelWork,
   };
 }
 
@@ -104,6 +120,9 @@ export function createRun(graph, startEventId = graph.events[0].id) {
     dispatchMode: null,
     activeLanes: [],
     completedLanes: [],
+    parallelWork: event.parallelWork
+      ? { kind: event.parallelWork.kind, selected: [...event.parallelWork.items], completed: [] }
+      : null,
     contextRequired: false,
     iteration: 1,
     trace: [],
@@ -127,6 +146,7 @@ export function transition(run, action) {
   if (action.type === "RERUN_SNAPSHOT") {
     const snapshot = run.eventSnapshots.find((item) => item.id === action.snapshotId);
     if (!snapshot) throw new Error(`Unknown snapshot: ${action.snapshotId}`);
+    const snapshotEvent = eventFor(run, snapshot.eventId);
     const snapshotIndex = run.eventSnapshots.indexOf(snapshot);
     const outgoingIndex = snapshot.trace.map((entry) => entry.from).lastIndexOf(snapshot.eventId);
     const resumeTrace = cloneTrace(outgoingIndex === -1 ? snapshot.trace : snapshot.trace.slice(0, outgoingIndex));
@@ -144,6 +164,9 @@ export function transition(run, action) {
       dispatchMode: priorState?.dispatchMode ?? snapshot.dispatchMode ?? null,
       activeLanes: cloneLanes(priorState?.activeLanes ?? snapshot.activeLanes),
       completedLanes: cloneLanes(priorState?.completedLanes ?? snapshot.completedLanes),
+      parallelWork: snapshotEvent?.relation === "parallel-work"
+        ? { ...cloneParallelWork(priorState?.parallelWork ?? snapshot.parallelWork), completed: [] }
+        : cloneParallelWork(priorState?.parallelWork ?? snapshot.parallelWork),
       contextRequired: priorState?.contextRequired ?? snapshot.contextRequired ?? false,
       trace: resumeTrace,
       history: historyIndex === -1 ? [] : run.history.slice(0, historyIndex + 1),
@@ -207,6 +230,13 @@ export function transition(run, action) {
       return { ...next, completedLanes, iteration };
     }
     const next = move(run, choice.next, choice.relation ?? "decision", { choice: action.choice }, iteration);
+    if (choice.resetParallelWork && next.parallelWork) {
+      return {
+        ...next,
+        parallelWork: { ...next.parallelWork, completed: [] },
+        iteration,
+      };
+    }
     if (choice.lanes) {
       const activeLanes = cloneLanes(choice.lanes);
       return {
@@ -221,8 +251,36 @@ export function transition(run, action) {
         iteration,
       };
     }
+    if (choice.parallelWork) {
+      return {
+        ...next,
+        parallelWork: {
+          kind: choice.parallelWork.kind,
+          selected: [...choice.parallelWork.items],
+          completed: [],
+        },
+        iteration,
+      };
+    }
     const selectedBranches = cloneBranches(choice.branches);
     return { ...next, selectedBranches, activeBranches: selectedBranches, completedBranches: [], iteration };
+  }
+  if (action.type === "COMPLETE_PARALLEL_ITEM") {
+    const work = run.parallelWork;
+    if (!work?.selected.includes(action.item)) throw new Error(`Inactive parallel item: ${action.item}`);
+    if (work.completed.includes(action.item)) return run;
+    const completed = [...work.completed, action.item];
+    const parallelWork = { ...work, completed };
+    if (completed.length < work.selected.length) {
+      const previous = stateSnapshot(run);
+      const recorded = recordEvent({ ...run, status: "success", parallelWork }, {
+        output: `完成并行项：${action.item}`,
+        summary: `${action.item} completed`,
+      });
+      return { ...recorded, history: [...run.history, previous], status: "paused", parallelWork };
+    }
+    const joined = move({ ...run, parallelWork }, event.join, "join", { items: [...work.selected] });
+    return { ...joined, parallelWork };
   }
   if (action.type === "COMPLETE_BRANCH") {
     if (!run.selectedBranches.includes(action.branch)) throw new Error(`Inactive branch: ${action.branch}`);
@@ -258,6 +316,7 @@ export function transition(run, action) {
   if (action.type === "ADVANCE") {
     if (event.relation === "decision") throw new Error("Branch selection required");
     if (event.relation === "parallel") throw new Error("Parallel branches must complete");
+    if (event.relation === "parallel-work") throw new Error("Parallel work items must complete");
     if (event.completeLane) {
       const completedLanes = [...new Set([...run.completedLanes, event.completeLane])];
       const pendingLane = run.activeLanes.find((lane) => !completedLanes.includes(lane));

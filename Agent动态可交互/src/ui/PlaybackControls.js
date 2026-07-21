@@ -38,6 +38,9 @@ export function renderPlaybackControls(container, model, handlers) {
   const laneProgress = activeLanes.length === 0
     ? ""
     : `主泳道 ${completedLaneCount} / ${activeLanes.length} · Lanes ${completedLaneCount} / ${activeLanes.length}　`;
+  const parallelWorkProgress = run.parallelWork?.selected.length
+    ? `${run.parallelWork.kind === "cognition" ? "协同模块" : "工具分支"} ${run.parallelWork.completed.length} / ${run.parallelWork.selected.length} · ${run.parallelWork.kind === "cognition" ? "Sync" : "Tools"} ${run.parallelWork.completed.length} / ${run.parallelWork.selected.length}　`
+    : "";
   const terminal = ["completed", "failed", "cancelled"].includes(run.status);
   const terminalLabels = {
     completed: "流程已完成 · Complete",
@@ -48,13 +51,17 @@ export function renderPlaybackControls(container, model, handlers) {
     ? terminalLabels[run.status]
     : event.relation === "parallel"
     ? "完成下一分支 · Complete Branch"
-    : event.relation === "callback"
-      ? "执行回传 · Callback"
-      : "下一事件 · Next Event";
+    : event.relation === "parallel-work"
+      ? run.parallelWork?.kind === "cognition"
+        ? "完成下一模块 · Complete Module"
+        : "完成下一工具 · Complete Tool"
+      : event.relation === "callback"
+        ? "执行回传 · Callback"
+        : "下一事件 · Next Event";
 
   const blocked = Boolean(run.simulatedIssue);
   const hidePrimary = needsChoice || blocked;
-  container.innerHTML = `<div class="playback"><div class="control-history"><button type="button" data-action="previous" title="上一步 / Previous (←)" ${run.history.length === 0 ? "disabled" : ""}>← 上一步 <small>Previous</small></button><button type="button" data-action="restart" title="重新开始 / Restart">重新开始 <small>Restart</small></button></div><div class="control-actions"><div class="decision-options"></div><button type="button" class="primary-action" data-action="primary" title="下一事件 / Next event (→)" ${hidePrimary ? "hidden" : ""} ${hidePrimary || terminal ? "disabled" : ""}>${primaryLabel}</button><div class="recovery-options"></div></div><div class="control-progress"><span class="run-progress" data-testid="run-progress" aria-label="当前轮次和事件 Current iteration and event">轮次 ${run.iteration} · 事件 ${eventNumber} / ${eventCount}<small>Iteration ${run.iteration} · Event ${eventNumber} / ${eventCount}</small></span><span data-testid="branch-progress" aria-label="并行泳道与分支进度 Parallel lane and branch progress">${laneProgress}检索分支 ${branchProgress} · Retrieval ${branchProgress}</span></div></div>`;
+  container.innerHTML = `<div class="playback"><div class="control-history"><button type="button" data-action="previous" title="上一步 / Previous (←)" ${run.history.length === 0 ? "disabled" : ""}>← 上一步 <small>Previous</small></button><button type="button" data-action="restart" title="重新开始 / Restart">重新开始 <small>Restart</small></button></div><div class="control-actions"><div class="decision-options"></div><button type="button" class="primary-action" data-action="primary" title="下一事件 / Next event (→)" ${hidePrimary ? "hidden" : ""} ${hidePrimary || terminal ? "disabled" : ""}>${primaryLabel}</button><div class="recovery-options"></div></div><div class="control-progress"><span class="run-progress" data-testid="run-progress" aria-label="当前轮次和事件 Current iteration and event">轮次 ${run.iteration} · 事件 ${eventNumber} / ${eventCount}<small>Iteration ${run.iteration} · Event ${eventNumber} / ${eventCount}</small></span><span data-testid="branch-progress" aria-label="并行泳道与分支进度 Parallel lane and branch progress">${laneProgress}${parallelWorkProgress}检索分支 ${branchProgress} · Retrieval ${branchProgress}</span></div></div>`;
 
   const options = container.querySelector(".decision-options");
   for (const [choiceId, choice] of blocked ? [] : Object.entries(event.choices ?? {})) {

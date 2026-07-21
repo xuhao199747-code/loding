@@ -24,6 +24,9 @@ function createInteractiveView(startRun = createRun(demoGraph)) {
       if (event.relation === "parallel") {
         const branch = state.run.activeBranches.find((item) => !state.run.completedBranches.includes(item));
         state.run = transition(state.run, { type: "COMPLETE_BRANCH", branch });
+      } else if (event.relation === "parallel-work") {
+        const item = state.run.parallelWork.selected.find((candidate) => !state.run.parallelWork.completed.includes(candidate));
+        state.run = transition(state.run, { type: "COMPLETE_PARALLEL_ITEM", item });
       } else {
         state.run = transition(state.run, { type: "ADVANCE" });
       }
@@ -191,6 +194,16 @@ describe("AppView", () => {
     expect(document.querySelector('[data-action="primary"]').hidden).toBe(true);
   });
 
+  it("offers sandbox, external system, and parallel tool choices", () => {
+    const view = createAppView(document.querySelector("#app"), handlers());
+    view.render({ graph: demoGraph, run: createRun(demoGraph, "tool-select-event"), viewport: createViewport() });
+
+    expect([...document.querySelectorAll("[data-branch-choice]")].map((button) => button.dataset.branchChoice)).toEqual(["sandbox", "external", "parallel"]);
+    expect(document.querySelector('[data-branch-choice="sandbox"]').textContent).toContain("代码沙箱");
+    expect(document.querySelector('[data-branch-choice="external"]').textContent).toContain("外部系统");
+    expect(document.querySelector('[data-branch-choice="parallel"]').textContent).toContain("双路并行");
+  });
+
   it("disables unavailable history navigation and labels terminal completion accurately", () => {
     const view = createAppView(document.querySelector("#app"), handlers());
     view.render({ graph: demoGraph, run: createRun(demoGraph), viewport: createViewport() });
@@ -287,6 +300,19 @@ describe("AppView", () => {
     expect(document.activeElement).not.toBe(document.body);
   });
 
+  it("completes planning and memory independently before exposing dispatch choices", () => {
+    const state = createInteractiveView(createRun(demoGraph, "planning-event"));
+
+    expect(document.querySelector('[data-action="primary"]').textContent).toContain("完成下一模块");
+    document.querySelector('[data-action="primary"]').click();
+    expect(state.run.currentEventId).toBe("planning-event");
+    expect(state.run.parallelWork.completed).toEqual(["planning"]);
+
+    document.querySelector('[data-action="primary"]').click();
+    expect(state.run.currentEventId).toBe("llm-dispatch-event");
+    expect(document.querySelectorAll("[data-branch-choice]")).toHaveLength(3);
+  });
+
   it("shows recovery actions only when the current scenario is blocked", () => {
     const run = {
       ...createRun(demoGraph, "rag-join"),
@@ -361,7 +387,7 @@ describe("AppView", () => {
     view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport("rag-route", "rag") });
 
     expect(document.querySelector("[data-testid=run-progress]").textContent).toContain("轮次 1");
-    expect(document.querySelector("[data-testid=run-progress]").textContent).toContain(`事件 6 / ${demoGraph.events.length}`);
+    expect(document.querySelector("[data-testid=run-progress]").textContent).toContain(`事件 5 / ${demoGraph.events.length}`);
   });
 
   it("offers bilingual failure simulations", () => {

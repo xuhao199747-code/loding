@@ -56,7 +56,7 @@ export const demoGraph = {
     { from: "rag-routing", to: "keyword-search" }, { from: "keyword-search", to: "database-retrieval" }, { from: "database-retrieval", to: "database-top-k" }, { from: "database-top-k", to: "result-merge-deduplicate" },
     { from: "rag-routing", to: "rag-web-search" }, { from: "rag-web-search", to: "web-top-k" }, { from: "web-top-k", to: "result-merge-deduplicate" },
     { from: "result-merge-deduplicate", to: "rerank" }, { from: "rerank", to: "top-n" }, { from: "top-n", to: "rag-context-assembly" }, { from: "rag-context-assembly", to: "llm" },
-    { from: "llm", to: "tools-group" }, { from: "tools-group", to: "action" }, { from: "action", to: "observation" }, { from: "observation", to: "llm" }, { from: "observation", to: "planning" }, { from: "memory", to: "action" },
+    { from: "llm", to: "tools-group" }, { from: "code-execution-sandbox", to: "action" }, { from: "external-environment-business-system", to: "action" }, { from: "action", to: "observation" }, { from: "observation", to: "llm" }, { from: "observation", to: "planning" }, { from: "memory", to: "action" },
   ],
   retrievalBranches: [
     { id: "vector", detailNodeIds: ["embedding-vectorization", "vector-store-retrieval", "vector-top-k", "keyword-search", "database-retrieval", "database-top-k"] },
@@ -101,7 +101,8 @@ export const demoGraph = {
     { id: "e11", from: "rag-merge", to: "rag-context", type: "sequence" },
     { id: "e12", from: "rag-context", to: "llm", type: "callback" },
     { id: "e13", from: "llm", to: "tool-select", type: "decision" },
-    { id: "e14", from: "tool-select", to: "action", type: "sequence" },
+    { id: "e14-sandbox", from: "tool-select", to: "action", type: "parallel", tool: "sandbox" },
+    { id: "e14-external", from: "tool-select", to: "action", type: "parallel", tool: "external" },
     { id: "e15", from: "action", to: "observation", type: "sequence" },
     { id: "e16", from: "observation", to: "planning", type: "replan" },
     { id: "e17", from: "llm", to: "final-response", type: "sequence" },
@@ -119,8 +120,7 @@ export const demoGraph = {
   events: [
     { id: "input-event", nodeId: "user-task", label: label("接收用户任务", "Receive Task"), relation: "sequence", edgeIds: ["e1"], next: "orchestrator-event" },
     { id: "orchestrator-event", nodeId: "orchestrator", label: label("初始化编排", "Initialize Orchestration"), relation: "sequence", edgeIds: ["e2"], next: "planning-event" },
-    { id: "planning-event", nodeId: "planning", label: label("生成执行计划", "Build Execution Plan"), relation: "module", edgeIds: ["e3", "e4"], next: "memory-event" },
-    { id: "memory-event", nodeId: "memory", label: label("读取记忆与上下文", "Read Memory & Context"), relation: "module", edgeIds: ["e5-request", "e5"], next: "llm-dispatch-event" },
+    { id: "planning-event", nodeId: "planning", label: label("规划与记忆协同", "Planning & Memory Sync"), relation: "parallel-work", edgeIds: ["e3", "e4", "e5-request", "e5"], parallelWork: { kind: "cognition", items: ["planning", "memory"] }, join: "llm-dispatch-event" },
     { id: "llm-dispatch-event", nodeId: "llm", label: label("并行调度上下文与行动", "Dispatch Context and Action Lanes"), relation: "decision", edgeIds: ["e6", "e13"], choices: {
       rag: { label: label("仅检索增强", "RAG Only"), lanes: ["rag"], next: "rag-route", contextRequired: true },
       tools: { label: label("仅工具执行", "Tools Only"), lanes: ["tools"], next: "tool-select-event", contextRequired: false },
@@ -135,11 +135,16 @@ export const demoGraph = {
     { id: "rag-join", nodeId: "rag-merge", label: label("汇合检索结果", "Join Retrieval Results"), relation: "join", edgeIds: ["e9", "e10"], next: "rag-context-event" },
     { id: "rag-context-event", nodeId: "rag-context", label: label("组装增强上下文", "Assemble Context"), relation: "module", edgeIds: ["e11"], next: "rag-callback" },
     { id: "rag-callback", nodeId: "rag-context", label: label("回传增强上下文", "Return Augmented Context"), relation: "callback", edgeIds: ["e12"], targetNodeId: "llm", completeLane: "rag", nextByPendingLane: { tools: "tool-select-event" }, next: "llm-join-event" },
-    { id: "tool-select-event", nodeId: "tool-select", label: label("选择执行工具", "Select Tool"), relation: "sequence", edgeIds: ["e14"], next: "tool-event" },
-    { id: "tool-event", nodeId: "action", label: label("执行工具调用", "Execute Tool Call"), relation: "module", edgeIds: ["e15"], next: "observation-event" },
+    { id: "tool-select-event", nodeId: "tool-select", label: label("选择执行工具", "Select Tool"), relation: "decision", choices: {
+      sandbox: { label: label("代码沙箱", "Code Sandbox"), parallelWork: { kind: "tools", items: ["sandbox"] }, next: "tool-event" },
+      external: { label: label("外部系统", "External System"), parallelWork: { kind: "tools", items: ["external"] }, next: "tool-event" },
+      parallel: { label: label("双路并行", "Run Both"), parallelWork: { kind: "tools", items: ["sandbox", "external"] }, next: "tool-event" },
+    } },
+    { id: "tool-event", nodeId: "action", label: label("执行工具分支", "Execute Tool Branches"), relation: "parallel-work", edgeIds: ["e14-sandbox", "e14-external"], join: "action-event" },
+    { id: "action-event", nodeId: "action", label: label("汇合并标准化结果", "Merge & Normalize Results"), relation: "module", edgeIds: ["e15"], next: "observation-event" },
     { id: "observation-event", nodeId: "observation", label: label("评估执行结果", "Evaluate Result"), relation: "decision", edgeIds: ["e16", "e18", "e19"], choices: {
       finish: { label: label("通过并回传", "Accept & Return"), next: "llm-join-event", relation: "callback", completeLane: "tools", nextByPendingLane: { rag: "rag-route" } },
-      retry: { label: label("重试工具", "Retry Tool"), next: "tool-event", relation: "retry" },
+      retry: { label: label("重试工具", "Retry Tool"), next: "tool-event", relation: "retry", resetParallelWork: true },
       replan: { label: label("回到规划", "Replan"), next: "planning-event", relation: "replan" },
     } },
     { id: "llm-join-event", nodeId: "llm", label: label("汇合上下文与观察结果", "Join Context and Observation"), relation: "sequence", edgeIds: ["e17"], next: "final-event" },

@@ -4,10 +4,10 @@ const TOPOLOGY_EDGE_META = new Map(Object.entries({
   "user-task->orchestrator": { edgeId: "e1", projectionId: "e1" },
   "orchestrator->llm": { edgeId: "e2", projectionId: "e2", feedsFanout: true },
   "llm->final-response": { edgeId: "e17", projectionId: "e17" },
-  "llm->planning": { edgeId: "e3", projectionId: "e3" },
-  "planning->llm": { edgeId: "e4", projectionId: "e4", feedback: true },
-  "llm->memory": { edgeId: "e5-request", projectionId: "e5-request" },
-  "memory->llm": { edgeId: "e5", projectionId: "e5", feedback: true },
+  "llm->planning": { edgeId: "e3", projectionId: "e3", parallelKind: "cognition", parallelItem: "planning" },
+  "planning->llm": { edgeId: "e4", projectionId: "e4", parallelKind: "cognition", parallelItem: "planning", feedback: true },
+  "llm->memory": { edgeId: "e5-request", projectionId: "e5-request", parallelKind: "cognition", parallelItem: "memory" },
+  "memory->llm": { edgeId: "e5", projectionId: "e5", parallelKind: "cognition", parallelItem: "memory", feedback: true },
   "llm->rag-query": { projectionId: "e6", presentationRelation: "parallel", lane: "rag", label: "并行检索 · Parallel Retrieval" },
   "rag-query->rag-routing": { edgeId: "e6", projectionId: "e6" },
   "rag-routing->embedding-vectorization": { edgeId: "e7", projectionId: "e7", branch: "vector" },
@@ -26,7 +26,8 @@ const TOPOLOGY_EDGE_META = new Map(Object.entries({
   "top-n->rag-context-assembly": { projectionId: "e11" },
   "rag-context-assembly->llm": { edgeId: "e12", projectionId: "e12", presentationRelation: "callback", label: "上下文回传 · Context Callback", feedback: true },
   "llm->tools-group": { edgeId: "e13", projectionId: "e13", presentationRelation: "parallel", lane: "tools", label: "并行工具准备 · Parallel Tool Prep" },
-  "tools-group->action": { edgeId: "e14", projectionId: "e14" },
+  "code-execution-sandbox->action": { edgeId: "e14-sandbox", projectionId: "e14-sandbox", parallelKind: "tools", parallelItem: "sandbox" },
+  "external-environment-business-system->action": { edgeId: "e14-external", projectionId: "e14-external", parallelKind: "tools", parallelItem: "external" },
   "action->observation": { edgeId: "e15", projectionId: "e15" },
   "observation->llm": { edgeId: "e19", projectionId: "e19", presentationRelation: "callback", label: "观察回传 · Observation Callback", feedback: true },
   "observation->planning": { edgeId: "e16", projectionId: "e16", feedback: true },
@@ -105,6 +106,13 @@ function executableState(graph, run, nodeId) {
     .filter(Boolean));
   const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
   const branch = nodeId === "vector-search" ? "vector" : nodeId === "web-search" ? "web" : null;
+  const cognitionItem = ["planning", "memory"].includes(nodeId) ? nodeId : null;
+
+  if (cognitionItem && run.parallelWork?.kind === "cognition" && run.parallelWork.selected.includes(cognitionItem)) {
+    return run.parallelWork.completed.includes(cognitionItem)
+      ? { complete: true, status: "completed" }
+      : { live: true, status: "running" };
+  }
 
   if (branch && selectedBranches.length && !selectedBranches.includes(branch)) return { skipped: true, status: "skipped" };
   if (branch && run.completedBranches.includes(branch)) return { complete: true, status: "completed" };
@@ -130,6 +138,18 @@ export function referenceVisualState(graph, run, id) {
     return {};
   }
 
+  const toolItem = id === "code-execution-sandbox"
+    ? "sandbox"
+    : id === "external-environment-business-system"
+      ? "external"
+      : null;
+  if (toolItem && run.parallelWork?.kind === "tools") {
+    if (!run.parallelWork.selected.includes(toolItem)) return { skipped: true, status: "skipped" };
+    return run.parallelWork.completed.includes(toolItem)
+      ? { complete: true, status: "completed" }
+      : { live: true, status: "running" };
+  }
+
   if (["planning-subgoals", "planning-cot", "planning-reflection", "planning-self-critique"].includes(id)) return executableState(graph, run, "planning");
   if (["memory-short-term", "memory-long-term", "memory-context", "memory-cross-conversation"].includes(id)) return executableState(graph, run, "memory");
   if (id === "rag-query") return executableState(graph, run, "rag-route");
@@ -140,7 +160,8 @@ export function referenceVisualState(graph, run, id) {
 
   const groupExecutables = GROUP_EXECUTABLES.get(id);
   if (groupExecutables) {
-    const current = groupExecutables.find((nodeId) => nodeId === run.currentNodeId);
+    const current = groupExecutables.find((nodeId) => nodeId === run.currentNodeId)
+      ?? groupExecutables.find((nodeId) => run.parallelWork?.kind === "cognition" && run.parallelWork.selected.includes(nodeId));
     if (current) return executableState(graph, run, current);
     if (id === "vector-data-branch" && selectedBranches.length && !selectedBranches.includes("vector")) return { skipped: true, status: "skipped" };
     if (id === "web-branch" && selectedBranches.length && !selectedBranches.includes("web")) return { skipped: true, status: "skipped" };
@@ -154,6 +175,11 @@ export function referenceVisualState(graph, run, id) {
 export function referenceEdgeState(graph, run, topologyEdge) {
   const meta = topologyEdgeMeta(topologyEdge);
   const selectedBranches = run.selectedBranches ?? run.activeBranches ?? [];
+  if (meta.parallelKind && run.parallelWork?.kind === meta.parallelKind) {
+    const selected = run.parallelWork.selected.includes(meta.parallelItem);
+    const complete = run.parallelWork.completed.includes(meta.parallelItem);
+    return { ...meta, live: selected && !complete, complete, skipped: !selected, relation: meta.presentationRelation };
+  }
   if (meta.branch && selectedBranches.length && !selectedBranches.includes(meta.branch)) return { ...meta, skipped: true };
   if (meta.lane && run.activeLanes?.includes(meta.lane)) {
     const complete = run.completedLanes?.includes(meta.lane);

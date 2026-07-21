@@ -29,8 +29,6 @@ const detailEndpointAliases = new Map(Object.entries({
   "web-search": ["rag-web-search"],
   "rag-merge": ["result-merge-deduplicate"],
   "rag-context": ["rag-context-assembly"],
-  "tool-select": ["external-environment-business-system"],
-  action: ["code-execution-sandbox"],
 }));
 const focusAliases = new Map(Object.entries({
   planning: "planning-subgoals",
@@ -40,7 +38,6 @@ const focusAliases = new Map(Object.entries({
   "web-search": "rag-web-search",
   "rag-merge": "result-merge-deduplicate",
   "rag-context": "rag-context-assembly",
-  "tool-select": "external-environment-business-system",
 }));
 
 const svg = (tag, attributes = {}) => {
@@ -442,12 +439,8 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
       to: CONTEXT_GATE_ID,
       label: "需要上下文 · Context required",
     },
-    {
-      key: "context-dependency-gate->action",
-      from: CONTEXT_GATE_ID,
-      to: "action",
-      label: "就绪后执行 · Execute when ready",
-    },
+    { key: "context-dependency-gate->code-execution-sandbox", from: CONTEXT_GATE_ID, to: "code-execution-sandbox", tool: "sandbox", label: "沙箱分支 · Sandbox" },
+    { key: "context-dependency-gate->external-environment-business-system", from: CONTEXT_GATE_ID, to: "external-environment-business-system", tool: "external", label: "外部系统 · External" },
   ];
   const gateState = contextGateState(run);
   for (const dependency of dependencyRoutes) {
@@ -463,8 +456,15 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
       "data-route-corridor": route.corridor,
     });
     path.classList.add("graph-edge", "is-context-dependency", "is-feedback");
+    if (dependency.tool) path.dataset.tool = dependency.tool;
     if (dependency.to === CONTEXT_GATE_ID && gateState.ready) path.classList.add("is-complete");
-    if (dependency.from === CONTEXT_GATE_ID && (gateState.ready || gateState.independent)) path.classList.add("is-live");
+    if (dependency.tool && run.parallelWork?.kind === "tools") {
+      const selected = run.parallelWork.selected.includes(dependency.tool);
+      const complete = run.parallelWork.completed.includes(dependency.tool);
+      if (selected && !complete && (gateState.ready || gateState.independent)) path.classList.add("is-live");
+      if (selected && complete) path.classList.add("is-complete");
+      if (!selected) path.classList.add("is-skipped");
+    }
     edgesLayer.append(path);
     if (path.classList.contains("is-live")) pulsesLayer.append(edgePulse({ key: dependency.key, pathData: route.d, start: route.start }));
   }

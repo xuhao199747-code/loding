@@ -1,5 +1,5 @@
 export const SESSION_KEY = "interactive-agent-flow:session:v1";
-const SESSION_VERSION = 1;
+const SESSION_VERSION = 2;
 
 const runFields = [
   "status",
@@ -11,6 +11,7 @@ const runFields = [
   "dispatchMode",
   "activeLanes",
   "completedLanes",
+  "parallelWork",
   "contextRequired",
   "iteration",
   "trace",
@@ -33,6 +34,11 @@ function isRestorable(payload, graph) {
   for (const field of ["selectedBranches", "activeBranches", "completedBranches", "activeLanes", "completedLanes", "trace", "history", "eventSnapshots"]) {
     if (!Array.isArray(payload.run[field])) return false;
   }
+  if (payload.run.parallelWork !== null && (
+    !payload.run.parallelWork
+    || !Array.isArray(payload.run.parallelWork.selected)
+    || !Array.isArray(payload.run.parallelWork.completed)
+  )) return false;
   return Number.isInteger(payload.run.iteration) && payload.run.iteration > 0;
 }
 

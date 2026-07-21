@@ -173,13 +173,17 @@ describe("reference hierarchy layout", () => {
     expect(gate.textContent).toContain("Independent: Continue");
 
     const dependency = document.querySelector('[data-projection-edge="rag-context-assembly->context-dependency-gate"]');
-    const release = document.querySelector('[data-projection-edge="context-dependency-gate->action"]');
-    for (const edge of [dependency, release]) {
+    const releases = [
+      document.querySelector('[data-projection-edge="context-dependency-gate->code-execution-sandbox"]'),
+      document.querySelector('[data-projection-edge="context-dependency-gate->external-environment-business-system"]'),
+    ];
+    for (const edge of [dependency, ...releases]) {
       expect(edge.classList.contains("is-context-dependency")).toBe(true);
       expect(edge.getAttribute("marker-end")).toBe("url(#arrow)");
     }
     expect(dependency.getAttribute("aria-label")).toContain("需要上下文 · Context required");
-    expect(release.getAttribute("aria-label")).toContain("就绪后执行 · Execute when ready");
+    expect(releases[0].getAttribute("aria-label")).toContain("沙箱分支 · Sandbox");
+    expect(releases[1].getAttribute("aria-label")).toContain("外部系统 · External");
 
     const retry = document.querySelector('[data-edge-id="e18"]');
     expect(retry.classList.contains("is-retry")).toBe(true);
@@ -210,17 +214,24 @@ describe("reference hierarchy layout", () => {
     expect(document.querySelector('[data-detail-node-id="context-dependency-gate"]').classList.contains("is-independent")).toBe(true);
   });
 
-  it("animates memory retrieval and its bidirectional LLM routes", () => {
-    render(createRun(demoGraph, "memory-event"));
+  it("runs planning and memory together, then preserves independent completion", () => {
+    let run = createRun(demoGraph, "planning-event");
+    render(run);
 
-    expect(document.querySelector('[data-group-id="memory-group"]').classList.contains("is-live")).toBe(true);
-    for (const id of ["memory-short-term", "memory-long-term", "memory-context", "memory-cross-conversation"]) {
-      expect(document.querySelector(`[data-detail-node-id="${id}"]`).classList.contains("is-live")).toBe(true);
+    for (const groupId of ["planning-group", "memory-group"]) {
+      expect(document.querySelector(`[data-group-id="${groupId}"]`).classList.contains("is-live")).toBe(true);
     }
-    for (const key of ["llm->memory", "memory->llm"]) {
+    for (const key of ["llm->planning", "planning->llm", "llm->memory", "memory->llm"]) {
       expect(document.querySelector(`[data-topology-edge="${key}"]`).classList.contains("is-live")).toBe(true);
       expect(document.querySelector(`[data-topology-edge-pulse-for="${key}"]`)).not.toBeNull();
     }
+
+    run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "planning" });
+    render(run);
+    expect(document.querySelector('[data-group-id="planning-group"]').classList.contains("is-complete")).toBe(true);
+    expect(document.querySelector('[data-group-id="memory-group"]').classList.contains("is-live")).toBe(true);
+    expect(document.querySelector('[data-topology-edge="planning->llm"]').classList.contains("is-complete")).toBe(true);
+    expect(document.querySelector('[data-topology-edge="memory->llm"]').classList.contains("is-live")).toBe(true);
   });
 
   it("projects vector and web execution state onto every matching detail and path", () => {
@@ -242,6 +253,34 @@ describe("reference hierarchy layout", () => {
     vectorRun = transition(vectorRun, { type: "COMPLETE_BRANCH", branch: "vector" });
     render(vectorRun);
     for (const id of vector) expect(document.querySelector(`[data-detail-node-id="${id}"]`).classList.contains("is-complete")).toBe(true);
+  });
+
+  it.each([
+    ["sandbox", ["code-execution-sandbox"], ["external-environment-business-system"]],
+    ["external", ["external-environment-business-system"], ["code-execution-sandbox"]],
+    ["parallel", ["code-execution-sandbox", "external-environment-business-system"], []],
+  ])("projects the %s tool choice onto only its selected nodes and routes", (choice, selected, skipped) => {
+    const run = transition(createRun(demoGraph, "tool-select-event"), { type: "CHOOSE_BRANCH", choice });
+    render(run);
+
+    expect(document.querySelector('[data-node-id="action"]').classList.contains("is-live")).toBe(true);
+    for (const id of selected) expect(document.querySelector(`[data-detail-node-id="${id}"]`).classList.contains("is-live")).toBe(true);
+    for (const id of skipped) expect(document.querySelector(`[data-detail-node-id="${id}"]`).classList.contains("is-skipped")).toBe(true);
+
+    const routeByNode = {
+      "code-execution-sandbox": "code-execution-sandbox->action",
+      "external-environment-business-system": "external-environment-business-system->action",
+    };
+    for (const id of selected) {
+      const key = routeByNode[id];
+      expect(document.querySelector(`[data-topology-edge="${key}"]`).classList.contains("is-live")).toBe(true);
+      expect(document.querySelector(`[data-topology-edge-pulse-for="${key}"]`)).not.toBeNull();
+    }
+    for (const id of skipped) {
+      const key = routeByNode[id];
+      expect(document.querySelector(`[data-topology-edge="${key}"]`).classList.contains("is-skipped")).toBe(true);
+      expect(document.querySelector(`[data-topology-edge-pulse-for="${key}"]`)).toBeNull();
+    }
   });
 
   it("projects merge, context callback, tool, retry, and replan states onto reference paths", () => {

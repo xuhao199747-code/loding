@@ -185,20 +185,30 @@ export function routeTopologyEdge(edge, context) {
     const end = pointOnSide(to, "top");
     return orthogonal([start, { x: 720, y: start.y }, { x: 720, y: 548 }, { x: end.x, y: 548 }, end], "dispatch-tools", { text: "并行工具准备 · Parallel Tool Prep", x: 610, y: 548 });
   }
-  if (key === "tools-group->action") {
-    const start = pointOnSide(from, "top", .66);
-    const end = pointOnSide(to, "top");
-    return orthogonal([start, { x: start.x, y: 587 }, { x: end.x, y: 587 }, end], "independent-action", { text: "无依赖：直接执行 · Independent: Continue", x: 1090, y: 587 });
+  if (key === "code-execution-sandbox->action") {
+    const start = pointOnSide(from, "top", .72);
+    const end = pointOnSide(to, "top", .45);
+    return orthogonal([start, { x: start.x, y: 586 }, { x: end.x, y: 586 }, end], "tool-sandbox-merge");
+  }
+  if (key === "external-environment-business-system->action") {
+    const start = pointOnSide(from, "right");
+    const end = pointOnSide(to, "left");
+    return orthogonal([start, { x: 990, y: start.y }, { x: 990, y: end.y }, end], "tool-external-merge");
   }
   if (key === "rag-context-assembly->context-dependency-gate") {
     const start = pointOnSide(from, "bottom", .72);
     const end = pointOnSide(to, "right");
     return orthogonal([start, { x: start.x, y: 548 }, { x: 1348, y: 548 }, { x: 1348, y: end.y }, end], "context-gate-feed");
   }
-  if (key === "context-dependency-gate->action") {
-    const start = pointOnSide(from, "right");
-    const end = pointOnSide(to, "left");
-    return orthogonal([start, { x: 1002, y: start.y }, { x: 1002, y: end.y }, end], "context-gate-release");
+  if (key === "context-dependency-gate->code-execution-sandbox") {
+    const start = pointOnSide(from, "left", .45);
+    const end = pointOnSide(to, "bottom", .76);
+    return orthogonal([start, { x: 780, y: start.y }, { x: 780, y: 660 }, { x: end.x, y: 660 }, end], "tool-sandbox-dispatch");
+  }
+  if (key === "context-dependency-gate->external-environment-business-system") {
+    const start = pointOnSide(from, "top", .5);
+    const end = pointOnSide(to, "bottom", .58);
+    return orthogonal([start, { x: start.x, y: 660 }, { x: end.x, y: 660 }, end], "tool-external-dispatch");
   }
   if (edge.from === "rag-routing" && ["embedding-vectorization", "keyword-search", "rag-web-search"].includes(edge.to)) {
     if (edge.to === "embedding-vectorization") {

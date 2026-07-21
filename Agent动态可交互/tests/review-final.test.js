@@ -8,9 +8,17 @@ import { readFileSync } from "node:fs";
 
 const advanceToRag = () => {
   let run = createRun(demoGraph);
-  for (let index = 0; index < 4; index += 1) run = transition(run, { type: "ADVANCE" });
+  run = transition(run, { type: "ADVANCE" });
+  run = transition(run, { type: "ADVANCE" });
+  run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "planning" });
+  run = transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "memory" });
   run = transition(run, { type: "CHOOSE_BRANCH", choice: "rag" });
   return run;
+};
+
+const completeExternalTool = () => {
+  let run = transition(createRun(demoGraph, "tool-select-event"), { type: "CHOOSE_BRANCH", choice: "external" });
+  return transition(run, { type: "COMPLETE_PARALLEL_ITEM", item: "external" });
 };
 
 describe("final review regressions", () => {
@@ -59,10 +67,12 @@ describe("final review regressions", () => {
   });
 
   it.each([
-    ["input-event", "user-task", "orchestrator-event"],
-    ["tool-event", "action", "observation-event"],
-  ])("reruns a successful %s snapshot without restoring its outgoing transition", (eventId, nodeId, nextEventId) => {
-    let run = transition(createRun(demoGraph, eventId), { type: "ADVANCE" });
+    ["input-event", "user-task", "orchestrator-event", "ADVANCE", null],
+    ["tool-event", "action", "action-event", "COMPLETE_PARALLEL_ITEM", "external"],
+  ])("reruns a successful %s snapshot without restoring its outgoing transition", (eventId, nodeId, nextEventId, actionType, item) => {
+    let run = eventId === "tool-event"
+      ? completeExternalTool()
+      : transition(createRun(demoGraph, eventId), { type: "ADVANCE" });
     const snapshot = latestSnapshotForNode(run, nodeId);
     const successfulTrace = structuredClone(snapshot.trace);
 
@@ -73,7 +83,7 @@ describe("final review regressions", () => {
     expect(snapshot.trace).toEqual(successfulTrace);
     expect(Object.isFrozen(snapshot)).toBe(true);
 
-    run = transition(run, { type: "ADVANCE" });
+    run = transition(run, { type: actionType, ...(item ? { item } : {}) });
     expect(run.currentEventId).toBe(nextEventId);
     expect(run.trace.filter((entry) => entry.from === eventId)).toHaveLength(1);
     expect(latestSnapshotForNode(run, nodeId)).toMatchObject({ status: "success" });
@@ -144,12 +154,13 @@ describe("final review regressions", () => {
   });
 
   it("retains historical snapshot data without exposing the removed inspector", () => {
-    const run = transition(createRun(demoGraph, "tool-event"), { type: "ADVANCE" });
+    let run = completeExternalTool();
     const historicalSnapshot = run.eventSnapshots.at(-1);
+    run = transition(run, { type: "ADVANCE" });
     const view = createAppView(document.body, { onNodeSelect: vi.fn() });
     view.render({ graph: demoGraph, run, viewport: { ...createViewport("tool-select", "tools"), viewing: { level: "node", moduleId: "tools", nodeId: "action" }, isViewingLive: false } });
 
-    expect(historicalSnapshot.output).toBe("完成：执行工具调用");
+    expect(historicalSnapshot.output).toBe("完成：执行工具分支");
     expect(document.querySelector(".inspector")).toBeNull();
     expect(document.querySelector('[data-action="rerun-snapshot"]')).toBeNull();
     expect(document.querySelector(".step-rail").textContent).toContain("评估执行结果");
