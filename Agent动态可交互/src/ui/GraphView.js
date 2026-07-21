@@ -227,19 +227,20 @@ function renderDetailNode(detail, state, isEndpoint, interaction) {
   group.append(svg("rect", { width: w, height: h, rx: h > 30 ? 8 : 5 }));
 
   if (detail.description) {
-    const label = svg("text", { x: w / 2, y: 13, "text-anchor": "middle", class: "detail-label" });
+    const lineYs = [-13.5, -4.5, 4.5, 13.5].map((offset) => h / 2 + offset);
+    const label = svg("text", { x: w / 2, y: lineYs[0], "text-anchor": "middle", "dominant-baseline": "middle", class: "detail-label" });
     label.textContent = detail.label.zh;
-    const support = svg("text", { x: w / 2, y: 22, "text-anchor": "middle", class: "detail-en" });
+    const support = svg("text", { x: w / 2, y: lineYs[1], "text-anchor": "middle", "dominant-baseline": "middle", class: "detail-en" });
     support.textContent = detail.label.en;
-    const zh = svg("text", { x: w / 2, y: 32, "text-anchor": "middle", class: "detail-description" });
+    const zh = svg("text", { x: w / 2, y: lineYs[2], "text-anchor": "middle", "dominant-baseline": "middle", class: "detail-description" });
     zh.textContent = detail.description.zh;
-    const en = svg("text", { x: w / 2, y: 41, "text-anchor": "middle", class: "detail-description detail-description--en" });
+    const en = svg("text", { x: w / 2, y: lineYs[3], "text-anchor": "middle", "dominant-baseline": "middle", class: "detail-description detail-description--en" });
     en.textContent = detail.description.en;
     group.append(label, support, zh, en);
   } else {
-    const zh = svg("text", { x: w / 2, y: 10, "text-anchor": "middle", class: "detail-label" });
+    const zh = svg("text", { x: w / 2, y: h / 2 - 4, "text-anchor": "middle", "dominant-baseline": "middle", class: "detail-label" });
     zh.textContent = detail.label.zh;
-    const en = svg("text", { x: w / 2, y: 18, "text-anchor": "middle", class: "detail-en" });
+    const en = svg("text", { x: w / 2, y: h / 2 + 4, "text-anchor": "middle", "dominant-baseline": "middle", class: "detail-en" });
     en.textContent = detail.label.en;
     group.append(zh, en);
   }
@@ -266,13 +267,14 @@ function renderExecutableNode(node, state, isEndpoint, interaction) {
   if (proxy) group.classList.add("graph-node--proxy");
   if (!proxy) {
     group.append(svg("rect", { width: w, height: h, rx: Math.min(10, h / 4) }));
-    const zh = svg("text", { x: w / 2, y: 17, "text-anchor": "middle", class: "primary-label node-label" });
+    const lineYs = status ? [h / 2 - 13, h / 2, h / 2 + 13] : [h / 2 - 7, h / 2 + 7];
+    const zh = svg("text", { x: w / 2, y: lineYs[0], "text-anchor": "middle", "dominant-baseline": "middle", class: "primary-label node-label" });
     zh.textContent = node.label.zh;
-    const en = svg("text", { x: w / 2, y: 31, "text-anchor": "middle", class: "node-en" });
+    const en = svg("text", { x: w / 2, y: lineYs[1], "text-anchor": "middle", "dominant-baseline": "middle", class: "node-en" });
     en.textContent = node.label.en;
     group.append(zh, en);
     if (status) {
-      const statusText = svg("text", { x: w / 2, y: h - 4, "text-anchor": "middle", class: "status-label" });
+      const statusText = svg("text", { x: w / 2, y: lineYs[2], "text-anchor": "middle", "dominant-baseline": "middle", class: "status-label" });
       statusText.textContent = statusLabels[status] ?? status;
       group.append(statusText);
     }

@@ -87,6 +87,31 @@ describe("reference hierarchy layout", () => {
     expect(document.querySelector('[data-layer="guardrails"] rect').getAttribute("width")).toBe("1400");
   });
 
+  it("keeps branch titles in a dedicated header band above their first cards", () => {
+    for (const groupId of ["vector-data-branch", "web-branch"]) {
+      const group = demoGraph.groups.find((item) => item.id === groupId);
+      const cards = demoGraph.detailNodes.filter((item) => item.groupId === groupId);
+      const firstCardY = Math.min(...cards.map((card) => card.bounds.y));
+
+      expect(firstCardY - group.bounds.y).toBeGreaterThanOrEqual(50);
+    }
+  });
+
+  it("centers every multi-line node label around its card midpoint", () => {
+    render();
+    const assertCentered = (element, selector) => {
+      const rect = element.querySelector(":scope > rect");
+      const lines = [...element.querySelectorAll(selector)];
+      const averageY = lines.reduce((sum, line) => sum + Number(line.getAttribute("y")), 0) / lines.length;
+      expect(averageY).toBeCloseTo(Number(rect.getAttribute("height")) / 2, 5);
+      for (const line of lines) expect(line.getAttribute("dominant-baseline")).toBe("middle");
+    };
+
+    assertCentered(document.querySelector('[data-node-id="final-response"]'), "text");
+    assertCentered(document.querySelector('[data-detail-node-id="rag-query"]'), "text");
+    assertCentered(document.querySelector('[data-detail-node-id="code-execution-sandbox"]'), "text");
+  });
+
   it("renders every declared relationship once with arrows and shape-boundary endpoints", () => {
     render();
 

@@ -54,4 +54,28 @@ describe("Cursor-style neutral interface", () => {
   it("lets completed state color override callback type color", () => {
     expect(styles.lastIndexOf(".graph-edge.is-complete")).toBeGreaterThan(styles.lastIndexOf(".graph-edge.is-callback"));
   });
+
+  it("keeps inactive callbacks and dependency routes neutral until state colors apply", () => {
+    expect(styles).toMatch(/--route:\s*#[0-9A-F]{6}/i);
+    expect(styles).toMatch(/\.graph-edge\.is-callback\s*\{[^}]*stroke:\s*var\(--route\);/s);
+    expect(styles).toMatch(/\.graph-edge\.is-context-dependency\s*\{[^}]*stroke:\s*var\(--route\);/s);
+    expect(styles.lastIndexOf(".graph-edge.is-live")).toBeGreaterThan(styles.lastIndexOf(".graph-edge.is-context-dependency"));
+    expect(styles.lastIndexOf(".graph-edge.is-complete")).toBeGreaterThan(styles.lastIndexOf(".graph-edge.is-context-dependency"));
+  });
+
+  it("uses one blue accent for every live relation instead of relation-specific warning colors", () => {
+    expect(styles).not.toMatch(/\.edge-join\.is-live\s*\{[^}]*var\(--done\)/s);
+    expect(styles).not.toMatch(/\.edge-(?:callback|retry|replan)\.is-live[^}]*var\(--error\)/s);
+    expect(styles).toMatch(/\.edge-callback\.is-live,[\s\S]*\.edge-replan\.is-live\s*\{[^}]*stroke:\s*var\(--live\)/s);
+  });
+
+  it("uses a muted completion color for nested groups and detail cards", () => {
+    expect(styles).toMatch(/--done-muted:\s*#[0-9A-F]{6}/i);
+    expect(styles).toMatch(/\.reference-group\.is-complete\s*>\s*rect\s*\{[^}]*var\(--done-muted\)/s);
+    expect(styles).toMatch(/\.detail-node\.is-complete\s*>\s*rect\s*\{[^}]*var\(--done-muted\)/s);
+  });
+
+  it("keeps an independent context gate neutral instead of adding a third accent color", () => {
+    expect(styles).toMatch(/\.context-gate\.is-independent\s*>\s*rect\s*\{[^}]*stroke:\s*var\(--route\)/s);
+  });
 });

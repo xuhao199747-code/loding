@@ -44,6 +44,24 @@ describe("edge routing corridors", () => {
     expect(new Set(corridorIds).size).toBe(corridorIds.length);
   });
 
+  it("gives planning and memory callbacks a visible orthogonal return corridor", () => {
+    for (const key of ["planning->llm", "memory->llm"]) {
+      const route = routes.get(key);
+      expect(route.kind).toBe("orthogonal");
+      expect(route.points.length).toBeGreaterThanOrEqual(5);
+      expect(Math.max(...route.points.map((point) => point.y)) - Math.min(...route.points.map((point) => point.y))).toBeGreaterThanOrEqual(35);
+    }
+  });
+
+  it("enters the first vector card from its open right side instead of crossing the branch title", () => {
+    const route = routes.get("rag-routing->embedding-vectorization");
+    const card = context.resolve("embedding-vectorization");
+
+    expect(route.end).toEqual({ x: card.x + card.w, y: card.y + card.h / 2 });
+    expect(route.points.at(-2).y).toBe(route.end.y);
+    expect(route.points.at(-2).x).toBeGreaterThan(route.end.x);
+  });
+
   it("keeps orthogonal routes axis-aligned", () => {
     for (const route of routes.values()) {
       if (route.kind !== "orthogonal") continue;

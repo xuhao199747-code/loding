@@ -5,11 +5,13 @@
   --surface-raised: #1B1B1B;
   --line: #2A2A2A;
   --line-strong: #3A3A3A;
+  --route: #4A4A4A;
   --subtle: #666666;
   --muted: #9B9B9B;
   --text: #EDEDED;
   --live: #6E8BFF;
   --done: #6FCF97;
+  --done-muted: #467A5D;
   --branch: #9B8AFB;
   --warn: #D6A85F;
   --error: #E06C75;
@@ -239,7 +241,7 @@ body {
   stroke: var(--live);
 }
 
-.reference-group.is-complete > rect { stroke: var(--done); }
+.reference-group.is-complete > rect { stroke: var(--done-muted); }
 .reference-group.is-skipped { opacity: .68; }
 
 .group-title {
@@ -323,12 +325,12 @@ body {
   stroke: var(--live);
 }
 
-.detail-node.is-complete > rect { stroke: var(--done); }
+.detail-node.is-complete > rect { stroke: var(--done-muted); }
 .detail-node.is-skipped { opacity: .68; }
 .context-gate.is-waiting > rect { stroke: var(--warn); stroke-dasharray: 5 3; }
 .context-gate.is-ready > rect { stroke: var(--done); }
-.context-gate.is-independent > rect { stroke: var(--branch); }
-.graph-edge.is-context-dependency { stroke: var(--branch); stroke-dasharray: 4 4; }
+.context-gate.is-independent > rect { stroke: var(--route); }
+.graph-edge.is-context-dependency { stroke: var(--route); stroke-dasharray: 4 4; }
 
 .detail-label {
   fill: var(--text);
@@ -365,7 +367,7 @@ body {
 
 .graph-edge {
   fill: none;
-  stroke: var(--line-strong);
+  stroke: var(--route);
   stroke-width: 1.6;
   opacity: .88;
   vector-effect: non-scaling-stroke;
@@ -376,7 +378,7 @@ body {
 }
 
 .graph-edge.is-callback {
-  stroke: var(--warn);
+  stroke: var(--route);
   stroke-dasharray: 8 6;
 }
 
@@ -724,11 +726,11 @@ body {
   font-size: .58rem;
 }
 
-.edge-parallel.is-live { stroke: var(--live); }
-.edge-join.is-live { stroke: var(--done); }
+.edge-parallel.is-live,
+.edge-join.is-live { stroke: var(--live); }
 .edge-callback.is-live,
 .edge-retry.is-live,
-.edge-replan.is-live { stroke: var(--error); }
+.edge-replan.is-live { stroke: var(--live); }
 
 .edge-pulse {
   pointer-events: none;

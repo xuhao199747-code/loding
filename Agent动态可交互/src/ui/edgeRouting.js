@@ -121,9 +121,15 @@ export function routeTopologyEdge(edge, context) {
     return orthogonal([start, { x: start.x, y: 290 }, { x: end.x, y: 290 }, end]);
   }
   if (key === "planning->llm") {
-    const start = pointOnSide(from, "top", .68);
-    const end = pointOnSide(to, "bottom", .18);
-    return curve(start, end, { x: start.x, y: start.y - 24 }, { x: end.x - 34, y: end.y + 18 }, "planning-return");
+    const start = pointOnSide(from, "top", .22);
+    const end = pointOnSide(to, "left", .62);
+    return orthogonal([
+      start,
+      { x: start.x, y: 286 },
+      { x: 326, y: 286 },
+      { x: 326, y: end.y },
+      end,
+    ], "planning-return");
   }
   if (key === "llm->memory") {
     const start = pointOnSide(from, "bottom", .68);
@@ -131,9 +137,15 @@ export function routeTopologyEdge(edge, context) {
     return orthogonal([start, { x: start.x, y: 290 }, { x: end.x, y: 290 }, end]);
   }
   if (key === "memory->llm") {
-    const start = pointOnSide(from, "top", .68);
-    const end = pointOnSide(to, "bottom", .82);
-    return curve(start, end, { x: start.x, y: start.y - 24 }, { x: end.x + 34, y: end.y + 18 }, "memory-return");
+    const start = pointOnSide(from, "top", .82);
+    const end = pointOnSide(to, "right", .62);
+    return orthogonal([
+      start,
+      { x: start.x, y: 286 },
+      { x: 704, y: 286 },
+      { x: 704, y: end.y },
+      end,
+    ], "memory-return");
   }
   if (key === "rag-context-assembly->llm") {
     const start = pointOnSide(from, "bottom");
@@ -189,6 +201,17 @@ export function routeTopologyEdge(edge, context) {
     return orthogonal([start, { x: 1002, y: start.y }, { x: 1002, y: end.y }, end], "context-gate-release");
   }
   if (edge.from === "rag-routing" && ["embedding-vectorization", "keyword-search", "rag-web-search"].includes(edge.to)) {
+    if (edge.to === "embedding-vectorization") {
+      const start = pointOnSide(from, "bottom", .2);
+      const end = pointOnSide(to, "right");
+      return orthogonal([
+        start,
+        { x: start.x, y: 208 },
+        { x: 950, y: 208 },
+        { x: 950, y: end.y },
+        end,
+      ], "rag-fanout");
+    }
     const fractions = { "embedding-vectorization": .2, "keyword-search": .5, "rag-web-search": .8 };
     const start = pointOnSide(from, "bottom", fractions[edge.to]);
     const end = pointOnSide(to, "top");
