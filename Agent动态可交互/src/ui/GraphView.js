@@ -135,6 +135,25 @@ function setNeighborhoodEmphasis(root, id, active) {
     node.classList.toggle("is-related", !inspected && neighbors.has(nodeId));
     node.classList.toggle("is-context-dimmed", !neighbors.has(nodeId));
   }
+
+  const groups = [...root.querySelectorAll("[data-group-id]")];
+  const groupsById = new Map(groups.map((group) => [group.dataset.groupId, group]));
+  const emphasizedGroupIds = new Set();
+  const includeGroupHierarchy = (groupId) => {
+    let currentId = groupId;
+    while (currentId && groupsById.has(currentId) && !emphasizedGroupIds.has(currentId)) {
+      emphasizedGroupIds.add(currentId);
+      currentId = groupsById.get(currentId).dataset.parentGroupId;
+    }
+  };
+  for (const node of root.querySelectorAll("[data-parent-group-id]")) {
+    if (!node.classList.contains("is-context-dimmed")) includeGroupHierarchy(node.dataset.parentGroupId);
+  }
+  for (const group of groups) {
+    const emphasized = emphasizedGroupIds.has(group.dataset.groupId);
+    group.classList.toggle("is-related", emphasized);
+    group.classList.toggle("is-context-dimmed", !emphasized);
+  }
   for (const label of root.querySelectorAll("[data-relation-label-for]")) {
     label.classList.toggle("is-related", relatedEdges.has(label.dataset.relationLabelFor));
     label.classList.toggle("is-context-dimmed", !relatedEdges.has(label.dataset.relationLabelFor));
@@ -198,7 +217,10 @@ function renderPanel(item, type, state = {}) {
     "aria-label": `${item.label.zh} ${item.label.en}`,
   };
   if (type === "system") attributes["data-system-boundary"] = item.id;
-  else attributes["data-group-id"] = item.id;
+  else {
+    attributes["data-group-id"] = item.id;
+    attributes["data-parent-group-id"] = item.parentId;
+  }
   const group = svg("g", attributes);
   group.classList.add(type === "system" ? "system-boundary" : "reference-group");
   if (type === "group") group.classList.add(`parent-${item.parentId}`, `layout-${item.layout}`);
@@ -216,6 +238,7 @@ function renderDetailNode(detail, state, isEndpoint, interaction) {
   const { x, y, w, h } = detail.bounds;
   const group = svg("g", {
     "data-detail-node-id": detail.id,
+    "data-parent-group-id": detail.groupId,
     transform: `translate(${x} ${y})`,
     role: "button",
     tabindex: 0,
@@ -253,8 +276,10 @@ function renderExecutableNode(node, state, isEndpoint, interaction) {
   const status = state.status;
   const suffix = status ? ` · ${statusLabels[status] ?? status}` : "";
   const proxy = !visibleExecutableIds.has(node.id);
+  const parentGroupId = ["core", "rag", "tools"].includes(node.moduleId) ? `${node.moduleId}-group` : null;
   const group = svg("g", {
     "data-node-id": node.id,
+    ...(parentGroupId ? { "data-parent-group-id": parentGroupId } : {}),
     transform: `translate(${x} ${y})`,
     ...(proxy
       ? { "aria-hidden": "true" }

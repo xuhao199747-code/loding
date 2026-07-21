@@ -304,6 +304,10 @@ body {
   opacity: .16 !important;
 }
 
+.reference-group.is-context-dimmed {
+  opacity: .08 !important;
+}
+
 .graph-node--proxy {
   pointer-events: none;
 }

@@ -48,6 +48,27 @@ describe("GraphView", () => {
     expect(document.querySelectorAll(".is-related, .is-context-dimmed, .is-inspected")).toHaveLength(0);
   });
 
+  it("dims unrelated active module frames while preserving the hovered detail hierarchy", () => {
+    render({ run: createRun(demoGraph, "tool-event"), viewport: createViewport() });
+    const longTerm = document.querySelector('[data-detail-node-id="memory-long-term"]');
+    const shortTerm = document.querySelector('[data-detail-node-id="memory-short-term"]');
+    const memoryGroup = document.querySelector('[data-group-id="memory-group"]');
+    const coreGroup = document.querySelector('[data-group-id="core-group"]');
+    const toolsGroup = document.querySelector('[data-group-id="tools-group"]');
+
+    longTerm.dispatchEvent(new PointerEvent("pointerenter", { bubbles: true }));
+
+    expect(longTerm.classList.contains("is-inspected")).toBe(true);
+    expect(shortTerm.classList.contains("is-inspected")).toBe(false);
+    expect(shortTerm.classList.contains("is-context-dimmed")).toBe(true);
+    expect(memoryGroup.classList.contains("is-context-dimmed")).toBe(false);
+    expect(coreGroup.classList.contains("is-context-dimmed")).toBe(false);
+    expect(toolsGroup.classList.contains("is-context-dimmed")).toBe(true);
+
+    longTerm.dispatchEvent(new PointerEvent("pointerleave", { bubbles: true }));
+    expect(document.querySelectorAll(".is-related, .is-context-dimmed, .is-inspected")).toHaveLength(0);
+  });
+
   it("opens node detail on click or keyboard without advancing execution", () => {
     const onNodeSelect = vi.fn();
     const run = createRun(demoGraph, "rag-route");
