@@ -70,9 +70,9 @@ describe("GraphView", () => {
     const nodesLayer = document.querySelector('[data-layer="nodes"]');
     expect(root.getAttribute("viewBox")).toBe("0 0 1400 800");
     expect([...root.children].filter((child) => child.hasAttribute("data-layer")).map((child) => child.dataset.layer)).toEqual([
-      "system-boundary",
       "groups",
       "topology-edges",
+      "relation-labels",
       "nodes",
       "guardrails",
       "live-pulses",

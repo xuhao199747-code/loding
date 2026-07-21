@@ -26,6 +26,16 @@ describe("Cursor-style neutral interface", () => {
     expect(styles).not.toMatch(/\.reference-group\.is-live[^}]*drop-shadow/s);
   });
 
+  it("highlights active and related routes by color without changing their width", () => {
+    const liveRule = styles.match(/\.graph-edge\.is-live\s*\{([^}]*)\}/s)?.[1] ?? "";
+    const relatedRule = styles.match(/\.graph-edge\.is-related\s*\{([^}]*)\}/s)?.[1] ?? "";
+
+    expect(liveRule).toMatch(/stroke:\s*var\(--live\);/);
+    expect(relatedRule).toMatch(/stroke:\s*var\(--live\);/);
+    expect(liveRule).not.toMatch(/stroke-width\s*:/);
+    expect(relatedRule).not.toMatch(/stroke-width\s*:/);
+  });
+
   it("lets completed state color override callback type color", () => {
     expect(styles.lastIndexOf(".graph-edge.is-complete")).toBeGreaterThan(styles.lastIndexOf(".graph-edge.is-callback"));
   });

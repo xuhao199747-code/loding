@@ -75,7 +75,16 @@ function appendRelationLabel(layer, key, label, x, y) {
 
 function appendMarkers(root) {
   const defs = svg("defs");
-  const marker = svg("marker", { id: "arrow", viewBox: "0 0 8 8", refX: 7, refY: 4, markerWidth: 6, markerHeight: 6, orient: "auto-start-reverse" });
+  const marker = svg("marker", {
+    id: "arrow",
+    viewBox: "0 0 8 8",
+    refX: 7,
+    refY: 4,
+    markerWidth: 7,
+    markerHeight: 7,
+    markerUnits: "userSpaceOnUse",
+    orient: "auto-start-reverse",
+  });
   marker.append(svg("path", { d: "M 0 0 L 8 4 L 0 8 z", class: "edge-arrow" }));
   defs.append(marker);
   root.append(defs);
@@ -315,15 +324,14 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
   const resolve = routingContext.resolve;
   const currentEvent = graph.events.find((event) => event.id === run.currentEventId);
   const endpoints = relationEndpoints(graph, run, currentEvent);
-  const systemLayer = svg("g", { "data-layer": "system-boundary" });
   const groupsLayer = svg("g", { "data-layer": "groups" });
   const edgesLayer = svg("g", { "data-layer": "topology-edges" });
+  const labelsLayer = svg("g", { "data-layer": "relation-labels", "aria-hidden": "true" });
   const nodesLayer = svg("g", { "data-layer": "nodes" });
   const guardrailsLayer = svg("g", { "data-layer": "guardrails" });
   const pulsesLayer = svg("g", { "data-layer": "live-pulses" });
-  root.append(systemLayer, groupsLayer, edgesLayer, nodesLayer, guardrailsLayer, pulsesLayer);
+  root.append(groupsLayer, edgesLayer, labelsLayer, nodesLayer, guardrailsLayer, pulsesLayer);
 
-  systemLayer.append(renderPanel(graph.systemBoundary, "system"));
   for (const group of graph.groups) groupsLayer.append(renderPanel(group, "group", referenceVisualState(graph, run, group.id)));
 
   for (const edge of graph.topologyEdges) {
@@ -359,7 +367,7 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
     if (state.complete) path.classList.add("is-complete");
     if (state.skipped) path.classList.add("is-skipped");
     edgesLayer.append(path);
-    if (route.label) appendRelationLabel(edgesLayer, key, route.label.text, route.label.x, route.label.y);
+    if (route.label) appendRelationLabel(labelsLayer, key, route.label.text, route.label.x, route.label.y);
     if (state.live) pulsesLayer.append(edgePulse({ key, edgeId: meta.edgeId, pathData: route.d, start: route.start }));
   }
 
@@ -383,7 +391,7 @@ export function renderGraph(container, { graph, run, onNodeSelect }) {
     if (live) retry.classList.add("is-live");
     if (completedEdgeIds.has(retryEdge.id)) retry.classList.add("is-complete");
     edgesLayer.append(retry);
-    appendRelationLabel(edgesLayer, retryEdge.id, relationLabels.retry, 1080, 726);
+    appendRelationLabel(labelsLayer, retryEdge.id, relationLabels.retry, 1080, 730);
     if (live) pulsesLayer.append(edgePulse({ key: retryEdge.id, edgeId: retryEdge.id, pathData: route.d, start: route.start, topology: false }));
   }
 

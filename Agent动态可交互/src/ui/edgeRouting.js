@@ -138,25 +138,25 @@ export function routeTopologyEdge(edge, context) {
   if (key === "rag-context-assembly->llm") {
     const start = pointOnSide(from, "bottom");
     const end = pointOnSide(to, "right");
-    const points = [start, { x: start.x, y: 486 }, { x: 735, y: 486 }, { x: 735, y: end.y }, end];
-    return orthogonal(points, "context-return", { text: "上下文回传 · Context Callback", x: 1060, y: 486 });
+    const points = [start, { x: start.x, y: 548 }, { x: 740, y: 548 }, { x: 740, y: end.y }, end];
+    return orthogonal(points, "context-return", { text: "上下文回传 · Context Callback", x: 1080, y: 548 });
   }
   if (key === "observation->llm") {
     const start = pointOnSide(from, "right");
     const end = pointOnSide(to, "right");
-    const points = [start, { x: 1360, y: start.y }, { x: 1360, y: 72 }, { x: 735, y: 72 }, { x: 735, y: end.y }, end];
-    return orthogonal(points, "observation-return", { text: "观察回传 · Observation Callback", x: 1110, y: 72 });
+    const points = [start, { x: 1370, y: start.y }, { x: 1370, y: 86 }, { x: 740, y: 86 }, { x: 740, y: end.y }, end];
+    return orthogonal(points, "observation-return", { text: "观察回传 · Observation Callback", x: 1120, y: 86 });
   }
   if (key === "observation->planning") {
     const start = pointOnSide(from, "bottom");
     const end = pointOnSide(to, "bottom");
-    const points = [start, { x: start.x, y: 730 }, { x: end.x, y: 730 }, end];
-    return orthogonal(points, "replan-return", { text: "评估失败：重规划 · Replan on Failure", x: 865, y: 730 });
+    const points = [start, { x: start.x, y: 738 }, { x: end.x, y: 738 }, end];
+    return orthogonal(points, "replan-return", { text: "评估失败：重规划 · Replan on Failure", x: 865, y: 738 });
   }
   if (key === "memory->action") {
     const start = pointOnSide(from, "bottom");
     const end = pointOnSide(to, "top");
-    return orthogonal([start, { x: start.x, y: 540 }, { x: end.x, y: 540 }, end], "state-feed");
+    return orthogonal([start, { x: start.x, y: 548 }, { x: end.x, y: 548 }, end], "state-feed");
   }
   if (key === "llm->final-response") {
     const start = pointOnSide(from, "left");
@@ -166,22 +166,22 @@ export function routeTopologyEdge(edge, context) {
   if (key === "llm->rag-query") {
     const start = pointOnSide(from, "right");
     const end = pointOnSide(to, "left");
-    return orthogonal([start, { x: 735, y: start.y }, { x: 735, y: end.y }, end], "dispatch-rag", { text: "并行检索 · Parallel Retrieval", x: 735, y: 190 });
+    return orthogonal([start, { x: 740, y: start.y }, { x: 740, y: end.y }, end], "dispatch-rag", { text: "并行检索 · Parallel Retrieval", x: 740, y: 205 });
   }
   if (key === "llm->tools-group") {
     const start = pointOnSide(from, "right");
     const end = pointOnSide(to, "top");
-    return orthogonal([start, { x: 715, y: start.y }, { x: 715, y: 522 }, { x: end.x, y: 522 }, end], "dispatch-tools", { text: "并行工具准备 · Parallel Tool Prep", x: 610, y: 522 });
+    return orthogonal([start, { x: 720, y: start.y }, { x: 720, y: 548 }, { x: end.x, y: 548 }, end], "dispatch-tools", { text: "并行工具准备 · Parallel Tool Prep", x: 610, y: 548 });
   }
   if (key === "tools-group->action") {
     const start = pointOnSide(from, "top", .66);
     const end = pointOnSide(to, "top");
-    return orthogonal([start, { x: start.x, y: 575 }, { x: end.x, y: 575 }, end], "independent-action", { text: "无依赖：直接执行 · Independent: Continue", x: 1080, y: 575 });
+    return orthogonal([start, { x: start.x, y: 587 }, { x: end.x, y: 587 }, end], "independent-action", { text: "无依赖：直接执行 · Independent: Continue", x: 1090, y: 587 });
   }
   if (key === "rag-context-assembly->context-dependency-gate") {
     const start = pointOnSide(from, "bottom", .72);
     const end = pointOnSide(to, "right");
-    return orthogonal([start, { x: start.x, y: 540 }, { x: 1320, y: 540 }, { x: 1320, y: end.y }, end], "context-gate-feed");
+    return orthogonal([start, { x: start.x, y: 548 }, { x: 1348, y: 548 }, { x: 1348, y: end.y }, end], "context-gate-feed");
   }
   if (key === "context-dependency-gate->action") {
     const start = pointOnSide(from, "right");
@@ -199,7 +199,7 @@ export function routeTopologyEdge(edge, context) {
     const fractions = { "vector-top-k": .2, "database-top-k": .5, "web-top-k": .8 };
     const start = pointOnSide(from, "bottom");
     const end = pointOnSide(to, "top", fractions[edge.from]);
-    const corridorY = 410;
+    const corridorY = 430;
     return orthogonal([start, { x: start.x, y: corridorY }, { x: end.x, y: corridorY }, end], "rag-fanin");
   }
   return direct(from, to);
@@ -210,6 +210,6 @@ export function routeRetryEdge(context) {
   const to = context.resolve("action");
   const start = pointOnSide(from, "bottom", .72);
   const end = pointOnSide(to, "bottom", .28);
-  const bendY = 686;
+  const bendY = 710;
   return curve(start, end, { x: start.x, y: bendY }, { x: end.x, y: bendY }, "retry-loop");
 }

@@ -296,7 +296,6 @@ body {
 
 .graph-edge.is-related {
   stroke: var(--live);
-  stroke-width: 2.2;
   opacity: 1;
 }
 
@@ -413,13 +412,13 @@ body {
 
 .graph-edge.is-live {
   stroke: var(--live);
-  stroke-width: 3;
   opacity: 1;
 }
 
-.edge-arrow { fill: var(--subtle); }
+.edge-arrow { fill: context-stroke; }
 .relation-label rect { fill: var(--surface); stroke: var(--line); stroke-width: .8; }
 .relation-label text { fill: var(--muted); font-size: 9px; font-weight: 600; }
+[data-layer="relation-labels"] { pointer-events: none; }
 .retry-loop { fill: none; stroke: var(--warn); stroke-width: 2; stroke-dasharray: 5 3; }
 
 [data-layer="guardrails"] rect {

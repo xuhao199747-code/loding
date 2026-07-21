@@ -24,13 +24,11 @@ describe("reference hierarchy layout", () => {
     renderGraph(document.querySelector("#graph"), { graph: demoGraph, run, onNodeSelect: vi.fn() });
   }
 
-  it("renders the outer boundary, nested panels, and every informative detail with bilingual group semantics", () => {
+  it("renders clean nested panels without an outer frame and keeps bilingual group semantics", () => {
     render();
 
     const system = document.querySelector('[data-system-boundary="agent-system"]');
-    expect(system).not.toBeNull();
-    expect(system.getAttribute("role")).toBe("group");
-    expect(system.getAttribute("aria-label")).toContain("Agent System");
+    expect(system).toBeNull();
 
     for (const group of demoGraph.groups) {
       const rendered = document.querySelector(`[data-group-id="${group.id}"]`);
@@ -67,7 +65,6 @@ describe("reference hierarchy layout", () => {
   it("uses only the explicit 1400 by 800 reference positions for the required hierarchy", () => {
     render();
 
-    const system = translatedBounds(document.querySelector('[data-system-boundary="agent-system"]'));
     const core = translatedBounds(document.querySelector('[data-group-id="core-group"]'));
     const rag = translatedBounds(document.querySelector('[data-group-id="rag-group"]'));
     const tools = translatedBounds(document.querySelector('[data-group-id="tools-group"]'));
@@ -76,13 +73,15 @@ describe("reference hierarchy layout", () => {
     const action = translatedBounds(document.querySelector('[data-node-id="action"]'));
     const observation = translatedBounds(document.querySelector('[data-node-id="observation"]'));
 
-    expect(system).toEqual(demoGraph.systemBoundary.bounds);
     expect(user).toEqual(demoGraph.nodes.find((node) => node.id === "user-task").referencePosition);
     expect(finalResponse).toEqual(demoGraph.nodes.find((node) => node.id === "final-response").referencePosition);
     expect(user.y + user.h).toBeLessThan(core.y);
     expect(finalResponse.x + finalResponse.w).toBeLessThan(core.x);
     expect(core.x + core.w).toBeLessThan(rag.x);
+    expect(rag.x - (core.x + core.w)).toBeGreaterThanOrEqual(80);
+    expect(core.y - (user.y + user.h)).toBeGreaterThanOrEqual(55);
     expect(tools.y).toBeGreaterThan(core.y);
+    expect(tools.y - (core.y + core.h)).toBeGreaterThanOrEqual(70);
     expect(action.x).toBeGreaterThan(tools.x);
     expect(observation.x).toBeGreaterThan(action.x);
     expect(document.querySelector('[data-layer="guardrails"] rect').getAttribute("width")).toBe("1400");
@@ -90,6 +89,11 @@ describe("reference hierarchy layout", () => {
 
   it("renders every declared relationship once with arrows and shape-boundary endpoints", () => {
     render();
+
+    const marker = document.querySelector("#arrow");
+    expect(marker.getAttribute("markerUnits")).toBe("userSpaceOnUse");
+    expect(marker.getAttribute("markerWidth")).toBe("7");
+    expect(marker.getAttribute("markerHeight")).toBe("7");
 
     const paths = [...document.querySelectorAll("[data-topology-edge]")];
     expect(paths.map((path) => path.dataset.topologyEdge)).toEqual(demoGraph.topologyEdges.map(topologyKey));
