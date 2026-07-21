@@ -264,8 +264,8 @@ function renderExecutableNode(node, state, isEndpoint, interaction) {
   if (isEndpoint) group.classList.add("is-relation-endpoint");
 
   if (proxy) group.classList.add("graph-node--proxy");
-  group.append(svg("rect", { width: w, height: h, rx: Math.min(10, h / 4) }));
   if (!proxy) {
+    group.append(svg("rect", { width: w, height: h, rx: Math.min(10, h / 4) }));
     const zh = svg("text", { x: w / 2, y: 17, "text-anchor": "middle", class: "primary-label node-label" });
     zh.textContent = node.label.zh;
     const en = svg("text", { x: w / 2, y: 31, "text-anchor": "middle", class: "node-en" });

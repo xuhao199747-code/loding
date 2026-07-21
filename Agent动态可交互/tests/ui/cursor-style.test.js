@@ -36,6 +36,21 @@ describe("Cursor-style neutral interface", () => {
     expect(relatedRule).not.toMatch(/stroke-width\s*:/);
   });
 
+  it("keeps active group, detail, and running-node outlines at their base width", () => {
+    const activeSelectors = [
+      ".reference-group.is-live > rect",
+      ".detail-node.is-live > rect",
+      ".graph-node.is-running > rect",
+      ".graph-node.is-relation-endpoint > rect",
+    ];
+
+    for (const selector of activeSelectors) {
+      const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const rule = styles.match(new RegExp(`${escaped}[^\\{]*\\{([^}]*)\\}`, "s"))?.[1] ?? "";
+      expect(rule, selector).not.toMatch(/stroke-width\s*:/);
+    }
+  });
+
   it("lets completed state color override callback type color", () => {
     expect(styles.lastIndexOf(".graph-edge.is-complete")).toBeGreaterThan(styles.lastIndexOf(".graph-edge.is-callback"));
   });

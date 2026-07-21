@@ -305,7 +305,25 @@ describe("GraphView", () => {
     expect(proxy.getAttribute("aria-hidden")).toBe("true");
     expect(proxy.hasAttribute("role")).toBe(false);
     expect(proxy.hasAttribute("tabindex")).toBe(false);
+    expect(proxy.querySelector("rect")).toBeNull();
+    expect(proxy.children).toHaveLength(0);
     expect(document.querySelector('[data-detail-node-id="rag-routing"]').getAttribute("role")).toBe("button");
+  });
+
+  it("does not draw a duplicate proxy outline over an active visible detail card", () => {
+    renderGraph(document.querySelector("#graph"), {
+      graph: demoGraph,
+      run: createRun(demoGraph, "tool-select-event"),
+      viewport: createViewport(),
+      onNodeSelect: vi.fn(),
+    });
+
+    const detail = document.querySelector('[data-detail-node-id="external-environment-business-system"]');
+    const proxy = document.querySelector('[data-node-id="tool-select"]');
+    expect(detail.classList.contains("is-live")).toBe(true);
+    expect(detail.querySelectorAll(":scope > rect")).toHaveLength(1);
+    expect(proxy.classList.contains("is-live")).toBe(true);
+    expect(proxy.querySelector("rect")).toBeNull();
   });
 
   it("opens SVG node detail by click, Enter, or Space", () => {

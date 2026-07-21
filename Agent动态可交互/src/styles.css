@@ -237,7 +237,6 @@ body {
 .reference-group.is-live > rect,
 .reference-group.is-relation-endpoint > rect {
   stroke: var(--live);
-  stroke-width: 2.5;
 }
 
 .reference-group.is-complete > rect { stroke: var(--done); }
@@ -303,22 +302,9 @@ body {
   opacity: .16 !important;
 }
 
-.graph-node--proxy > rect {
-  fill: transparent;
-  stroke: transparent;
-}
-
 .graph-node--proxy {
   pointer-events: none;
 }
-
-.graph-node--proxy.is-live > rect,
-.graph-node--proxy.is-relation-endpoint > rect {
-  stroke: var(--live);
-  stroke-width: 2.5;
-}
-
-.graph-node--proxy.is-complete > rect { stroke: var(--done); }
 
 .node-label {
   font-size: 11px;
@@ -335,7 +321,6 @@ body {
 .detail-node.is-live > rect,
 .detail-node.is-relation-endpoint > rect {
   stroke: var(--live);
-  stroke-width: 2.25;
 }
 
 .detail-node.is-complete > rect { stroke: var(--done); }
@@ -374,9 +359,9 @@ body {
   stroke: var(--done);
 }
 
-.graph-node.is-running > rect { stroke-width: 3; stroke-dasharray: 3 2; }
+.graph-node.is-running > rect { stroke-dasharray: 3 2; }
 .graph-node.is-success > rect { stroke: var(--done); stroke-width: 3; }
-.graph-node.is-relation-endpoint > rect { stroke-width: 3; stroke-dasharray: 7 3; }
+.graph-node.is-relation-endpoint > rect { stroke-dasharray: 7 3; }
 
 .graph-edge {
   fill: none;
