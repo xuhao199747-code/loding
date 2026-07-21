@@ -210,6 +210,19 @@ describe("reference hierarchy layout", () => {
     expect(document.querySelector('[data-detail-node-id="context-dependency-gate"]').classList.contains("is-independent")).toBe(true);
   });
 
+  it("animates memory retrieval and its bidirectional LLM routes", () => {
+    render(createRun(demoGraph, "memory-event"));
+
+    expect(document.querySelector('[data-group-id="memory-group"]').classList.contains("is-live")).toBe(true);
+    for (const id of ["memory-short-term", "memory-long-term", "memory-context", "memory-cross-conversation"]) {
+      expect(document.querySelector(`[data-detail-node-id="${id}"]`).classList.contains("is-live")).toBe(true);
+    }
+    for (const key of ["llm->memory", "memory->llm"]) {
+      expect(document.querySelector(`[data-topology-edge="${key}"]`).classList.contains("is-live")).toBe(true);
+      expect(document.querySelector(`[data-topology-edge-pulse-for="${key}"]`)).not.toBeNull();
+    }
+  });
+
   it("projects vector and web execution state onto every matching detail and path", () => {
     let vectorRun = transition(createRun(demoGraph, "rag-route"), { type: "CHOOSE_BRANCH", choice: "vector" });
     render(vectorRun);

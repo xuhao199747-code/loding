@@ -102,6 +102,14 @@ describe("execution state machine", () => {
     expect(run.trace.at(-1)).toMatchObject({ relation: "sequence", iteration: 1 });
   });
 
+  it("passes through memory retrieval between planning and parallel dispatch", () => {
+    let run = transition(createRun(demoGraph, "planning-event"), { type: "ADVANCE" });
+    expect(run).toMatchObject({ currentEventId: "memory-event", currentNodeId: "memory" });
+
+    run = transition(run, { type: "ADVANCE" });
+    expect(run).toMatchObject({ currentEventId: "llm-dispatch-event", currentNodeId: "llm" });
+  });
+
   it("advances callback events and records their trace", () => {
     const run = transition(createRun(demoGraph, "rag-callback"), { type: "ADVANCE" });
     expect(run).toMatchObject({ currentEventId: "llm-join-event", currentNodeId: "llm" });

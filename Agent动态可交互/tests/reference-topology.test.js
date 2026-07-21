@@ -153,6 +153,7 @@ describe("reference topology", () => {
       { id: "e2", from: "orchestrator", to: "llm", type: "sequence" },
       { id: "e3", from: "llm", to: "planning", type: "module" },
       { id: "e4", from: "planning", to: "llm", type: "callback" },
+      { id: "e5-request", from: "llm", to: "memory", type: "module" },
       { id: "e5", from: "memory", to: "llm", type: "callback" },
       { id: "e6", from: "llm", to: "rag-route", type: "decision" },
       { id: "e7", from: "rag-route", to: "vector-search", type: "parallel", branch: "vector" },
@@ -172,7 +173,8 @@ describe("reference topology", () => {
     expect(demoGraph.events.map(transitionProjection)).toEqual([
       { id: "input-event", nodeId: "user-task", relation: "sequence", edgeIds: ["e1"], next: "orchestrator-event", join: null, targetNodeId: null, choices: {} },
       { id: "orchestrator-event", nodeId: "orchestrator", relation: "sequence", edgeIds: ["e2"], next: "planning-event", join: null, targetNodeId: null, choices: {} },
-      { id: "planning-event", nodeId: "planning", relation: "module", edgeIds: ["e3", "e4"], next: "llm-dispatch-event", join: null, targetNodeId: null, choices: {} },
+      { id: "planning-event", nodeId: "planning", relation: "module", edgeIds: ["e3", "e4"], next: "memory-event", join: null, targetNodeId: null, choices: {} },
+      { id: "memory-event", nodeId: "memory", relation: "module", edgeIds: ["e5-request", "e5"], next: "llm-dispatch-event", join: null, targetNodeId: null, choices: {} },
       { id: "llm-dispatch-event", nodeId: "llm", relation: "decision", edgeIds: ["e6", "e13"], next: null, join: null, targetNodeId: null, choices: { rag: { branches: null, next: "rag-route", relation: null }, tools: { branches: null, next: "tool-select-event", relation: null }, parallel: { branches: null, next: "rag-route", relation: null } } },
       { id: "rag-route", nodeId: "rag-route", relation: "decision", edgeIds: ["e7", "e8"], next: null, join: null, targetNodeId: null, choices: { vector: { branches: ["vector"], next: "rag-retrieval", relation: null }, web: { branches: ["web"], next: "rag-retrieval", relation: null }, parallel: { branches: ["vector", "web"], next: "rag-retrieval", relation: null } } },
       { id: "rag-retrieval", nodeId: "rag-route", relation: "parallel", edgeIds: ["e7", "e8"], next: null, join: "rag-join", targetNodeId: null, choices: {} },

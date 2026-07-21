@@ -274,6 +274,7 @@ describe("AppView", () => {
     const next = document.querySelector('[data-action="primary"]');
     next.focus();
     activateWithKeyboard(next);
+    activateWithKeyboard(document.activeElement);
 
     expect(document.activeElement).toBe(document.querySelector('[data-branch-choice="rag"]'));
     activateWithKeyboard(document.activeElement);
@@ -360,7 +361,7 @@ describe("AppView", () => {
     view.render({ graph: demoGraph, run: createRun(demoGraph, "rag-route"), viewport: createViewport("rag-route", "rag") });
 
     expect(document.querySelector("[data-testid=run-progress]").textContent).toContain("轮次 1");
-    expect(document.querySelector("[data-testid=run-progress]").textContent).toContain(`事件 5 / ${demoGraph.events.length}`);
+    expect(document.querySelector("[data-testid=run-progress]").textContent).toContain(`事件 6 / ${demoGraph.events.length}`);
   });
 
   it("offers bilingual failure simulations", () => {
@@ -434,7 +435,7 @@ describe("AppView", () => {
     select.value = "no-results";
     select.dispatchEvent(new Event("change"));
 
-    for (let index = 0; index < 3; index += 1) document.querySelector('[data-action="primary"]').click();
+    for (let index = 0; index < 4; index += 1) document.querySelector('[data-action="primary"]').click();
     document.querySelector('[data-branch-choice="rag"]').click();
     document.querySelector('[data-branch-choice="vector"]').click();
     document.querySelector('[data-action="primary"]').click();
@@ -451,7 +452,7 @@ describe("AppView", () => {
     select.value = "no-results";
     select.dispatchEvent(new Event("change"));
 
-    for (let index = 0; index < 3; index += 1) document.querySelector('[data-action="primary"]').click();
+    for (let index = 0; index < 4; index += 1) document.querySelector('[data-action="primary"]').click();
     document.querySelector('[data-branch-choice="rag"]').click();
     document.querySelector('[data-branch-choice="vector"]').click();
     document.querySelector('[data-action="primary"]').click();

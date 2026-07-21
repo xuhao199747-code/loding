@@ -6,6 +6,7 @@ const TOPOLOGY_EDGE_META = new Map(Object.entries({
   "llm->final-response": { edgeId: "e17", projectionId: "e17" },
   "llm->planning": { edgeId: "e3", projectionId: "e3" },
   "planning->llm": { edgeId: "e4", projectionId: "e4", feedback: true },
+  "llm->memory": { edgeId: "e5-request", projectionId: "e5-request" },
   "memory->llm": { edgeId: "e5", projectionId: "e5", feedback: true },
   "llm->rag-query": { projectionId: "e6", presentationRelation: "parallel", lane: "rag", label: "并行检索 · Parallel Retrieval" },
   "rag-query->rag-routing": { edgeId: "e6", projectionId: "e6" },

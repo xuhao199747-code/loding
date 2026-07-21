@@ -91,6 +91,7 @@ export const demoGraph = {
     { id: "e2", from: "orchestrator", to: "llm", type: "sequence" },
     { id: "e3", from: "llm", to: "planning", type: "module" },
     { id: "e4", from: "planning", to: "llm", type: "callback" },
+    { id: "e5-request", from: "llm", to: "memory", type: "module" },
     { id: "e5", from: "memory", to: "llm", type: "callback" },
     { id: "e6", from: "llm", to: "rag-route", type: "decision" },
     { id: "e7", from: "rag-route", to: "vector-search", type: "parallel", branch: "vector" },
@@ -118,7 +119,8 @@ export const demoGraph = {
   events: [
     { id: "input-event", nodeId: "user-task", label: label("接收用户任务", "Receive Task"), relation: "sequence", edgeIds: ["e1"], next: "orchestrator-event" },
     { id: "orchestrator-event", nodeId: "orchestrator", label: label("初始化编排", "Initialize Orchestration"), relation: "sequence", edgeIds: ["e2"], next: "planning-event" },
-    { id: "planning-event", nodeId: "planning", label: label("生成执行计划", "Build Execution Plan"), relation: "module", edgeIds: ["e3", "e4"], next: "llm-dispatch-event" },
+    { id: "planning-event", nodeId: "planning", label: label("生成执行计划", "Build Execution Plan"), relation: "module", edgeIds: ["e3", "e4"], next: "memory-event" },
+    { id: "memory-event", nodeId: "memory", label: label("读取记忆与上下文", "Read Memory & Context"), relation: "module", edgeIds: ["e5-request", "e5"], next: "llm-dispatch-event" },
     { id: "llm-dispatch-event", nodeId: "llm", label: label("并行调度上下文与行动", "Dispatch Context and Action Lanes"), relation: "decision", edgeIds: ["e6", "e13"], choices: {
       rag: { label: label("仅检索增强", "RAG Only"), lanes: ["rag"], next: "rag-route", contextRequired: true },
       tools: { label: label("仅工具执行", "Tools Only"), lanes: ["tools"], next: "tool-select-event", contextRequired: false },
