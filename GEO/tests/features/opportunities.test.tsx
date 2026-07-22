@@ -8,15 +8,15 @@ describe("opportunities", () => {
   it("renders opportunity backlog", async () => {
     render(<OpportunitiesPage />, { wrapper: MemoryRouter })
 
-    await waitFor(() => expect(screen.getByText("内容机会")).toBeInTheDocument())
-    expect(screen.getByText("FAQ 缺口")).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByText("Content Opportunities")).toBeInTheDocument())
+    expect(screen.getByText("FAQ Gap")).toBeInTheDocument()
   })
 
   it("opens opportunity detail", async () => {
     render(<OpportunitiesPage />, { wrapper: MemoryRouter })
     const user = userEvent.setup()
 
-    await user.click(await screen.findByRole("button", { name: /查看机会/ }))
-    expect(screen.getByText("建议动作")).toBeInTheDocument()
+    await user.click(await screen.findByRole("button", { name: /View Opportunity/ }))
+    expect(screen.getByText("Recommended Action")).toBeInTheDocument()
   })
 })

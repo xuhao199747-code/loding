@@ -14,12 +14,12 @@ export function ProjectDetailPage() {
 
   return (
     <div>
-      <PageHeader title="项目详情" description={project ? `${project.brandName} · ${project.domain}` : "加载项目资料"} />
+      <PageHeader title="Project Details" description={project ? `${project.brandName} · ${project.domain}` : "Loading project profile"} />
       <Tabs defaultValue="profile">
         <TabsList>
-          <TabsTrigger value="profile">品牌资料</TabsTrigger>
-          <TabsTrigger value="competitors">竞品</TabsTrigger>
-          <TabsTrigger value="prompts">Prompt 组</TabsTrigger>
+          <TabsTrigger value="profile">Brand Profile</TabsTrigger>
+          <TabsTrigger value="competitors">Competitors</TabsTrigger>
+          <TabsTrigger value="prompts">Prompt Groups</TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
           <Card className="rounded-lg">
@@ -27,14 +27,14 @@ export function ProjectDetailPage() {
               <CardTitle className="text-base">{project?.brandName ?? "Nihao Jewelry"}</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
-              当前市场：{project?.market ?? "北美"} · 语言：{project?.language ?? "中文 / English"}
+              Current market: {project?.market ?? "North America"} · Language: {project?.language ?? "Chinese / English"}
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="competitors">
           <Card className="rounded-lg">
             <CardContent className="p-4 text-sm text-muted-foreground">
-              {(project?.competitors ?? []).map((competitor) => competitor.name).join("、")}
+              {(project?.competitors ?? []).map((competitor) => competitor.name).join(", ")}
             </CardContent>
           </Card>
         </TabsContent>
@@ -44,7 +44,7 @@ export function ProjectDetailPage() {
               {(project?.promptGroups ?? []).map((group) => (
                 <div key={group.id}>
                   <div className="font-medium">{group.name}</div>
-                  <div className="text-muted-foreground">{group.prompts.length} 个 Prompt</div>
+                  <div className="text-muted-foreground">{group.prompts.length} prompts</div>
                 </div>
               ))}
             </CardContent>

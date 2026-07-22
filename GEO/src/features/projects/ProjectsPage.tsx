@@ -21,27 +21,27 @@ export function ProjectsPage() {
   return (
     <div>
       <PageHeader
-        title="项目"
-        description="管理品牌、域名、竞品和 Prompt 监控范围。"
+        title="Projects"
+        description="Manage brands, domains, competitors, and prompt monitoring scope."
         actions={
           <Button size="sm" className="gap-2">
             <Plus className="size-4" />
-            新建项目
+            New Project
           </Button>
         }
       />
-      <FilterBar searchPlaceholder="搜索项目或域名" />
+      <FilterBar searchPlaceholder="Search projects or domains" />
       <DataTable empty={projects.length === 0}>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>项目</TableHead>
-              <TableHead>域名</TableHead>
-              <TableHead>市场</TableHead>
-              <TableHead>竞品</TableHead>
+              <TableHead>Projects</TableHead>
+              <TableHead>Domain</TableHead>
+              <TableHead>Market</TableHead>
+              <TableHead>Competitors</TableHead>
               <TableHead>Prompt</TableHead>
-              <TableHead>状态</TableHead>
-              <TableHead>最后诊断</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Last Diagnosis</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -58,7 +58,7 @@ export function ProjectsPage() {
                 <TableCell>{project.competitors.length}</TableCell>
                 <TableCell>{project.promptGroups.reduce((total, group) => total + group.prompts.length, 0)}</TableCell>
                 <TableCell>
-                  <StatusBadge tone="success">监控中</StatusBadge>
+                  <StatusBadge tone="success">Monitoring</StatusBadge>
                 </TableCell>
                 <TableCell>{formatDateTime(project.lastRunAt)}</TableCell>
               </TableRow>

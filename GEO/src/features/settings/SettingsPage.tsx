@@ -8,32 +8,32 @@ import { Textarea } from "@/components/ui/textarea"
 export function SettingsPage() {
   return (
     <div>
-      <PageHeader title="设置" description="维护品牌资料、竞品、Prompt 库和模型展示偏好。" />
+      <PageHeader title="Settings" description="Maintain brand profiles, competitors, prompt library, and model display preferences." />
       <Tabs defaultValue="brand">
         <TabsList>
-          <TabsTrigger value="brand">品牌资料</TabsTrigger>
-          <TabsTrigger value="prompts">Prompt 库</TabsTrigger>
-          <TabsTrigger value="models">模型展示</TabsTrigger>
+          <TabsTrigger value="brand">Brand Profile</TabsTrigger>
+          <TabsTrigger value="prompts">Prompt Library</TabsTrigger>
+          <TabsTrigger value="models">Model Display</TabsTrigger>
         </TabsList>
         <TabsContent value="brand">
           <Card className="rounded-lg">
-            <CardHeader><CardTitle className="text-base">品牌资料</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base">Brand Profile</CardTitle></CardHeader>
             <CardContent className="grid gap-4">
               <Input defaultValue="Nihao Jewelry" />
               <Input defaultValue="www.nihaojewelry.com" />
               <Textarea defaultValue="Wholesale fashion jewelry and accessories supplier." />
-              <Button className="w-fit">保存</Button>
+              <Button className="w-fit">Save</Button>
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="prompts">
           <Card className="rounded-lg">
-            <CardContent className="p-4 text-sm text-muted-foreground">批发采购、物流与服务、竞品对比。</CardContent>
+            <CardContent className="p-4 text-sm text-muted-foreground">Wholesale sourcing, shipping and service, and competitor comparisons.</CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="models">
           <Card className="rounded-lg">
-            <CardContent className="p-4 text-sm text-muted-foreground">ChatGPT、Perplexity、Gemini、Claude 仅作为前端 mock 展示。</CardContent>
+            <CardContent className="p-4 text-sm text-muted-foreground">ChatGPT, Perplexity, Gemini, and Claude are shown as frontend mocks only.</CardContent>
           </Card>
         </TabsContent>
       </Tabs>

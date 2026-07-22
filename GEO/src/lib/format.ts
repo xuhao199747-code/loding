@@ -8,7 +8,7 @@ export function formatPercent(value: number): string {
 }
 
 export function formatDateTime(value: string): string {
-  return new Intl.DateTimeFormat("zh-CN", {
+  return new Intl.DateTimeFormat("en-US", {
     month: "2-digit",
     day: "2-digit",
     hour: "2-digit",
@@ -18,9 +18,9 @@ export function formatDateTime(value: string): string {
 
 export function getSeverityLabel(severity: "high" | "medium" | "low"): string {
   const labels = {
-    high: "高优先级",
-    medium: "中优先级",
-    low: "低优先级",
+    high: "High Priority",
+    medium: "Medium Priority",
+    low: "Low Priority",
   }
 
   return labels[severity]

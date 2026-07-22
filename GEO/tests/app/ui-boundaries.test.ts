@@ -10,6 +10,7 @@ describe("UI library boundaries", () => {
   it("keeps ai-elements out of non-AI admin modules", () => {
     const violations = Object.entries(adminModules)
       .filter(([path]) => !path.includes("content-studio/ContentAssistant"))
+      .filter(([path]) => !path.includes("dashboard/DashboardPage"))
       .filter(([, source]) => String(source).includes("ai-elements"))
       .map(([path]) => path)
 

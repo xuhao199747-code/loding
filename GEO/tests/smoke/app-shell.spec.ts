@@ -17,7 +17,7 @@ const routes = [
 for (const route of routes) {
   test(`renders ${route}`, async ({ page }) => {
     await page.goto(route)
-    await expect(page.getByText("AlphaRank")).toBeVisible()
+    await expect(page.getByRole("img", { name: "AlphaRank logo" })).toBeVisible()
     await expect(page.locator("main")).toBeVisible()
   })
 }

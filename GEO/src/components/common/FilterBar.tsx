@@ -8,7 +8,7 @@ type FilterBarProps = {
   actions?: ReactNode
 }
 
-export function FilterBar({ searchPlaceholder = "搜索", filters, actions }: FilterBarProps) {
+export function FilterBar({ searchPlaceholder = "Search", filters, actions }: FilterBarProps) {
   return (
     <div className="mb-4 flex items-center justify-between gap-3 rounded-lg border border-border bg-card p-3 max-lg:flex-col max-lg:items-stretch">
       <div className="relative min-w-64 max-lg:w-full">

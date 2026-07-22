@@ -6,6 +6,7 @@ import { ContentStudioPage } from "@/features/content-studio/ContentStudioPage"
 import { DashboardPage } from "@/features/dashboard/DashboardPage"
 import { GeoDiagnosisDetailPage } from "@/features/geo-diagnosis/GeoDiagnosisDetailPage"
 import { GeoDiagnosisPage } from "@/features/geo-diagnosis/GeoDiagnosisPage"
+import { GeoDiagnosisWorkbenchPage } from "@/features/geo-diagnosis/GeoDiagnosisWorkbenchPage"
 import { OpportunitiesPage } from "@/features/opportunities/OpportunitiesPage"
 import { ProjectDetailPage } from "@/features/projects/ProjectDetailPage"
 import { ProjectsPage } from "@/features/projects/ProjectsPage"
@@ -19,9 +20,11 @@ export function AppRoutes() {
     <Routes>
       <Route element={<AppShell />}>
         <Route index element={<DashboardPage />} />
+        <Route path="marketing-agent" element={<DashboardPage />} />
         <Route path="projects" element={<ProjectsPage />} />
         <Route path="projects/:projectId" element={<ProjectDetailPage />} />
         <Route path="diagnosis" element={<GeoDiagnosisPage />} />
+        <Route path="geo-diagnosis" element={<GeoDiagnosisWorkbenchPage />} />
         <Route path="diagnosis/:runId" element={<GeoDiagnosisDetailPage />} />
         <Route path="answer-monitor" element={<AnswerMonitorPage />} />
         <Route path="sentiment" element={<SentimentAnalysisPage />} />

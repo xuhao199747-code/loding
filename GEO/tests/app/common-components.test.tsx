@@ -5,15 +5,15 @@ import { StatusBadge } from "@/components/common/StatusBadge"
 
 describe("common components", () => {
   it("renders a metric card", () => {
-    render(<MetricCard title="GEO 综合" value="72/100" helper="较上周 +8.2%" />)
+    render(<MetricCard title="GEO Composite" value="72/100" helper="+8.2% vs last week" />)
 
-    expect(screen.getByText("GEO 综合")).toBeInTheDocument()
+    expect(screen.getByText("GEO Composite")).toBeInTheDocument()
     expect(screen.getByText("72/100")).toBeInTheDocument()
   })
 
   it("renders a Chinese severity badge", () => {
-    render(<StatusBadge tone="danger">高优先级</StatusBadge>)
+    render(<StatusBadge tone="danger">High Priority</StatusBadge>)
 
-    expect(screen.getByText("高优先级")).toBeInTheDocument()
+    expect(screen.getByText("High Priority")).toBeInTheDocument()
   })
 })

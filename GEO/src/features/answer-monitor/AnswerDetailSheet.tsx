@@ -15,24 +15,24 @@ export function AnswerDetailSheet({ item, open, onOpenChange }: AnswerDetailShee
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full overflow-y-auto sm:max-w-2xl">
         <SheetHeader>
-          <SheetTitle>完整答案</SheetTitle>
-          <SheetDescription>{item?.prompt ?? "选择一条 AI 答案查看详情"}</SheetDescription>
+          <SheetTitle>AI Response Details</SheetTitle>
+          <SheetDescription>{item?.prompt ?? "Select an AI answer to view details"}</SheetDescription>
         </SheetHeader>
         {item ? (
           <Tabs defaultValue="answer" className="mt-6">
             <TabsList>
-              <TabsTrigger value="answer">答案</TabsTrigger>
-              <TabsTrigger value="sources">引用来源</TabsTrigger>
-              <TabsTrigger value="claims">提取主张</TabsTrigger>
+              <TabsTrigger value="answer">Answer</TabsTrigger>
+              <TabsTrigger value="sources">Citation Sources</TabsTrigger>
+              <TabsTrigger value="claims">Extracted Claims</TabsTrigger>
             </TabsList>
             <TabsContent value="answer" className="space-y-4">
               <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm leading-6">{item.fullAnswer}</div>
               <div className="flex gap-2">
                 <StatusBadge tone={item.brandMentioned ? "success" : "warning"}>
-                  {item.brandMentioned ? "提及品牌" : "未提及品牌"}
+                  {item.brandMentioned ? "Brand mentioned" : "Brand not mentioned"}
                 </StatusBadge>
                 <StatusBadge tone={item.citedOfficialDomain ? "success" : "danger"}>
-                  {item.citedOfficialDomain ? "引用官网" : "未引用官网"}
+                  {item.citedOfficialDomain ? "Official cited" : "Official not cited"}
                 </StatusBadge>
               </div>
             </TabsContent>

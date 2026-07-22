@@ -14,7 +14,7 @@ import { getLatestDiagnosisRun } from "@/features/geo-diagnosis/diagnosis-servic
 
 const chartConfig = {
   value: {
-    label: "GEO 综合",
+    label: "GEO 综合分",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig
@@ -24,21 +24,28 @@ export function GeoDiagnosisDetailPage() {
   const [trend, setTrend] = useState<{ label: string; value: number }[]>(scoreTrend)
 
   useEffect(() => {
+    let isMounted = true
+
     void Promise.all([getLatestDiagnosisRun(), getMockScoreTrend()]).then(([nextRun, nextTrend]) => {
+      if (!isMounted) return
       setRun(nextRun)
       setTrend(nextTrend)
     })
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   return (
     <div>
-      <PageHeader title="诊断详情" description={run ? `${run.domain} · ${formatDateTime(run.createdAt)}` : "加载诊断结果"} />
+      <PageHeader title="诊断详情" description={run ? `${run.domain} · ${formatDateTime(run.createdAt)}` : "正在加载诊断结果"} />
       {run ? (
         <>
           <Card className="mb-4 rounded-lg">
             <CardContent className="flex items-center justify-between gap-4 p-5 max-md:flex-col max-md:items-start">
               <div>
-                <div className="text-sm text-muted-foreground">GEO 综合</div>
+                <div className="text-sm text-muted-foreground">GEO 综合分</div>
                 <div className="mt-1 text-4xl font-semibold tracking-normal">{formatScore(run.geoScore)}</div>
               </div>
               <div className="max-w-3xl text-sm text-muted-foreground">{run.summary}</div>
@@ -46,10 +53,10 @@ export function GeoDiagnosisDetailPage() {
             </CardContent>
           </Card>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <ScoreCard label="AI 可引用性" score={run.aiCitability} helper="官网可作为 AI 答案来源的概率" />
-            <ScoreCard label="品牌权威性" score={run.brandAuthority} helper="品牌是否被稳定识别和信任" />
-            <ScoreCard label="E-E-A-T 信号" score={run.eeatSignal} helper="经验、专业、权威和可信信号" />
-            <ScoreCard label="内容结构" score={66} helper="标题、FAQ、证据和 Schema 清晰度" />
+            <ScoreCard label="AI 可引用性" score={run.aiCitability} helper="官网内容被 AI 作为回答来源引用的可能性" />
+            <ScoreCard label="品牌权威度" score={run.brandAuthority} helper="品牌是否被持续识别并建立信任" />
+            <ScoreCard label="E-E-A-T 信号" score={run.eeatSignal} helper="经验、专业性、权威性与可信度信号" />
+            <ScoreCard label="内容结构" score={66} helper="标题、FAQ、证据与结构化数据的清晰度" />
           </div>
           <div className="mt-4 grid gap-4 xl:grid-cols-[1fr_420px]">
             <Card className="rounded-lg">
@@ -65,7 +72,7 @@ export function GeoDiagnosisDetailPage() {
                         <div className="space-y-3 text-sm text-muted-foreground">
                           <p>{recommendation.reason}</p>
                           <p className="text-foreground">{recommendation.action}</p>
-                          <div>影响 Prompt：{recommendation.affectedPrompts.join("、")}</div>
+                          <div>影响提问：{recommendation.affectedPrompts.join(", ")}</div>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
@@ -75,7 +82,7 @@ export function GeoDiagnosisDetailPage() {
             </Card>
             <Card className="rounded-lg">
               <CardHeader>
-                <CardTitle className="text-base">分数趋势</CardTitle>
+                <CardTitle className="text-base">评分趋势</CardTitle>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={chartConfig} className="h-64 w-full">

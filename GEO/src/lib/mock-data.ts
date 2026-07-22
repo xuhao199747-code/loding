@@ -11,11 +11,11 @@ import type {
 export const projects: Project[] = [
   {
     id: "project-nihao",
-    name: "Nihao Jewelry GEO 优化",
+    name: "Nihao Jewelry GEO Optimization",
     brandName: "Nihao Jewelry",
     domain: "www.nihaojewelry.com",
-    market: "北美",
-    language: "中文 / English",
+    market: "North America",
+    language: "Chinese / English",
     status: "active",
     lastRunAt: "2026-03-10T14:22:00.000Z",
     competitors: [
@@ -26,7 +26,7 @@ export const projects: Project[] = [
     promptGroups: [
       {
         id: "prompt-wholesale",
-        name: "批发采购",
+        name: "Wholesale Sourcing",
         prompts: [
           "Where can I buy wholesale fashion jewelry online?",
           "Best wholesale jewelry suppliers for boutiques",
@@ -35,7 +35,7 @@ export const projects: Project[] = [
       },
       {
         id: "prompt-shipping",
-        name: "物流与服务",
+        name: "Shipping and Service",
         prompts: [
           "How long does Nihao Jewelry shipping take?",
           "Does Nihao Jewelry have responsive customer service?",
@@ -56,25 +56,25 @@ export const diagnosisRuns: DiagnosisRun[] = [
     brandAuthority: 74,
     eeatSignal: 61,
     priority: "high",
-    summary: "AI 答案能识别品牌和主要卖点，但对物流时效与引用来源的表达不够稳定。",
+    summary: "AI answers recognize the brand and its core value props, but shipping timelines and citation sources are still inconsistent.",
     recommendations: [
       {
         id: "rec-shipping-faq",
-        title: "补强物流 FAQ 与时效证据",
+        title: "Strengthen Shipping FAQ and Delivery Evidence",
         severity: "high",
-        reason: "运输延迟相关回答出现负面情绪，且 AI 经常引用第三方评论而不是官网说明。",
+        reason: "Shipping-delay answers show negative sentiment, and AI often cites third-party reviews instead of official site guidance.",
         affectedPrompts: ["How long does Nihao Jewelry shipping take?"],
         affectedUrls: ["https://www.nihaojewelry.com/shipping"],
-        action: "在物流页面增加按地区和运输方式拆分的时效表，并补充承运商说明。",
+        action: "Add delivery-time tables by region and carrier method on the shipping page, with carrier notes.",
       },
       {
         id: "rec-eeat-author",
-        title: "增加采购指南作者与审核信息",
+        title: "Add Author and Review Details to the Sourcing Guide",
         severity: "medium",
-        reason: "批发采购类内容缺少作者、更新时间和专业审核信号。",
+        reason: "Wholesale sourcing content lacks author, update, and expert review signals.",
         affectedPrompts: ["Best wholesale jewelry suppliers for boutiques"],
         affectedUrls: ["https://www.nihaojewelry.com/blog/wholesale-guide"],
-        action: "为核心指南增加作者信息、更新时间、采购经验和数据来源。",
+        action: "Add author details, update dates, sourcing experience, and data sources to core guides.",
       },
     ],
   },
@@ -88,7 +88,7 @@ export const diagnosisRuns: DiagnosisRun[] = [
     brandAuthority: 70,
     eeatSignal: 55,
     priority: "medium",
-    summary: "品牌可见度稳定，但可引用内容密度偏低。",
+    summary: "Brand visibility is stable, but citability density remains low.",
     recommendations: [],
   },
   {
@@ -101,7 +101,7 @@ export const diagnosisRuns: DiagnosisRun[] = [
     brandAuthority: 66,
     eeatSignal: 49,
     priority: "medium",
-    summary: "AI 更常引用竞品或平台型页面，官网证据不足。",
+    summary: "AI more often cites competitors or marketplace pages, while official evidence is insufficient.",
     recommendations: [],
   },
 ]
@@ -122,7 +122,7 @@ export const answerItems: AnswerMonitorItem[] = [
     fullAnswer:
       "Nihao Jewelry is often mentioned as an affordable wholesale fashion jewelry supplier with a large catalog, no minimum order requirement, and global shipping options. Buyers should compare shipping time, return policy, and support responsiveness before ordering.",
     citedSources: ["https://www.nihaojewelry.com", "https://www.nihaojewelry.com/shipping"],
-    extractedClaims: ["产品目录丰富", "无最低订单要求", "支持全球发货"],
+    extractedClaims: ["Rich product catalog", "No minimum order requirement", "Supports global shipping"],
   },
   {
     id: "answer-2",
@@ -139,7 +139,7 @@ export const answerItems: AnswerMonitorItem[] = [
     fullAnswer:
       "Shipping times vary and some users report delays depending on region and carrier. Nihao Jewelry lists several delivery methods, but buyers should check current shipping estimates before purchase.",
     citedSources: ["https://example-review-site.test/nihao-shipping"],
-    extractedClaims: ["运输时间不稳定", "部分用户反馈延迟", "购买前应确认当前时效"],
+    extractedClaims: ["Shipping times are inconsistent", "Some users report delays", "Confirm current delivery estimates before purchase"],
   },
   {
     id: "answer-3",
@@ -156,7 +156,7 @@ export const answerItems: AnswerMonitorItem[] = [
     fullAnswer:
       "Nihao Jewelry can be suitable for small boutiques because it has low price points and many SKUs. For bulk orders, buyers should sample first and confirm shipping, refund, and customer support details.",
     citedSources: ["https://www.nihaojewelry.com/help"],
-    extractedClaims: ["适合小型精品店", "建议先样品采购", "需要确认售后政策"],
+    extractedClaims: ["Suitable for small boutiques", "Sample first before bulk ordering", "Confirm after-sales policy"],
   },
   {
     id: "answer-4",
@@ -173,7 +173,7 @@ export const answerItems: AnswerMonitorItem[] = [
     fullAnswer:
       "Faire, Alibaba, and several regional suppliers are commonly recommended for boutique wholesale jewelry sourcing. Selection, delivery predictability, and return policy should be compared.",
     citedSources: ["https://www.faire.com", "https://www.alibaba.com"],
-    extractedClaims: ["竞品被优先推荐", "AlphaRank 监测品牌缺席"],
+    extractedClaims: ["Competitors are recommended first", "The monitored AlphaRank brand is absent"],
   },
   {
     id: "answer-5",
@@ -190,7 +190,7 @@ export const answerItems: AnswerMonitorItem[] = [
     fullAnswer:
       "The brand describes 24/7 support and personal account managers for buyers. Independent reviews are mixed, so buyers should verify response expectations before placing urgent orders.",
     citedSources: ["https://www.nihaojewelry.com/contact-us"],
-    extractedClaims: ["提供 24/7 支持", "有客户经理", "第三方评价不完全一致"],
+    extractedClaims: ["Offers 24/7 support", "Has account managers", "Third-party reviews are mixed"],
   },
   {
     id: "answer-6",
@@ -207,7 +207,7 @@ export const answerItems: AnswerMonitorItem[] = [
     fullAnswer:
       "Nihao Jewelry is relevant because it allows buyers to purchase without a strict MOQ. This makes it useful for testing styles before larger boutique purchases.",
     citedSources: ["https://www.nihaojewelry.com"],
-    extractedClaims: ["无严格 MOQ", "适合测试款式", "对小批量采购友好"],
+    extractedClaims: ["No strict MOQ", "Good for testing styles", "Friendly for small-batch sourcing"],
   },
 ]
 
@@ -215,51 +215,51 @@ export const topicInsights: TopicInsight[] = [
   {
     id: "topic-shipping-delay",
     projectId: "project-nihao",
-    topic: "运输延迟",
+    topic: "Shipping Delays",
     sentiment: "negative",
     occurrences: 58,
     changePercent: -4.9,
-    summary: "运输时效是最常见的负面话题，AI 回答倾向提醒用户提前确认配送方式。",
+    summary: "Delivery timing is the most common negative topic, and AI answers tend to tell users to confirm shipping methods in advance.",
     evidence: ["Shipping times vary and some users report delays depending on region and carrier."],
   },
   {
     id: "topic-service",
     projectId: "project-nihao",
-    topic: "响应迅速的客户服务",
+    topic: "Responsive Customer Service",
     sentiment: "positive",
     occurrences: 57,
     changePercent: 14.6,
-    summary: "客服响应被频繁描述为正面卖点，但需要更多官方页面证据支撑。",
+    summary: "Customer support is frequently described as a positive selling point, but needs more official-page evidence.",
     evidence: ["The brand describes 24/7 support and personal account managers for buyers."],
   },
   {
     id: "topic-no-moq",
     projectId: "project-nihao",
-    topic: "无最低订单数量",
+    topic: "No Minimum Order Quantity",
     sentiment: "positive",
     occurrences: 44,
     changePercent: 8.2,
-    summary: "无 MOQ 是 AI 回答中最稳定的差异化卖点之一。",
+    summary: "No MOQ is one of the most stable differentiators in AI answers.",
     evidence: ["Nihao Jewelry is relevant because it allows buyers to purchase without a strict MOQ."],
   },
   {
     id: "topic-affordable",
     projectId: "project-nihao",
-    topic: "实惠的价格",
+    topic: "Affordable Pricing",
     sentiment: "positive",
     occurrences: 32,
     changePercent: 0,
-    summary: "低价和丰富 SKU 常与批发采购意图一起出现。",
+    summary: "Low prices and broad SKU coverage often appear with wholesale sourcing intent.",
     evidence: ["It has low price points and many SKUs."],
   },
   {
     id: "topic-competitive",
     projectId: "project-nihao",
-    topic: "竞争性定价",
+    topic: "Competitive Pricing",
     sentiment: "negative",
     occurrences: 21,
     changePercent: -12.9,
-    summary: "AI 有时会将价格优势转化为质量或履约风险提示。",
+    summary: "AI sometimes turns pricing advantages into quality or fulfillment risk caveats.",
     evidence: ["Buyers should compare shipping time, return policy, and support responsiveness before ordering."],
   },
 ]
@@ -268,7 +268,7 @@ export const opportunities: ContentOpportunity[] = [
   {
     id: "opp-faq-shipping",
     projectId: "project-nihao",
-    title: "补齐运输时效 FAQ",
+    title: "Complete the Shipping Timeline FAQ",
     type: "faq_gap",
     severity: "high",
     impactScore: 91,
@@ -277,13 +277,13 @@ export const opportunities: ContentOpportunity[] = [
     dueDate: "2026-03-18",
     affectedPrompts: ["How long does Nihao Jewelry shipping take?"],
     affectedUrls: ["https://www.nihaojewelry.com/shipping"],
-    evidence: "运输延迟在 AI 答案中出现 58 次，且官网引用不足。",
-    suggestedAction: "增加按地区、承运商、订单处理阶段拆分的 FAQ，并加入最近更新时间。",
+    evidence: "Shipping delays appeared 58 times in AI answers, with insufficient official citations.",
+    suggestedAction: "Add FAQ entries by region, carrier, and order-processing stage, including the latest update time.",
   },
   {
     id: "opp-source-evidence",
     projectId: "project-nihao",
-    title: "为批发采购指南补充来源证据",
+    title: "Add Source Evidence to the Wholesale Sourcing Guide",
     type: "source_evidence_gap",
     severity: "high",
     impactScore: 86,
@@ -292,13 +292,13 @@ export const opportunities: ContentOpportunity[] = [
     dueDate: "2026-03-20",
     affectedPrompts: ["Best wholesale jewelry suppliers for boutiques"],
     affectedUrls: ["https://www.nihaojewelry.com/blog/wholesale-guide"],
-    evidence: "Claude 回答中品牌缺席，竞品 Faire 和 Alibaba 被优先推荐。",
-    suggestedAction: "补充采购流程、样品建议、退换政策和买家案例。",
+    evidence: "The brand is absent in Claude answers, while Faire and Alibaba are recommended first.",
+    suggestedAction: "Add sourcing workflow, sample guidance, return policy, and buyer cases.",
   },
   {
     id: "opp-comparison",
     projectId: "project-nihao",
-    title: "建设 Nihao vs 竞品对比页",
+    title: "Build a Nihao vs Competitors Comparison Page",
     type: "comparison_gap",
     severity: "medium",
     impactScore: 78,
@@ -307,13 +307,13 @@ export const opportunities: ContentOpportunity[] = [
     dueDate: "2026-03-25",
     affectedPrompts: ["Where can I buy wholesale fashion jewelry online?"],
     affectedUrls: ["https://www.nihaojewelry.com"],
-    evidence: "竞品在采购平台类 Prompt 中频繁共现。",
-    suggestedAction: "用表格说明 MOQ、SKU、配送、客服和适合场景。",
+    evidence: "Competitors frequently co-occur in marketplace sourcing prompts.",
+    suggestedAction: "Use a table to explain MOQ, SKU coverage, delivery, support, and best-fit scenarios.",
   },
   {
     id: "opp-claim-clarity",
     projectId: "project-nihao",
-    title: "澄清 24/7 客服主张",
+    title: "Clarify the 24/7 Support Claim",
     type: "claim_clarity",
     severity: "medium",
     impactScore: 73,
@@ -322,13 +322,13 @@ export const opportunities: ContentOpportunity[] = [
     dueDate: "2026-03-16",
     affectedPrompts: ["Does Nihao Jewelry have responsive customer service?"],
     affectedUrls: ["https://www.nihaojewelry.com/contact-us"],
-    evidence: "AI 同时引用官方支持信息和第三方 mixed reviews。",
-    suggestedAction: "增加响应时间说明、支持渠道、服务 SLA 和节假日说明。",
+    evidence: "AI cites both official support information and third-party mixed reviews.",
+    suggestedAction: "Add response-time expectations, support channels, service SLA, and holiday coverage.",
   },
   {
     id: "opp-eeat",
     projectId: "project-nihao",
-    title: "增加作者与审核信息",
+    title: "Add Author and Review Information",
     type: "eeat_gap",
     severity: "medium",
     impactScore: 68,
@@ -337,13 +337,13 @@ export const opportunities: ContentOpportunity[] = [
     dueDate: "2026-03-28",
     affectedPrompts: ["Is Nihao Jewelry reliable for bulk orders?"],
     affectedUrls: ["https://www.nihaojewelry.com/blog/wholesale-guide"],
-    evidence: "E-E-A-T 信号分为 61/100，内容专业来源不清晰。",
-    suggestedAction: "增加作者背景、采购经验、审核人和更新时间。",
+    evidence: "E-E-A-T signal score is 61/100, and expert sources are unclear.",
+    suggestedAction: "Add author background, sourcing experience, reviewer, and updated date.",
   },
   {
     id: "opp-schema",
     projectId: "project-nihao",
-    title: "结构化 FAQ Schema",
+    title: "Structure FAQ Schema",
     type: "structure_schema",
     severity: "low",
     impactScore: 54,
@@ -352,15 +352,15 @@ export const opportunities: ContentOpportunity[] = [
     dueDate: "2026-03-12",
     affectedPrompts: ["Wholesale jewelry supplier with no minimum order"],
     affectedUrls: ["https://www.nihaojewelry.com/help"],
-    evidence: "FAQ 内容存在，但 AI 摘取稳定性偏低。",
-    suggestedAction: "为 FAQ 页面添加结构化数据和更清晰的问题标题。",
+    evidence: "FAQ content exists, but AI extraction stability is low.",
+    suggestedAction: "Add structured data and clearer question titles to FAQ pages.",
   },
 ]
 
 export const tasks: TaskItem[] = [
   {
     id: "task-1",
-    title: "重写运输 FAQ",
+    title: "Rewrite Shipping FAQ",
     status: "planned",
     owner: "Mia",
     priority: "high",

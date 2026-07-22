@@ -10,7 +10,7 @@ type DataTableProps = {
   isLoading?: boolean
 }
 
-export function DataTable({ children, empty = false, emptyTitle = "暂无数据", isLoading = false }: DataTableProps) {
+export function DataTable({ children, empty = false, emptyTitle = "No data yet", isLoading = false }: DataTableProps) {
   if (isLoading) {
     return (
       <div className="rounded-lg border border-border bg-card">

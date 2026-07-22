@@ -13,13 +13,13 @@ import { opportunities as initialOpportunities } from "@/lib/mock-data"
 import { listOpportunities } from "@/features/opportunities/opportunities-service"
 
 const typeLabels: Record<OpportunityType, string> = {
-  faq_gap: "FAQ 缺口",
-  source_evidence_gap: "证据缺口",
-  comparison_gap: "对比内容缺口",
-  claim_clarity: "主张澄清",
-  negative_sentiment_response: "负面回应",
-  eeat_gap: "E-E-A-T 缺口",
-  structure_schema: "结构化数据",
+  faq_gap: "FAQ Gap",
+  source_evidence_gap: "Evidence Gap",
+  comparison_gap: "Comparison Content Gap",
+  claim_clarity: "Claim Clarity",
+  negative_sentiment_response: "Negative Response",
+  eeat_gap: "E-E-A-T Gap",
+  structure_schema: "Structured Data",
 }
 
 export function OpportunitiesPage() {
@@ -32,20 +32,20 @@ export function OpportunitiesPage() {
 
   return (
     <div>
-      <PageHeader title="内容机会" description="汇总诊断、答案监控和情感分析发现的问题，并转成内容优化 backlog。" />
-      <FilterBar searchPlaceholder="搜索机会、Prompt 或 URL" />
+      <PageHeader title="Content Opportunities" description="Collect issues from diagnosis, answer monitoring, and sentiment analysis, then turn them into a content optimization backlog." />
+      <FilterBar searchPlaceholder="Search opportunities, prompts, or URLs" />
       <DataTable empty={items.length === 0}>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>机会</TableHead>
-              <TableHead>类型</TableHead>
-              <TableHead>严重度</TableHead>
-              <TableHead>影响分</TableHead>
-              <TableHead>影响 Prompt</TableHead>
-              <TableHead>状态</TableHead>
-              <TableHead>负责人</TableHead>
-              <TableHead className="text-right">操作</TableHead>
+              <TableHead>Opportunity</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Severity</TableHead>
+              <TableHead>Impact Score</TableHead>
+              <TableHead>Affected Prompts</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Owner</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -58,7 +58,7 @@ export function OpportunitiesPage() {
                 <TableCell>{typeLabels[item.type]}</TableCell>
                 <TableCell>
                   <StatusBadge tone={item.severity === "high" ? "danger" : item.severity === "medium" ? "warning" : "neutral"}>
-                    {item.severity === "high" ? "高" : item.severity === "medium" ? "中" : "低"}
+                    {item.severity === "high" ? "High" : item.severity === "medium" ? "Medium" : "Low"}
                   </StatusBadge>
                 </TableCell>
                 <TableCell>{item.impactScore}</TableCell>
@@ -73,21 +73,21 @@ export function OpportunitiesPage() {
                       variant="ghost"
                       size="sm"
                       className="gap-2"
-                      aria-label={index === 0 ? "查看机会" : `查看第 ${index + 1} 个机会`}
+                      aria-label={index === 0 ? "View Opportunity" : `View opportunity ${index + 1}`}
                       onClick={() => setSelected(item)}
                     >
                       <Eye className="size-4" />
-                      {index === 0 ? "查看机会" : "查看"}
+                      {index === 0 ? "View Opportunity" : "View"}
                     </Button>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" aria-label="更多操作">
+                        <Button variant="ghost" size="icon" aria-label="More actions">
                           <MoreHorizontal className="size-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>创建任务</DropdownMenuItem>
-                        <DropdownMenuItem>标记完成</DropdownMenuItem>
+                        <DropdownMenuItem>Create Task</DropdownMenuItem>
+                        <DropdownMenuItem>Mark Complete</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>

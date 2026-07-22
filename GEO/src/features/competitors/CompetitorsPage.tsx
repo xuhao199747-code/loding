@@ -12,18 +12,18 @@ const competitorData = [
 ]
 
 const chartConfig = {
-  mentions: { label: "提及率", color: "var(--chart-1)" },
-  citations: { label: "引用率", color: "var(--chart-2)" },
+  mentions: { label: "Mention Rate", color: "var(--chart-1)" },
+  citations: { label: "Citation Rate", color: "var(--chart-2)" },
 } satisfies ChartConfig
 
 export function CompetitorsPage() {
   return (
     <div>
-      <PageHeader title="竞争分析" description="比较品牌和竞品在 AI 答案中的提及、引用与话题优势。" />
+      <PageHeader title="Competitive Analysis" description="Compare brand and competitor mentions, citations, and topic advantages in AI answers." />
       <div className="grid gap-4 xl:grid-cols-[1fr_420px]">
         <Card className="rounded-lg">
           <CardHeader>
-            <CardTitle className="text-base">竞品份额</CardTitle>
+            <CardTitle className="text-base">Competitor Share</CardTitle>
           </CardHeader>
           <CardContent>
             <ChartContainer config={chartConfig} className="h-72 w-full">
@@ -39,14 +39,14 @@ export function CompetitorsPage() {
         </Card>
         <Card className="rounded-lg">
           <CardHeader>
-            <CardTitle className="text-base">高风险 Prompt</CardTitle>
+            <CardTitle className="text-base">High-Risk Prompts</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Prompt</TableHead>
-                  <TableHead>领先竞品</TableHead>
+                  <TableHead>Leading Competitor</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
