@@ -70,12 +70,13 @@ export function SidebarNav() {
   return (
     <TooltipProvider delayDuration={100}>
       <aside
+        data-testid="sidebar-nav"
         className={cn(
-          "sticky top-0 flex h-screen shrink-0 flex-col border-r border-app-border bg-app-surface py-3 text-app-ink transition-[width,padding] duration-200",
+          "group/sidebar sticky top-0 flex h-screen shrink-0 flex-col border-r border-app-border bg-app-surface py-3 text-app-ink transition-[width,padding] duration-200",
           expanded ? "w-[280px] gap-4 px-3" : "w-[60px] items-center gap-6 px-[14px]",
         )}
       >
-        <div className={cn("group relative flex w-full items-center", expanded ? "h-10 gap-1" : "h-10 justify-center")}>
+        <div className={cn("relative flex w-full items-center", expanded ? "h-10 gap-1" : "h-10 justify-center")}>
           {expanded ? (
             <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg">
               <img src={alpharankMascotLogo} alt="AlphaRank 标志" className="size-10 max-w-none object-contain" />
@@ -90,7 +91,7 @@ export function SidebarNav() {
             <img
               src={alpharankMascotLogo}
               alt="AlphaRank 标志"
-              className="pointer-events-none absolute left-1/2 top-1/2 size-10 -translate-x-1/2 -translate-y-1/2 object-contain opacity-100 transition-opacity group-hover:opacity-0"
+              className="pointer-events-none absolute left-1/2 top-1/2 size-10 -translate-x-1/2 -translate-y-1/2 object-contain opacity-100 transition-opacity group-hover/sidebar:opacity-0"
             />
           ) : null}
           <Button
@@ -100,7 +101,7 @@ export function SidebarNav() {
               "size-8 rounded-md text-app-muted shadow-none",
               expanded
                 ? "bg-transparent hover:bg-app-panel"
-                : "border-app-border bg-white opacity-0 transition-opacity hover:bg-app-panel group-hover:opacity-100",
+                : "border-app-border bg-white opacity-0 transition-opacity hover:bg-app-panel group-hover/sidebar:opacity-100",
             )}
             data-testid="sidebar-toggle"
             aria-expanded={expanded}

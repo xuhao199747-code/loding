@@ -67,13 +67,13 @@ describe("AppRoutes", () => {
     expect(roadmapButton.querySelector("svg")).toHaveClass("text-orange-500")
     expect(screen.getByTestId("quick-start-suggestions")).toHaveClass("no-scrollbar")
 
-    const mascotImage = screen.getByTestId("strategy-agent-mascot")
+    const mascotVideo = screen.getByTestId("strategy-agent-mascot")
     const mascotPoster = screen.getByTestId("strategy-agent-mascot-poster")
-    expect(mascotImage).toHaveAttribute("src", expect.stringContaining("multi-agent-mascot-loop.gif"))
+    expect(mascotVideo).toHaveAttribute("src", expect.stringContaining("multi-agent-mascot-loop.mp4"))
     expect(mascotPoster).toHaveAttribute("src", expect.stringContaining("multi-agent-mascot-first-frame.png"))
-    expect(mascotImage).toHaveClass("scale-x-[-1]")
+    expect(mascotVideo).toHaveClass("scale-x-[-1]")
     expect(mascotPoster).toHaveClass("scale-x-[-1]")
-    expect(mascotImage).toHaveStyle({
+    expect(mascotVideo).toHaveStyle({
       right: "0px",
       top: "-16px",
       width: "160px",
@@ -103,8 +103,14 @@ describe("AppRoutes", () => {
 
     expect(screen.getByRole("button", { name: "Writer Agent" })).toHaveClass("bg-white", "text-app-ink")
     expect(screen.getByText("你的内容创作师")).toBeInTheDocument()
-    expect(mascotImage).toHaveAttribute("src", expect.stringContaining("writer-agent-mascot-loop.gif"))
-    expect(mascotPoster).toHaveAttribute("src", expect.stringContaining("writer-agent-mascot-loop-first-frame.png"))
+    expect(screen.getByTestId("strategy-agent-mascot")).toHaveAttribute(
+      "src",
+      expect.stringContaining("writer-agent-mascot-loop.mp4"),
+    )
+    expect(screen.getByTestId("strategy-agent-mascot-poster")).toHaveAttribute(
+      "src",
+      expect.stringContaining("writer-agent-mascot-loop-first-frame.png"),
+    )
 
     await user.click(screen.getByRole("button", { name: "Submit" }))
 
@@ -155,11 +161,14 @@ describe("AppRoutes", () => {
     )
 
     expect(screen.getByRole("img", { name: "AlphaRank 标志" })).toBeVisible()
+    expect(screen.getByTestId("sidebar-nav")).toHaveClass("group/sidebar")
     expect(screen.getByRole("img", { name: "AlphaRank 标志" })).toHaveAttribute(
       "src",
       expect.stringContaining("alpharank-mascot-logo"),
     )
     expect(screen.getByTestId("sidebar-toggle")).toHaveClass("opacity-0")
+    expect(screen.getByTestId("sidebar-toggle")).toHaveClass("group-hover/sidebar:opacity-100")
+    expect(screen.getByTestId("sidebar-toggle")).not.toHaveClass("group-hover:opacity-100")
     expect(screen.getByTestId("sidebar-toggle")).not.toHaveClass("shadow-sm")
     expect(screen.getByTestId("sidebar-toggle")).toHaveClass("shadow-none")
     expect(screen.getByTestId("brand-corner-mask")).toBeInTheDocument()
@@ -205,6 +214,7 @@ describe("AppRoutes", () => {
     expect(screen.getByRole("img", { name: "AlphaRank 标志" })).toBeVisible()
     expect(screen.getByTestId("sidebar-toggle")).toHaveClass("opacity-0")
     expect(screen.getByTestId("sidebar-toggle")).not.toHaveClass("group-focus-within:opacity-100")
+    expect(screen.getByTestId("sidebar-toggle")).toHaveClass("group-hover/sidebar:opacity-100")
   })
 
   it("renders the answer monitor route", async () => {

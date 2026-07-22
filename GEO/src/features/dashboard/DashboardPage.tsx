@@ -34,14 +34,14 @@ import { cn } from "@/lib/utils"
 import agentData from "@/assets/agent-data-badge.png"
 import agentStrategy from "@/assets/agent-strategy-badge.png"
 import agentWriter from "@/assets/agent-writer-badge.png"
-import dataMascot from "@/assets/data-agent-mascot-loop.gif"
+import dataMascot from "@/assets/data-agent-mascot-loop.mp4"
 import dataMascotPoster from "@/assets/data-agent-mascot-loop-first-frame.png"
-import multiAgentMascot from "@/assets/multi-agent-mascot-loop.gif"
+import multiAgentMascot from "@/assets/multi-agent-mascot-loop.mp4"
 import multiAgentMascotPoster from "@/assets/multi-agent-mascot-first-frame.png"
 import multiAgentTabIcon from "@/assets/multi-agent-tab-icon.png"
-import mascot from "@/assets/strategy-agent-mascot.gif"
+import mascot from "@/assets/strategy-agent-mascot.mp4"
 import mascotPoster from "@/assets/strategy-agent-mascot-first-frame.png"
-import writerMascot from "@/assets/writer-agent-mascot-loop.gif"
+import writerMascot from "@/assets/writer-agent-mascot-loop.mp4"
 import writerMascotPoster from "@/assets/writer-agent-mascot-loop-first-frame.png"
 
 type AgentId = "multi" | "data" | "strategy" | "writer"
@@ -52,9 +52,8 @@ type AgentMenuItem = {
   tabTitle: string
   heading: string
   image: string
-  mascot: string
+  mascotVideo: string
   mascotPoster: string
-  mascotAnimated?: boolean
   placeholder: string
   suggestions: typeof suggestions
 }
@@ -78,9 +77,8 @@ const agents: AgentMenuItem[] = [
     tabTitle: "Multi-Agent",
     heading: "今天聚焦哪个品牌？",
     image: multiAgentTabIcon,
-    mascot: multiAgentMascot,
+    mascotVideo: multiAgentMascot,
     mascotPoster: multiAgentMascotPoster,
-    mascotAnimated: true,
     placeholder: "分配一个任务，或 @ 委派给某位 Agent...",
     suggestions,
   },
@@ -90,9 +88,8 @@ const agents: AgentMenuItem[] = [
     tabTitle: "DataAgent",
     heading: "你的品牌数据分析师",
     image: agentData,
-    mascot: dataMascot,
+    mascotVideo: dataMascot,
     mascotPoster: dataMascotPoster,
-    mascotAnimated: true,
     placeholder: "我能为您做些什么？",
     suggestions,
   },
@@ -102,9 +99,8 @@ const agents: AgentMenuItem[] = [
     tabTitle: "Strategy Agent",
     heading: "你的GEO 品牌策略师",
     image: agentStrategy,
-    mascot,
+    mascotVideo: mascot,
     mascotPoster,
-    mascotAnimated: true,
     placeholder: "我能为您做些什么？",
     suggestions,
   },
@@ -114,9 +110,8 @@ const agents: AgentMenuItem[] = [
     tabTitle: "Writer Agent",
     heading: "你的内容创作师",
     image: agentWriter,
-    mascot: writerMascot,
+    mascotVideo: writerMascot,
     mascotPoster: writerMascotPoster,
-    mascotAnimated: true,
     placeholder: "我能为您做些什么？",
     suggestions,
   },
@@ -145,7 +140,7 @@ const histories: HistoryMenuItem[] = [
   { title: "个性化", meta: "Writer" },
 ]
 
-function AgentMascot({ src, poster }: { src: string; poster: string }) {
+function AgentMascot({ poster, src }: { poster: string; src: string }) {
   const [loadedSrc, setLoadedSrc] = useState<string | null>(null)
   const isLoaded = loadedSrc === src
   const mascotStyle = { right: 0, top: -16, width: 160, height: 160 }
@@ -167,11 +162,18 @@ function AgentMascot({ src, poster }: { src: string; poster: string }) {
         )}
         style={mascotStyle}
       />
-      <img
+      <video
+        key={src}
         src={src}
-        alt=""
+        poster={poster}
+        aria-hidden="true"
         data-testid="strategy-agent-mascot"
-        onLoad={() => setLoadedSrc(src)}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        onCanPlay={() => setLoadedSrc(src)}
         className={cn(
           "pointer-events-none absolute scale-x-[-1] object-cover transition-opacity duration-150",
           isLoaded ? "opacity-100" : "opacity-0",
@@ -245,7 +247,7 @@ export function DashboardPage() {
           />
         ) : (
         <div className="relative z-10 flex w-[900px] max-w-[calc(100%-40px)] flex-col gap-10">
-          <AgentMascot src={activeAgent.mascot} poster={activeAgent.mascotPoster} />
+          <AgentMascot src={activeAgent.mascotVideo} poster={activeAgent.mascotPoster} />
           <section className="relative flex flex-col gap-4">
             <div className="flex flex-col items-start gap-4">
               <h1 className="text-2xl font-semibold leading-8 tracking-normal text-app-ink">
