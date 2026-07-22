@@ -1,0 +1,53 @@
+<h2>9.4 AI Answer、Citation 与页面采集</h2>
+<p><b>两分钟面试回答。</b>材料显示 Prompt Set 进入 Crawler 后关联 platform、search query、cite/not-cite pages、AIO Response 和 country/region；数据再按平台、地区、语言、行业和来源筛选（图 31、32）。总体架构列出多个 AI Search/Answer 平台与 Crawler，但没有说明每个平台采用官方 API、浏览器还是第三方服务（图 38）。因此接入方式必须作为技术、产品和合规共同确认的问题。</p>
+<whiteboard type="mermaid">
+flowchart TB
+    A["Prompt Set"] --> B["平台与地区任务"]
+    B --> C["AI Search/Answer"]
+    C --> D["原始 Answer"]
+    C --> E["Citation 链接"]
+    E --> F["被引用页面"]
+    B --> G["未引用页面"]
+    D --> H["AnswerAnalyze"]
+    F --> H
+    G --> H
+    H --> I["可见度与竞品洞察"]
+    J["材料未知：各平台接入协议"] -.-> C
+    K["图 31/32/38/43"] -.-> H
+</whiteboard>
+<p><b>面试/工作模板：PRD。</b>定义平台、地区、采集时间窗、Prompt 版本、原始响应保留、Citation 解析、页面抓取深度、清洗版本、去重键、失败码和重放。接入方案按授权、稳定性、完整性、成本、地域覆盖和维护负担评审。</p>
+<p><b>产品验收。</b>采集成功、字段完整、重复、解析成功、时效和来源可追溯；异常覆盖验证码、地区限制、答案为空、引用解析失败、页面失效和清洗后为空。材料未提供目标值，需要建立基线。</p>
+<h2>9.5 Knowledge Layer、LightRAG 与数据隔离</h2>
+<p><b>产品经理为什么需要关心。</b>知识库决定诊断和生成能否找到正确事实。产品经理不需要部署数据库，但必须定义知识对象、来源、更新、权限、追溯、重建和删除行为。</p>
+<p><b>材料明确。</b>材料提出 Knowledge Graph、GraphRAG、LightRAG、Embedding、实体关系抽取与合并，并将数据写入图、向量、KV 和 Community 等存储，再通过 Facade/QueryAPI 查询（图 4、5、41、47—64）。图 67—69 展示 workspace 隔离和 metadata。</p>
+<p><b>材料未说明。</b>生产数据库、数据规模、Embedding 模型、实体本体、消歧阈值、备份恢复、删除 SLA 和组件上线状态均未知。这些技术名词只能标记为材料中的候选技术方案。</p>
+<whiteboard type="mermaid">
+flowchart TB
+    A["Answer/文件/参考"] --> B["切分与 Embedding"]
+    B --> C["实体关系抽取"]
+    C --> D["实体关系合并"]
+    D --> E["向量存储"]
+    D --> F["图存储"]
+    D --> G["KV 与状态"]
+    D --> H["Community"]
+    E --> I["QueryAPI Facade"]
+    F --> I
+    G --> I
+    H --> I
+    I --> J["Agent 查询"]
+    K["租户与来源元数据"] -.-> B
+    K -.-> I
+    L["图 41/47-64/67-69"] -.-> J
+</whiteboard>
+<h3>面试/工作模板：数据契约</h3>
+<table>
+  <thead><tr><th>对象</th><th>PRD 需要定义</th><th>关键风险</th></tr></thead>
+  <tbody>
+    <tr><td>Document/Chunk</td><td>主键、版本、来源、位置、权限</td><td>重复、过期、无法回到原文</td></tr>
+    <tr><td>Entity/Relation</td><td>本体、别名、证据、合并与撤销</td><td>误合并、无来源关系</td></tr>
+    <tr><td>Embedding</td><td>模型、维度、索引版本、重建</td><td>升级后新旧不可比较</td></tr>
+    <tr><td>Workspace</td><td>租户、共享边界、删除、审计</td><td>跨租户串读和缓存泄漏</td></tr>
+  </tbody>
+</table>
+<p><b>产品验收。</b>写入幂等、实体重复、关系证据、查询可追溯、租户串读、删除传播和索引重建。部分存储写入成功、实体冲突和模型维度变化必须有明确异常状态。</p>
+<p><b>技术评审问题。</b>跨存储主键是什么？一次写入部分失败如何补偿？实体合并能否撤销？每条关系是否保留来源？Embedding 升级如何双写和切换？删除客户文件后图、向量和缓存何时清除？</p>

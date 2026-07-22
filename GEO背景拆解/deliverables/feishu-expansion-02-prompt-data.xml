@@ -1,0 +1,80 @@
+<h2>9.3 Prompt 来源、设计、API 输入与数据集</h2>
+<p><b>产品经理为什么需要关心。</b>Prompt 决定系统观察什么市场需求，也决定诊断与实验口径。Discovery Prompt、Agent Instruction Prompt、Generation Prompt 和 Judge Prompt 是四种不同产品对象，不能用同一套质量标准。</p>
+<p><b>材料明确。</b>PromptBuilder 负责热词发现、Prompt 构建和需求扩展；Prompt Cluster 用相近意图组织诊断；架构列出 Search AutoComplete、People Also Ask、Related Search、Google Ads、DataForSEO 等来源；Direct Tool 通过 /v1/responses 调用 promptbuilder_process，并做工具白名单与参数校验（图 9、25、38、100、101）。</p>
+<p><b>材料未说明。</b>材料没有证明接入 CRM、客服、站内搜索或真实终端用户日志，也没有展示完整 System Prompt、来源占比、聚类阈值、Prompt 版本和线上效果。</p>
+<whiteboard type="mermaid">
+flowchart TB
+    P["四类 Prompt 产品"] --> A["Discovery"]
+    P --> C["Agent Instruction"]
+    P --> D["Generation"]
+    P --> E["Judge"]
+    A --> S["品牌/搜索/关键词输入"]
+    S --> B["PromptBuilder"]
+    B --> F["候选 Prompt"]
+    F --> G["去重与聚类"]
+    G --> H["Prompt Cluster"]
+    H --> I["Prompt Set"]
+    I --> J["Crawler 任务"]
+    K["材料未知：真实用户问题接入"] -.-> F
+    L["图 9/25/29/31/38/100/101"] -.-> I
+</whiteboard>
+<h3>四类 Prompt 的产品边界</h3>
+<table>
+  <thead><tr><th>类型</th><th>解决的问题</th><th>好 Prompt 看什么</th><th>坏 Prompt 的表现</th></tr></thead>
+  <tbody>
+    <tr><td>Discovery</td><td>构建 Prompt Set 并观察市场</td><td>来源、意图、Cluster、可采集</td><td>语义重复、混合意图、无来源</td></tr>
+    <tr><td>Agent Instruction</td><td>路由和工具执行</td><td>权限、参数、终止、审计</td><td>无限工具、无步骤上限、无降级</td></tr>
+    <tr><td>Generation</td><td>规划、生成和整合内容</td><td>事实边界、结构、引用、一致性</td><td>范例与事实混用、无证据补写</td></tr>
+    <tr><td>Judge</td><td>Rubric 评分和推断</td><td>评分锚点、证据、稳定、可校准</td><td>只要求“打 0—100 分”</td></tr>
+  </tbody>
+</table>
+<h3>面试/工作模板：Prompt 八段契约</h3>
+<ol>
+  <li seq="auto"><b>Goal：</b>要支持哪个业务决策，完成条件是什么。</li>
+  <li seq="auto"><b>Input：</b>字段、类型、必填、版本和长度。</li>
+  <li seq="auto"><b>Evidence Policy：</b>事实、参考、用户输入和模型知识的边界。</li>
+  <li seq="auto"><b>Task：</b>步骤、顺序和范围。</li>
+  <li seq="auto"><b>Constraints：</b>禁止编造、权限、语言和成本限制。</li>
+  <li seq="auto"><b>Output Schema：</b>字段、枚举、空值和 evidence_id。</li>
+  <li seq="auto"><b>Failure Behavior：</b>缺失、冲突、无证据和工具失败时的返回。</li>
+  <li seq="auto"><b>Evaluation：</b>Golden Set、基线、版本和发布门禁。</li>
+</ol>
+<p><b>面试/工作模板（非 AlphaRank 原始 Prompt）。</b>以 GEO 内容诊断为例：输入 TARGET_PROMPTS、PAGE_CONTENT、REFERENCE、KNOWLEDGE_FILE 和 RUBRIC；REFERENCE 只影响风格，KNOWLEDGE_FILE 才能支持新增事实；输出 summary、issues、page_evidence、fact_sources、confidence、unsupported_claims 和 missing_information；证据不足时返回 insufficient_evidence，不得强行补写。</p>
+<p><b>产品验收。</b>Discovery 看覆盖、重复与有效采集；Agent Prompt 看工具和参数正确；Generation 看事实支持与结构一致；Judge 看专家一致与重复稳定。所有 Prompt 版本都要绑定模型、数据集、Rubric、变更原因和回滚条件。</p>
+<h3>PromptBuilder Direct Tool 时序</h3>
+<whiteboard type="mermaid">
+sequenceDiagram
+    participant C as Client
+    participant R as ResponsesHandler
+    participant T as ToolRegistry
+    participant P as promptbuilder_process
+    participant S as SessionManager
+    C->>R: POST /v1/responses
+    R->>R: 识别 direct_tool
+    R->>T: 校验工具白名单
+    T-->>R: 校验结果
+    R->>P: keywords/brand/top_k
+    P->>P: 生成并聚类 Prompt
+    P-->>R: 结构化 JSON
+    R->>S: 持久化调用记录
+    R-->>C: 工具执行结果
+</whiteboard>
+<h3>Dataset Builder</h3>
+<p><b>材料明确。</b>Dataset Builder 分为原始数据获取、数据清洗和数据集构建。数据按 Platform、Country/Region、Language、Industry、Sources 五维筛选，并执行网页长度与无效元素等清洗（图 31、32）。</p>
+<p><b>材料未说明。</b>采样权重、覆盖目标、任务规模、清洗版本和人工抽检比例未知。</p>
+<whiteboard type="mermaid">
+flowchart TB
+    A["原始数据获取"] --> B["五维筛选"]
+    B --> C["平台"]
+    B --> D["地区与语言"]
+    B --> E["行业与来源"]
+    C --> F["网页清洗"]
+    D --> F
+    E --> F
+    F --> G["长度与无效元素"]
+    G --> H["去重与质量检查"]
+    H --> I["版本化数据集"]
+    J["材料未知：采样权重"] -.-> B
+    K["图 31/32"] -.-> I
+</whiteboard>
+<p><b>技术评审问题。</b>Prompt 来源如何追溯？聚类后是否保留原文？Prompt 修改是否生成新版本？五维组合如何避免样本爆炸？清洗规则升级是否重跑历史数据？失败样本是否进入指标分母？</p>

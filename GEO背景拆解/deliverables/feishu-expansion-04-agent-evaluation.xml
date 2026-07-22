@@ -1,0 +1,64 @@
+<h2>9.6 Recall、索引与内容 Grounding</h2>
+<p><b>材料明确。</b>材料区分 FULL 与 CHUNK，设计 naive、local、global、hybrid、mix、community 等查询模式，并给出 Hybrid Recall、OpenSearch 字段和二次访问（图 64、70—85）。图 80 要求 REFERENCE 与 KNOWLEDGE_FILE 分桶：前者用于风格，后者约束事实。</p>
+<p><b>材料未说明。</b>正式接口 Schema、切分长度、融合公式、Rerank 上线状态、默认路由和线上性能未知；图 80 的 topK 等参数不能直接称为生产默认值。</p>
+<whiteboard type="mermaid">
+flowchart TB
+    A["查询意图"] --> B{"召回目标"}
+    B -->|"实体局部"| C["local"]
+    B -->|"主题全局"| D["global/community"]
+    B -->|"词义组合"| E["hybrid/mix"]
+    C --> F["FULL/CHUNK"]
+    D --> F
+    E --> F
+    F --> G["REFERENCE 桶"]
+    F --> H["KNOWLEDGE_FILE 桶"]
+    G --> I["只约束风格"]
+    H --> J["约束事实"]
+    I --> K["分区组装 Prompt"]
+    J --> K
+    L["图 64/70-85"] -.-> K
+</whiteboard>
+<p><b>面试/工作模板：PRD。</b>定义查询意图、租户过滤、来源、粒度、topK、二次访问、空结果、证据展示和上下文截断。离线看 Recall@K、Precision@K、MRR、nDCG 与证据覆盖；在线看回答支持、引用正确、采纳、延迟和成本。</p>
+<p><b>技术评审问题。</b>每种模式解决什么问题？融合前分数如何归一化？相同文档多个 Chunk 如何去重？上下文超限先删什么？用户如何回到 FULL 原文？</p>
+<h2>9.7 Agent Runtime 与接口调用</h2>
+<p><b>两分钟面试回答。</b>材料设计 Direct Tool、Remote Agent、Local Agent 和 Raw LLM 四路运行时，并为诊断、Prompt 生成、声量计算和普通模型调用展示不同路径（图 89—105）。材料没有给出超时、步骤和成本阈值，因此这些需要产品与技术共同定义。</p>
+<whiteboard type="mermaid">
+flowchart TB
+    A["统一请求入口"] --> B{"任务类型"}
+    B -->|"确定性工具"| C["Direct Tool"]
+    B -->|"远端能力"| D["Remote Agent"]
+    B -->|"多步工具协作"| E["Local AgentLoop"]
+    B -->|"简单模型调用"| F["Raw LLM"]
+    C --> G["白名单与参数校验"]
+    D --> H["远端协议与超时"]
+    E --> I["步骤/权限/终止"]
+    F --> J["模型与输出约束"]
+    G --> K["统一 Session 与审计"]
+    H --> K
+    I --> K
+    J --> K
+    L["图 89-105"] -.-> K
+</whiteboard>
+<p><b>面试/工作模板：产品决策。</b>高确定性计算优先工具；多步工具协作才进入 AgentLoop；简单生成可用 Raw LLM；跨系统再评估 Remote Agent。PRD 为每个任务定义执行模式、允许工具、权限、最大步骤、超时、取消、进度、fallback、人工确认和审计。</p>
+<p><b>产品验收。</b>任务完成、工具成功、参数错误、平均步骤、循环终止、延迟、成本和人工接管。异常覆盖路由错误、工具不可用、重复调用、Session 丢失、远端超时、Schema 失败和权限拒绝。</p>
+<h2>9.8 诊断、LLM-as-Judge 与引用推断</h2>
+<p><b>材料明确。</b>材料将网页诊断拆为 9 个维度、33 个子项，组合统计分析与 LLM-as-Judge，并展示分数聚合、引用推断初始化与精炼、品牌诊断权重和等级（图 25—30、107—119）。</p>
+<p><b>材料未说明。</b>Rubric 权重、Judge Prompt、模型版本、采样次数、聚合公式、人工标注集、置信度公式和品牌等级基线未知。权重与阈值只能视为待校准产品假设。</p>
+<whiteboard type="mermaid">
+flowchart TB
+    A["Rubric 与证据"] --> B["确定性统计"]
+    A --> C["LLM-as-Judge"]
+    C --> D["分数与 evidence_id"]
+    B --> E["分数聚合"]
+    D --> E
+    E --> F["推断初始化"]
+    F --> G["矛盾与反事实检查"]
+    G --> H["推断精炼"]
+    H --> I["置信度与建议"]
+    I --> J["人工标注校准"]
+    J --> A
+    K["材料未知：公式与阈值"] -.-> E
+    L["图 25-30/107-119"] -.-> I
+</whiteboard>
+<p><b>面试/工作模板：PRD。</b>定义评分对象、Rubric 版本、输入证据、维度输出、总分聚合、置信度、无法判断、人工复核、解释和申诉。规则可计算项优先确定性方法；语义判断由 Judge 输出分数、理由和 evidence_id。</p>
+<p><b>产品验收。</b>与专家一致、同输入重复稳定、证据支持、维度区分、置信度校准和人工复核率。模型或 Prompt 升级必须重跑基准集；总分不能掩盖关键风险。</p>

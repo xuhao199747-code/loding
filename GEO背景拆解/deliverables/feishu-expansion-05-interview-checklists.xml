@@ -1,0 +1,52 @@
+<h2>9.9 内容生成、实验与归因</h2>
+<p><b>材料明确。</b>长内容生成拆为 Planner、Generator、Integrator，并使用网页、策略、客户补充信息、RAG cited pages 和动态 Prompt Manager；多模态链路规划图片位置与描述（图 29、33、34）。工作流要求发布后验证并反馈到下一轮（图 7、8、19、24）。</p>
+<p><b>材料未说明。</b>模型、完整 Prompt、CMS 接入、人工审核、发布权限、内容版本、实验窗口、对照组、归因公式和线上提升未知。</p>
+<h3>面试/工作模板：生成 PRD</h3>
+<ul>
+  <li>Planner 输出目标 Prompt、内容 Gap、证据需求、大纲与禁止新增的事实。</li>
+  <li>Generator 只使用允许的事实来源，输出段落和 source_id。</li>
+  <li>Integrator 检查跨段一致、事实支持、引用、品牌规则和格式。</li>
+  <li>用户可以锁定事实、选择建议、查看差异、审核、发布和回退。</li>
+  <li>REFERENCE 只影响表达，KNOWLEDGE_FILE 才支持新增事实。</li>
+</ul>
+<p><b>产品验收。</b>生成阶段看事实支持、引用正确、结构通过、人工采纳和编辑距离；发布阶段看成功、回退和版本一致；效果阶段比较固定 Prompt Set 上的 Visibility、Citation、SOV 等变化，并记录平台、模型与外部事件。</p>
+<p><b>归因边界。</b>内容发布与指标变化之间存在时间差和外部影响。产品应显示实验条件、置信度与替代解释，不能把相关性描述成确定因果。</p>
+<h2>9.10 PRD、技术评审与面试检查表</h2>
+<h3>通用 AI 功能 PRD 检查表</h3>
+<checkbox done="false">目标用户和业务决策是否有材料证据；没有时是否标为待确认</checkbox>
+<checkbox done="false">输入字段、来源、版本、租户、权限和最大长度是否定义</checkbox>
+<checkbox done="false">模型、工具和数据各自负责什么，失败由谁接管</checkbox>
+<checkbox done="false">事实来源与参考范例是否分区</checkbox>
+<checkbox done="false">输出是否有 Schema、evidence_id、置信度和无法判断</checkbox>
+<checkbox done="false">成功、空结果、超时、权限拒绝、Schema 失败是否可见</checkbox>
+<checkbox done="false">模型、Prompt、Rubric、索引和内容是否版本化</checkbox>
+<checkbox done="false">质量、用户、业务、延迟和成本是否同时验收</checkbox>
+<checkbox done="false">是否有 Golden Set、灰度、监控和回滚</checkbox>
+<h3>技术评审问题清单</h3>
+<table>
+  <thead><tr><th>模块</th><th>产品经理必须追问</th></tr></thead>
+  <tbody>
+    <tr><td>采集</td><td>来源是否合法稳定？原始响应能否回放？失败是否污染指标？</td></tr>
+    <tr><td>Prompt</td><td>属于哪种 Prompt？证据边界、Schema、版本和测试集是什么？</td></tr>
+    <tr><td>知识库</td><td>主键、来源、租户、删除、重建和部分失败如何处理？</td></tr>
+    <tr><td>Recall</td><td>路由、融合、去重、证据定位、空结果和上下文截断如何做？</td></tr>
+    <tr><td>Agent</td><td>为什么需要 Agent？工具、权限、步骤、终止、审计和 fallback 是什么？</td></tr>
+    <tr><td>Judge</td><td>Rubric、证据、人工标注、稳定性、校准和升级门禁是什么？</td></tr>
+    <tr><td>生成</td><td>新增事实从哪里来？如何审核、发布、回退和关联实验？</td></tr>
+  </tbody>
+</table>
+<h3>常见面试追问</h3>
+<ol>
+  <li seq="auto">AlphaRank 的 Prompt 从哪里来？哪些是图片事实，哪些仍未知？</li>
+  <li seq="auto">API 输入了什么，PromptBuilder 生成了什么？</li>
+  <li seq="auto">什么是好 Prompt，什么是坏 Prompt，怎样量化？</li>
+  <li seq="auto">AI Answer 与 Citation 如何形成可追溯数据？</li>
+  <li seq="auto">为什么需要向量、图、KV 和 Community？</li>
+  <li seq="auto">local、global、hybrid、mix、community 如何选择？</li>
+  <li seq="auto">为什么 Direct Tool、AgentLoop 与 Raw LLM 要分路？</li>
+  <li seq="auto">LLM-as-Judge 如何避免评分漂移？</li>
+  <li seq="auto">引用推断如何表达证据、置信度与反事实？</li>
+  <li seq="auto">如何验证内容优化真的有效，而不是平台自然波动？</li>
+</ol>
+<p><b>推荐回答句式。</b>“材料明确展示的是……（图号）；材料没有说明……，所以我不会把它当作既有事实。如果由我设计，我会……；最终通过……进行验收。”</p>
+<p><b>最后提醒。</b>面试中承认材料未知不是减分。能区分事实、假设和方案，并说明如何验证，才是 AI 产品经理的专业能力。</p>
