@@ -69,7 +69,7 @@ describe("AppRoutes", () => {
 
     const mascotVideo = screen.getByTestId("strategy-agent-mascot")
     const mascotPoster = screen.getByTestId("strategy-agent-mascot-poster")
-    expect(mascotVideo).toHaveAttribute("src", expect.stringContaining("multi-agent-mascot-loop.mp4"))
+    expect(mascotVideo).toHaveAttribute("src", expect.stringContaining("multi-agent-mascot-loop.webm"))
     expect(mascotPoster).toHaveAttribute("src", expect.stringContaining("multi-agent-mascot-first-frame.png"))
     expect(mascotVideo).toHaveClass("scale-x-[-1]")
     expect(mascotPoster).toHaveClass("scale-x-[-1]")
@@ -105,7 +105,7 @@ describe("AppRoutes", () => {
     expect(screen.getByText("你的内容创作师")).toBeInTheDocument()
     expect(screen.getByTestId("strategy-agent-mascot")).toHaveAttribute(
       "src",
-      expect.stringContaining("writer-agent-mascot-loop.mp4"),
+      expect.stringContaining("writer-agent-mascot-loop.webm"),
     )
     expect(screen.getByTestId("strategy-agent-mascot-poster")).toHaveAttribute(
       "src",
