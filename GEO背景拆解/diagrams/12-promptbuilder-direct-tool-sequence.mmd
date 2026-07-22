@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant C as Client
+    participant R as ResponsesHandler
+    participant T as ToolRegistry
+    participant P as promptbuilder_process
+    participant S as SessionManager
+    C->>R: POST /v1/responses
+    R->>R: 识别 direct_tool
+    R->>T: 校验工具白名单
+    T-->>R: 校验结果
+    R->>P: keywords/brand/top_k
+    P->>P: 生成并聚类 Prompt
+    P-->>R: 结构化 JSON
+    R->>S: 持久化调用记录
+    R-->>C: 工具执行结果

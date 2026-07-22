@@ -1,0 +1,13 @@
+flowchart TB
+    A["Prompt Set"] --> B["平台与地区任务"]
+    B --> C["AI Search/Answer"]
+    C --> D["原始 Answer"]
+    C --> E["Citation 链接"]
+    E --> F["被引用页面"]
+    B --> G["未引用页面"]
+    D --> H["AnswerAnalyze"]
+    F --> H
+    G --> H
+    H --> I["可见度与竞品洞察"]
+    J["材料未知：各平台接入协议"] -.-> C
+    K["图 31/32/38/43"] -.-> H

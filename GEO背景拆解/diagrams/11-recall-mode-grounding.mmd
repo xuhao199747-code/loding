@@ -1,0 +1,15 @@
+flowchart TB
+    A["查询意图"] --> B{"召回目标"}
+    B -->|"实体局部"| C["local"]
+    B -->|"主题全局"| D["global/community"]
+    B -->|"词义组合"| E["hybrid/mix"]
+    C --> F["FULL/CHUNK"]
+    D --> F
+    E --> F
+    F --> G["REFERENCE 桶"]
+    F --> H["KNOWLEDGE_FILE 桶"]
+    G --> I["只约束风格"]
+    H --> J["约束事实"]
+    I --> K["分区组装 Prompt"]
+    J --> K
+    L["图 64/70-85"] -.-> K

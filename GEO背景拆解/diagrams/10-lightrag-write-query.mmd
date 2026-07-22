@@ -1,0 +1,16 @@
+flowchart TB
+    A["Answer/文件/参考"] --> B["切分与 Embedding"]
+    B --> C["实体关系抽取"]
+    C --> D["实体关系合并"]
+    D --> E["向量存储"]
+    D --> F["图存储"]
+    D --> G["KV 与状态"]
+    D --> H["Community"]
+    E --> I["QueryAPI Facade"]
+    F --> I
+    G --> I
+    H --> I
+    I --> J["Agent 查询"]
+    K["租户与来源元数据"] -.-> B
+    K -.-> I
+    L["图 41/47-64/67-69"] -.-> J

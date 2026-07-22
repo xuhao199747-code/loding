@@ -1,0 +1,14 @@
+flowchart TB
+    P["四类 Prompt 产品"] --> A["Discovery"]
+    P --> C["Agent Instruction"]
+    P --> D["Generation"]
+    P --> E["Judge"]
+    A --> S["品牌/搜索/关键词输入"]
+    S --> B["PromptBuilder"]
+    B --> F["候选 Prompt"]
+    F --> G["去重与聚类"]
+    G --> H["Prompt Cluster"]
+    H --> I["Prompt Set"]
+    I --> J["Crawler 任务"]
+    K["材料未知：真实用户问题接入"] -.-> F
+    L["图 9/25/29/31/38/100/101"] -.-> I
