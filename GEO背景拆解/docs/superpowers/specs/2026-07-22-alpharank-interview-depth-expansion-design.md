@@ -93,6 +93,9 @@
 - `/v1/responses`、Direct Tool、`promptbuilder_process`、参数校验和结构化返回。
 - Search AutoComplete、People Also Ask、Related Search、Google Ads、DataForSEO、Effective Prompts 与 Keyword Volumes 等材料明确的数据源。
 - Prompt Set 如何进入 Crawler，并关联 platform、search query、cite/not-cite pages、AIO Response 与 country/region。
+- 区分 Discovery Prompt、Agent Instruction Prompt、Generation Prompt 和 Judge Prompt，说明四类 Prompt 解决的问题、输入输出和验收方式。
+- 基于图片 25、29、33、80、100、101 解释 Prompt Cluster、动态 Prompt Manager、Planner/Generator/Integrator、双路上下文和 Direct Tool；图片没有展示的完整 Prompt 文本保持未知。
+- 增加“好 Prompt / 坏 Prompt”产品评审框架：目标、输入、证据边界、任务、约束、输出 Schema、失败行为和测试集。该框架明确标为面试/工作模板，不声称来自 AlphaRank。
 - 明确指出材料未证明接入 CRM、客服、站内搜索或真实终端用户日志。
 - 面试候选方案说明一方问题、观察问题和合成问题如何分层，但明确其不代表 AlphaRank 已实现。
 
@@ -174,6 +177,7 @@
 - 所有材料未说明的问题被明确标注，没有用行业经验补成产品事实。
 - 每个核心主题至少提供一段面试回答、一组实现链路、一组产品验收指标和追问边界。
 - 每个核心主题明确回答产品经理要做什么决策、PRD 要写什么、评审要问什么、上线后看什么指标。
+- Prompt 章节能够区分四类 Prompt 产品，并提供一个明确标为“非 AlphaRank 原始 Prompt”的完整候选模板与好坏判断标准。
 - 目标用户、商业模式、MVP、上线状态和目标数值没有图片证据时保持未知，不生成看似完整但无来源的结论。
 - 通用模板和个人候选方案带有统一标签，读者不会误认为它们来自 AlphaRank 材料。
 - Prompt 来源问题明确回答“API 输入了什么、系统生成了什么、Crawler 采集了什么，以及材料没有证明什么”。

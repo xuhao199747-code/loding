@@ -102,10 +102,11 @@ git commit -m "docs: add alpharank product evidence matrix"
 - Read: `reports/alpharank-pm-evidence-matrix.md`
 - Modify: `reports/alpharank-geo-ai-pm-guide.md`
 - Create: `reports/alpharank-pm-interview-question-bank.md`
+- Create: `reports/alpharank-prompt-design-playbook.md`
 
 **Interfaces:**
 - Consumes: Material-backed claims and explicit unknowns from Task 1.
-- Produces: Eight PM work modules and a question bank; every module contains seven labeled blocks.
+- Produces: Eight PM work modules, a question bank, and a Prompt design playbook; every module contains seven labeled blocks.
 
 - [ ] **Step 1: Add the seven-block structure to every core topic**
 
@@ -151,11 +152,37 @@ Create `reports/alpharank-pm-interview-question-bank.md` with at least these que
 8. LLM-as-Judge 如何避免评分漂移？
 9. 引用推断如何表达证据和置信度？
 10. 如何验证一次内容优化真的有效？
+11. AlphaRank 材料展示了哪些类型的 Prompt？
+12. 你会怎样设计 Prompt，什么是好 Prompt、什么是坏 Prompt？
 ```
 
 Every answer follows: `材料事实 → 材料未知 → 如果由我设计 → 验收方法`.
 
-- [ ] **Step 4: Verify guide structure and forbidden ambiguity**
+- [ ] **Step 4: Write the Prompt design playbook**
+
+Create `reports/alpharank-prompt-design-playbook.md` and separate four Prompt products:
+
+```text
+Discovery Prompt：用于构建 Prompt Set 并采集 AI Search/Answer
+Agent Instruction Prompt：用于路由、工具调用和任务执行
+Generation Prompt：用于 Planner、Generator、Integrator 和多模态生成
+Judge Prompt：用于 Rubric 评分、证据输出和引用推断
+```
+
+For each type, include:
+
+```text
+材料明确：referenced image numbers and confirmed flow
+材料未说明：missing full prompt text, versions, default parameters, or online status
+面试/工作模板：goal, input, evidence policy, task, constraints, output schema, failure behavior
+好 Prompt：measurable, source-bounded, unambiguous, schema-valid, traceable, testable
+坏 Prompt：vague goal, mixed evidence roles, conflicting instructions, no schema, no failure path, untestable adjectives
+验收：golden set, schema pass rate, factual support, citation traceability, consistency, latency, and cost
+```
+
+Add one complete candidate Prompt for a GEO content-diagnosis task. Label it exactly `面试/工作模板（非 AlphaRank 原始 Prompt）`. The template must separate `REFERENCE` examples from `KNOWLEDGE_FILE` facts as shown in image 80 and must require evidence IDs in the output.
+
+- [ ] **Step 5: Verify guide structure and forbidden ambiguity**
 
 Run:
 
@@ -173,18 +200,24 @@ for label in required:
 for phrase in ['大概率已经', '应该已经接入', '可以确定使用官方 API']:
     assert phrase not in guide, phrase
 bank = Path('reports/alpharank-pm-interview-question-bank.md').read_text()
-assert bank.count('材料事实') >= 10
-assert bank.count('材料未知') >= 10
+assert bank.count('材料事实') >= 12
+assert bank.count('材料未知') >= 12
+playbook = Path('reports/alpharank-prompt-design-playbook.md').read_text()
+for prompt_type in ['Discovery Prompt', 'Agent Instruction Prompt', 'Generation Prompt', 'Judge Prompt']:
+    assert prompt_type in playbook, prompt_type
+for label in ['材料明确', '材料未说明', '面试/工作模板（非 AlphaRank 原始 Prompt）', '好 Prompt', '坏 Prompt', '验收']:
+    assert label in playbook, label
 print('pm-guide-ok')
 PY
 ```
 
 Expected: `pm-guide-ok`.
 
-- [ ] **Step 5: Commit the PM guide and question bank**
+- [ ] **Step 6: Commit the PM guide, question bank, and Prompt playbook**
 
 ```bash
-git add reports/alpharank-geo-ai-pm-guide.md reports/alpharank-pm-interview-question-bank.md
+git add reports/alpharank-geo-ai-pm-guide.md reports/alpharank-pm-interview-question-bank.md \
+  reports/alpharank-prompt-design-playbook.md
 git commit -m "docs: expand alpharank guide for product managers"
 ```
 
@@ -210,7 +243,7 @@ git commit -m "docs: expand alpharank guide for product managers"
 Use these scopes:
 
 ```text
-07: API input fields + material-backed search sources → PromptBuilder → Prompt Set → Crawler
+07: four Prompt product types + API input fields + material-backed search sources → PromptBuilder → Prompt Set → Crawler
 08: Prompt Set → AI Search/Answer → AnswerAnalyze → cited/not-cited pages → insight assets
 09: raw acquisition → five-dimensional filtering → webpage cleaning → dataset version
 10: sources → chunk/embedding/KG extract/KG merge → graph/vector/KV/community → QueryAPI
@@ -269,7 +302,7 @@ Use this exact top-level chapter and subsections:
 <h1>九、AI 产品经理实战与面试深挖</h1>
 <h2>9.1 如何阅读：事实、未知与候选方案</h2>
 <h2>9.2 产品定义、场景与功能边界</h2>
-<h2>9.3 Prompt 来源、API 输入与数据集</h2>
+<h2>9.3 Prompt 来源、设计、API 输入与数据集</h2>
 <h2>9.4 AI Answer、Citation 与页面采集</h2>
 <h2>9.5 Knowledge Layer、LightRAG 与数据隔离</h2>
 <h2>9.6 Recall、索引与内容 Grounding</h2>
