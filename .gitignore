@@ -1,3 +1,7 @@
 .worktrees/
 __pycache__/
 *.pyc
+GEO背景拆解/processing/geo-images/ocr/
+GEO背景拆解/processing/geo-images/thumbnails/
+GEO背景拆解/processing/geo-images/contact-sheets/
+GEO背景拆解/processing/geo-images/ocr-run.json
