@@ -1,0 +1,57 @@
+{
+  "selected_at": "2026-07-23",
+  "selection_rule": "每种类型选择一个已确认、高置信度且边界明确的文档组",
+  "pilots": [
+    {
+      "group_id": "geo-doc-061",
+      "title": "Adversarial AI Search Engine",
+      "content_type": "纯文字型",
+      "category": "05-内容优化与分发",
+      "status": "待处理",
+      "files": [
+        {
+          "filename": "image 35.png",
+          "source_path": "/Users/mac/Desktop/GEO图/image 35.png",
+          "width": 5409,
+          "height": 3858,
+          "bytes": 3782307,
+          "sha256": "6a8508cdc31fdc5c02fb4866b5495945f951063b2896199e562726dbeae80cc9"
+        }
+      ]
+    },
+    {
+      "group_id": "geo-doc-062",
+      "title": "SEO Diagnostic Agent 技术方案",
+      "content_type": "复杂流程图型",
+      "category": "04-Agent与技术架构",
+      "status": "待处理",
+      "files": [
+        {
+          "filename": "image 120.png",
+          "source_path": "/Users/mac/Desktop/GEO图/image 120.png",
+          "width": 1756,
+          "height": 1126,
+          "bytes": 667825,
+          "sha256": "2098d44a3d20406f69d67afc54a1b8282eb717a2c421fb20835ef3ac06f92048"
+        }
+      ]
+    },
+    {
+      "group_id": "geo-doc-063",
+      "title": "品牌行业库",
+      "content_type": "表格型",
+      "category": "03-数据与知识工程",
+      "status": "待处理",
+      "files": [
+        {
+          "filename": "image 264.png",
+          "source_path": "/Users/mac/Desktop/GEO图/image 264.png",
+          "width": 1454,
+          "height": 1412,
+          "bytes": 473887,
+          "sha256": "1a819ba68cf94500ee1aab03d1278bdb68371d6d4171c92076e9b54cecf2b23e"
+        }
+      ]
+    }
+  ]
+}
