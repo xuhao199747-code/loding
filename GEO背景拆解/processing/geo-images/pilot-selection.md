@@ -6,9 +6,9 @@
 
 | 组 ID | 文章标题 | 类型 | 原始图片 | 入库分类 | 状态 |
 |---|---|---|---|---|---|
-| geo-doc-061 | Adversarial AI Search Engine | 纯文字型 | image 35.png | 05-内容优化与分发 | 待处理 |
-| geo-doc-062 | SEO Diagnostic Agent 技术方案 | 复杂流程图型 | image 120.png | 04-Agent与技术架构 | 待处理 |
-| geo-doc-063 | 品牌行业库 | 表格型 | image 264.png | 03-数据与知识工程 | 待处理 |
+| geo-doc-061 | Adversarial AI Search Engine | 纯文字型 | image 35.png | 05-内容优化与分发 | 已完成 |
+| geo-doc-062 | SEO Diagnostic Agent 技术方案 | 复杂流程图型 | image 120.png | 04-Agent与技术架构 | 已完成 |
+| geo-doc-063 | 品牌行业库 | 表格型 | image 264.png | 03-数据与知识工程 | 已完成 |
 
 ## 为什么先做这三篇
 

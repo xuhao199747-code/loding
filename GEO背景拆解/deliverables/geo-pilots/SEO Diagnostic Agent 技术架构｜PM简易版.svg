@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="420" viewBox="0 0 1500 420" role="img" aria-labelledby="title desc">
+  <title id="title">SEO Diagnostic Agent PM 简易版</title>
+  <desc id="desc">面向产品经理展示从用户输入到诊断报告的六步主链路。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4f46e5"/>
+    </marker>
+    <style>
+      .title{font:700 34px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#172033}
+      .h{font:700 21px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#172033}
+      .s{font:500 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#475569}
+      .box{fill:#fff;stroke:#818cf8;stroke-width:2.5;rx:18}
+      .arrow{fill:none;stroke:#4f46e5;stroke-width:3;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1500" height="420" fill="#f8fafc"/>
+  <text x="750" y="58" text-anchor="middle" class="title">SEO 诊断 Agent：产品主流程</text>
+
+  <rect x="35" y="145" width="195" height="125" class="box"/>
+  <text x="132" y="193" text-anchor="middle" class="h">用户输入</text>
+  <text x="132" y="226" text-anchor="middle" class="s">URL + 关键词</text>
+
+  <rect x="280" y="145" width="180" height="125" class="box"/>
+  <text x="370" y="210" text-anchor="middle" class="h">路由</text>
+
+  <rect x="510" y="145" width="210" height="125" class="box"/>
+  <text x="615" y="194" text-anchor="middle" class="h">抓取与诊断</text>
+  <text x="615" y="227" text-anchor="middle" class="s">获取页面数据</text>
+
+  <rect x="770" y="145" width="210" height="125" class="box"/>
+  <text x="875" y="194" text-anchor="middle" class="h">四类分析</text>
+  <text x="875" y="227" text-anchor="middle" class="s">技术 / 页面 / Schema / 内容</text>
+
+  <rect x="1030" y="145" width="170" height="125" class="box"/>
+  <text x="1115" y="210" text-anchor="middle" class="h">评分</text>
+
+  <rect x="1250" y="145" width="215" height="125" class="box"/>
+  <text x="1357" y="194" text-anchor="middle" class="h">诊断报告</text>
+  <text x="1357" y="227" text-anchor="middle" class="s">JSON / 0–100 分</text>
+
+  <path d="M230 207 H280" class="arrow"/>
+  <path d="M460 207 H510" class="arrow"/>
+  <path d="M720 207 H770" class="arrow"/>
+  <path d="M980 207 H1030" class="arrow"/>
+  <path d="M1200 207 H1250" class="arrow"/>
+
+  <text x="750" y="340" text-anchor="middle" class="s">PM 只需先理解主链路；Skills、Tools、并行/串行边界请看完整技术版。</text>
+</svg>
