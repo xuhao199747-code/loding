@@ -16,5 +16,9 @@ ocr_low_confidence_count: 48
 faithful_document: faithful.md
 readable_document: readable.md
 quality_report: quality-report.md
+vector_diagram_count: 4
+vector_diagram_format: pure-svg
+vector_diagram_raster_embeds: 0
+diagram_evidence_policy: SVG 默认展示，PNG 原图留证
 feishu_status: 未发布
 status: 允许入库

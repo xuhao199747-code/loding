@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="760" viewBox="0 0 1800 760">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#718096"/></marker>
+    <style>
+      text{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;fill:#202938}.title{font-size:34px;font-weight:780}.intro{font-size:20px;fill:#667085}.head{font-size:24px;font-weight:760}.question{font-size:18px;font-weight:680}.item{font-size:17px;fill:#374151}
+    </style>
+  </defs>
+  <rect width="1800" height="760" fill="#fff"/>
+  <text x="55" y="58" class="title">3.2 GEO Workflow</text>
+  <text x="55" y="98" class="intro">GEO 本质上不是内容生成，而是“发现 → 分析 → 优化 → 验证”的持续优化数据闭环。</text>
+  <text x="55" y="135" font-size="20">典型链路：问题发现 → 内容诊断 → Gap 分析 → 优化建议 → 内容生成 → 发布验证</text>
+
+  <g data-node="problem-discovery">
+    <rect x="55" y="180" width="270" height="500" fill="#fbfbfc" stroke="#cbd1da" stroke-width="2"/>
+    <rect x="55" y="180" width="270" height="110" fill="#f2f4f7" stroke="#cbd1da"/>
+    <text x="80" y="220" class="head">问题发现</text><text x="80" y="258" class="question">发生了什么？</text>
+    <text x="80" y="335" class="item">Visibility 是否下降</text><text x="80" y="385" class="item">Citation 是否下降</text><text x="80" y="435" class="item">是否出现新的竞争对手</text><text x="80" y="485" class="item">是否出现新的机会点</text>
+  </g>
+  <path d="M327 430H347" stroke="#718096" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g data-node="content-diagnosis">
+    <rect x="350" y="180" width="270" height="500" fill="#fff" stroke="#cbd1da" stroke-width="2"/>
+    <rect x="350" y="180" width="270" height="110" fill="#f2f4f7" stroke="#cbd1da"/>
+    <text x="375" y="220" class="head">内容诊断</text><text x="375" y="258" class="question">问题在哪里？</text>
+    <text x="375" y="335" class="item">内容覆盖度</text><text x="375" y="385" class="item">信息完整度</text><text x="375" y="435" class="item">引用友好度</text><text x="375" y="485" class="item">权威性分析</text>
+  </g>
+  <path d="M622 430H642" stroke="#718096" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g data-node="gap-analysis">
+    <rect x="645" y="180" width="270" height="500" fill="#fbfbfc" stroke="#cbd1da" stroke-width="2"/>
+    <rect x="645" y="180" width="270" height="110" fill="#f2f4f7" stroke="#cbd1da"/>
+    <text x="670" y="220" class="head">Gap 分析</text><text x="670" y="258" class="question">差距在哪里？</text>
+    <text x="670" y="335" class="item">与竞品差异</text><text x="670" y="385" class="item">与行业最佳实践差异</text><text x="670" y="435" class="item">与 AI Search 偏好差异</text>
+  </g>
+  <path d="M917 430H937" stroke="#718096" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g data-node="optimization-advice">
+    <rect x="940" y="180" width="270" height="500" fill="#fff" stroke="#cbd1da" stroke-width="2"/>
+    <rect x="940" y="180" width="270" height="110" fill="#f2f4f7" stroke="#cbd1da"/>
+    <text x="965" y="220" class="head">优化建议</text><text x="965" y="258" class="question">应该怎么优化？</text>
+    <text x="965" y="335" class="item">优先优化哪些 Topic</text><text x="965" y="385" class="item">优先覆盖哪些 Prompt</text><text x="965" y="435" class="item">优先补充哪些内容</text><text x="965" y="485" class="item">优先布局哪些平台</text>
+  </g>
+  <path d="M1212 430H1232" stroke="#718096" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g data-node="content-generation">
+    <rect x="1235" y="180" width="270" height="500" fill="#fbfbfc" stroke="#cbd1da" stroke-width="2"/>
+    <rect x="1235" y="180" width="270" height="110" fill="#f2f4f7" stroke="#cbd1da"/>
+    <text x="1260" y="220" class="head">内容生成</text><text x="1260" y="258" class="question">具体优化什么？</text>
+    <text x="1260" y="335" class="item">Blog 内容生成</text><text x="1260" y="385" class="item">FAQ 内容生成</text><text x="1260" y="435" class="item">Product Page 生成</text><text x="1260" y="485" class="item">Comparison Page 生成</text><text x="1260" y="535" class="item">AI Answer Friendly</text><text x="1260" y="570" class="item">内容生成</text>
+  </g>
+  <path d="M1507 430H1527" stroke="#718096" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g data-node="publish-validation">
+    <rect x="1530" y="180" width="215" height="500" fill="#fff" stroke="#cbd1da" stroke-width="2"/>
+    <rect x="1530" y="180" width="215" height="110" fill="#f2f4f7" stroke="#cbd1da"/>
+    <text x="1555" y="220" class="head">发布验证</text><text x="1555" y="258" class="question">优化是否有效？</text>
+    <text x="1555" y="335" class="item">Citation 是否提升</text><text x="1555" y="385" class="item">Visibility 是否提升</text><text x="1555" y="435" class="item">Share of Voice</text><text x="1555" y="470" class="item">是否提升</text><text x="1555" y="520" class="item">优化策略是否有效</text>
+  </g>
+</svg>

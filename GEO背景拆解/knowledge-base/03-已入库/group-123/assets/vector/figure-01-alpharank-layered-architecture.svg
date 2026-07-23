@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#8b74ef"/>
+    </marker>
+    <style>
+      text{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;fill:#172044}
+      .title{font-size:34px;font-weight:760}.intro{font-size:19px}.layerEn{font-size:19px;font-weight:720}.layerCn{font-size:24px;font-weight:760}
+      .cardTitle{font-size:16px;font-weight:700}.cardDesc{font-size:12px;fill:#5f6b86}.valueTitle{font-size:17px;font-weight:750}.valueDesc{font-size:13px;fill:#4d5875}
+      .cap{font-size:15px;font-weight:730}.footer{font-size:20px;font-weight:750;fill:#5f43dc}
+    </style>
+  </defs>
+  <rect width="1600" height="1080" fill="#fff"/>
+  <text x="55" y="55" class="title">2. AlphaRank 整体架构</text>
+  <text x="55" y="92" class="intro">整体架构：Data Layer → Knowledge Layer → Agent Layer → Application Layer；数据沉淀资产 → 知识沉淀认知 → Agent 沉淀能力 → 产品沉淀价值。</text>
+
+  <g data-node="application-layer">
+    <rect x="55" y="130" width="1490" height="190" rx="18" fill="#fbf9ff" stroke="#c9bdfb" stroke-width="2"/>
+    <rect x="75" y="150" width="205" height="150" rx="14" fill="#eee8ff"/>
+    <rect x="98" y="170" width="52" height="42" rx="10" fill="#6d46da"/><text x="124" y="199" text-anchor="middle" fill="#fff" font-size="21" font-weight="800">04</text>
+    <text x="98" y="238" class="layerEn" fill="#5536bd">Application Layer</text><text x="98" y="274" class="layerCn" fill="#5536bd">产品层</text>
+    <text x="330" y="157" class="cap" fill="#6643d7">核心能力</text>
+    <g data-node="app-dashboard"><rect x="330" y="177" width="190" height="98" rx="12" fill="#fff" stroke="#d4cafa"/><text x="350" y="211" class="cardTitle">GEO 数据看板</text><text x="350" y="240" class="cardDesc">可视化监控与洞察</text></g>
+    <g data-node="app-visibility"><rect x="535" y="177" width="190" height="98" rx="12" fill="#fff" stroke="#d4cafa"/><text x="555" y="211" class="cardTitle">AI Visibility 监控</text><text x="555" y="240" class="cardDesc">品牌曝光与趋势追踪</text></g>
+    <g data-node="app-advice"><rect x="740" y="177" width="190" height="98" rx="12" fill="#fff" stroke="#d4cafa"/><text x="760" y="211" class="cardTitle">内容优化建议</text><text x="760" y="240" class="cardDesc">策略推荐与优先级</text></g>
+    <g data-node="app-content"><rect x="945" y="177" width="190" height="98" rx="12" fill="#fff" stroke="#d4cafa"/><text x="965" y="211" class="cardTitle">内容生成与管理</text><text x="965" y="240" class="cardDesc">AI 内容生成与管理</text></g>
+    <g data-node="app-validation"><rect x="1150" y="177" width="190" height="98" rx="12" fill="#fff" stroke="#d4cafa"/><text x="1170" y="211" class="cardTitle">发布验证与追踪</text><text x="1170" y="240" class="cardDesc">效果验证与归因分析</text></g>
+    <g data-node="app-value"><rect x="1360" y="150" width="165" height="150" rx="14" fill="#f3efff" stroke="#d4cafa"/><text x="1442" y="184" text-anchor="middle" class="valueTitle" fill="#6543d5">产品沉淀价值</text><text x="1442" y="216" text-anchor="middle" class="valueDesc">能力产品化、可视化</text><text x="1442" y="238" text-anchor="middle" class="valueDesc">可交付，支持品牌</text><text x="1442" y="260" text-anchor="middle" class="valueDesc">持续增长</text></g>
+  </g>
+  <path d="M800 339V323" stroke="#8b74ef" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g data-node="agent-layer">
+    <rect x="55" y="350" width="1490" height="190" rx="18" fill="#f8fbff" stroke="#a9cdfa" stroke-width="2"/>
+    <rect x="75" y="370" width="205" height="150" rx="14" fill="#e6f1ff"/>
+    <rect x="98" y="390" width="52" height="42" rx="10" fill="#1778e8"/><text x="124" y="419" text-anchor="middle" fill="#fff" font-size="21" font-weight="800">03</text>
+    <text x="98" y="458" class="layerEn" fill="#0f64c5">Agent Layer</text><text x="98" y="494" class="layerCn" fill="#0f64c5">智能体层</text>
+    <text x="330" y="377" class="cap" fill="#1778e8">核心能力</text>
+    <g data-node="agent-discover"><rect x="330" y="397" width="190" height="98" rx="12" fill="#fff" stroke="#b9d8fb"/><text x="350" y="431" class="cardTitle">问题发现 Agent</text><text x="350" y="460" class="cardDesc">监控变化与机会识别</text></g>
+    <g data-node="agent-diagnose"><rect x="535" y="397" width="190" height="98" rx="12" fill="#fff" stroke="#b9d8fb"/><text x="555" y="431" class="cardTitle">诊断分析 Agent</text><text x="555" y="460" class="cardDesc">内容与引用诊断分析</text></g>
+    <g data-node="agent-strategy"><rect x="740" y="397" width="190" height="98" rx="12" fill="#fff" stroke="#b9d8fb"/><text x="760" y="431" class="cardTitle">策略规划 Agent</text><text x="760" y="460" class="cardDesc">优化策略与路径规划</text></g>
+    <g data-node="agent-generate"><rect x="945" y="397" width="190" height="98" rx="12" fill="#fff" stroke="#b9d8fb"/><text x="965" y="431" class="cardTitle">内容生成 Agent</text><text x="965" y="460" class="cardDesc">AI 内容生成与优化</text></g>
+    <g data-node="agent-evaluate"><rect x="1150" y="397" width="190" height="98" rx="12" fill="#fff" stroke="#b9d8fb"/><text x="1170" y="431" class="cardTitle">验证评估 Agent</text><text x="1170" y="460" class="cardDesc">效果验证与策略迭代</text></g>
+    <g data-node="agent-value"><rect x="1360" y="370" width="165" height="150" rx="14" fill="#eaf4ff" stroke="#b9d8fb"/><text x="1442" y="404" text-anchor="middle" class="valueTitle" fill="#1267c9">Agent 沉淀能力</text><text x="1442" y="436" text-anchor="middle" class="valueDesc">专业 Agent 协同</text><text x="1442" y="458" text-anchor="middle" class="valueDesc">把知识转为分析、</text><text x="1442" y="480" text-anchor="middle" class="valueDesc">决策与优化能力</text></g>
+  </g>
+  <path d="M800 559V543" stroke="#8b74ef" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g data-node="knowledge-layer">
+    <rect x="55" y="570" width="1490" height="190" rx="18" fill="#f7fffb" stroke="#9fdec1" stroke-width="2"/>
+    <rect x="75" y="590" width="205" height="150" rx="14" fill="#e2f8ed"/>
+    <rect x="98" y="610" width="52" height="42" rx="10" fill="#12ad72"/><text x="124" y="639" text-anchor="middle" fill="#fff" font-size="21" font-weight="800">02</text>
+    <text x="98" y="678" class="layerEn" fill="#078b59">Knowledge Layer</text><text x="98" y="714" class="layerCn" fill="#078b59">知识层</text>
+    <text x="330" y="597" class="cap" fill="#12ad72">核心能力</text>
+    <g data-node="knowledge-base"><rect x="330" y="617" width="190" height="98" rx="12" fill="#fff" stroke="#aee3ca"/><text x="350" y="651" class="cardTitle">知识库体系</text><text x="350" y="680" class="cardDesc">企业 / 行业 / 品牌 / 策略</text></g>
+    <g data-node="knowledge-graph"><rect x="535" y="617" width="190" height="98" rx="12" fill="#fff" stroke="#aee3ca"/><text x="555" y="651" class="cardTitle">Knowledge Graph</text><text x="555" y="680" class="cardDesc">实体识别与关系沉淀</text></g>
+    <g data-node="causal-graph"><rect x="740" y="617" width="190" height="98" rx="12" fill="#fff" stroke="#aee3ca"/><text x="760" y="651" class="cardTitle">Causal Graph</text><text x="760" y="680" class="cardDesc">因果关系建模与归因</text></g>
+    <g data-node="graph-rag"><rect x="945" y="617" width="190" height="98" rx="12" fill="#fff" stroke="#aee3ca"/><text x="965" y="651" class="cardTitle">GraphRAG</text><text x="965" y="680" class="cardDesc">图谱增强检索与推理</text></g>
+    <g data-node="knowledge-freshness"><rect x="1150" y="617" width="190" height="98" rx="12" fill="#fff" stroke="#aee3ca"/><text x="1170" y="651" class="cardTitle">时效性更新</text><text x="1170" y="680" class="cardDesc">持续吸收最新数据</text></g>
+    <g data-node="knowledge-value"><rect x="1360" y="590" width="165" height="150" rx="14" fill="#e7f8ef" stroke="#aee3ca"/><text x="1442" y="624" text-anchor="middle" class="valueTitle" fill="#078b59">知识沉淀认知</text><text x="1442" y="656" text-anchor="middle" class="valueDesc">结构化知识与</text><text x="1442" y="678" text-anchor="middle" class="valueDesc">关系网络支撑</text><text x="1442" y="700" text-anchor="middle" class="valueDesc">深度分析与决策</text></g>
+  </g>
+  <path d="M800 779V763" stroke="#8b74ef" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g data-node="data-layer">
+    <rect x="55" y="790" width="1490" height="190" rx="18" fill="#fffaf5" stroke="#f5bd83" stroke-width="2"/>
+    <rect x="75" y="810" width="205" height="150" rx="14" fill="#fff0df"/>
+    <rect x="98" y="830" width="52" height="42" rx="10" fill="#ff7a00"/><text x="124" y="859" text-anchor="middle" fill="#fff" font-size="21" font-weight="800">01</text>
+    <text x="98" y="898" class="layerEn" fill="#d96300">Data Layer</text><text x="98" y="934" class="layerCn" fill="#d96300">数据层</text>
+    <text x="330" y="817" class="cap" fill="#ff7a00">核心能力</text>
+    <g data-node="data-collect"><rect x="330" y="837" width="190" height="98" rx="12" fill="#fff" stroke="#f8c996"/><text x="350" y="871" class="cardTitle">多源数据采集</text><text x="350" y="900" class="cardDesc">AI Search / 社媒 / 新闻</text></g>
+    <g data-node="data-clean"><rect x="535" y="837" width="190" height="98" rx="12" fill="#fff" stroke="#f8c996"/><text x="555" y="871" class="cardTitle">数据清洗与处理</text><text x="555" y="900" class="cardDesc">去重 / 标准化 / 结构化</text></g>
+    <g data-node="data-storage"><rect x="740" y="837" width="190" height="98" rx="12" fill="#fff" stroke="#f8c996"/><text x="760" y="871" class="cardTitle">数据存储与管理</text><text x="760" y="900" class="cardDesc">高效存储 / 索引 / 安全</text></g>
+    <g data-node="data-monitor"><rect x="945" y="837" width="190" height="98" rx="12" fill="#fff" stroke="#f8c996"/><text x="965" y="871" class="cardTitle">数据监控与更新</text><text x="965" y="900" class="cardDesc">实时监控 / 增量更新</text></g>
+    <g data-node="data-governance"><rect x="1150" y="837" width="190" height="98" rx="12" fill="#fff" stroke="#f8c996"/><text x="1170" y="871" class="cardTitle">数据治理与合规</text><text x="1170" y="900" class="cardDesc">隐私合规 / 安全治理</text></g>
+    <g data-node="data-value"><rect x="1360" y="810" width="165" height="150" rx="14" fill="#fff1e2" stroke="#f8c996"/><text x="1442" y="844" text-anchor="middle" class="valueTitle" fill="#d96300">数据沉淀资产</text><text x="1442" y="876" text-anchor="middle" class="valueDesc">持续采集、处理</text><text x="1442" y="898" text-anchor="middle" class="valueDesc">多源数据，形成</text><text x="1442" y="920" text-anchor="middle" class="valueDesc">可信可扩展资产</text></g>
+  </g>
+
+  <g data-node="internal-loop">
+    <rect x="310" y="1005" width="980" height="54" rx="27" fill="#f7f3ff" stroke="#c9bdfb" stroke-width="2"/>
+    <text x="800" y="1038" text-anchor="middle" class="footer">AlphaRank 产品内部闭环　数据沉淀资产 → 知识沉淀认知 → Agent 沉淀能力 → 产品沉淀价值 → 持续优化与迭代</text>
+    <path d="M1450 980V1032H1310" fill="none" stroke="#8b74ef" stroke-width="3" stroke-dasharray="8 8" marker-end="url(#arrow)"/>
+    <path d="M290 1032H150V982" fill="none" stroke="#8b74ef" stroke-width="3" stroke-dasharray="8 8" marker-end="url(#arrow)"/>
+  </g>
+</svg>

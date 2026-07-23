@@ -9,7 +9,7 @@ review_status: reviewed
 # AlphaRank GEO 全景说明｜忠实还原版
 
 > [!info] 使用说明
-> 本文按照原始长图从上到下还原。正文经过 OCR 后对照原图校正；流程图和复杂表格保留原始高清裁图。每个主要内容块前的注释记录其在 7370 × 32768 原图中的像素范围。原始证据：[Group 123.png](source/Group%20123.png)。
+> 本文按照原始长图从上到下还原。正文经过 OCR 后对照原图校正；4 张流程图按原布局与节点关系重绘为纯 SVG，并保留原始高清裁图作为核对证据；复杂表格同时保留原图与 Markdown 版本。每个主要内容块前的注释记录其在 7370 × 32768 原图中的像素范围。原始证据：[Group 123.png](source/Group%20123.png)。
 
 <!-- source_region: x=2230,y=29,width=2700,height=6220; review=passed -->
 
@@ -106,7 +106,9 @@ GEO/AEO：Generative / Answer / Agent Engine Optimization，目标是让品牌�
 
 整体架构：Data Layer → Knowledge Layer → Agent Layer → Application Layer；数据沉淀资产 → 知识沉淀认知 → Agent 沉淀能力 → 产品沉淀价值，最终形成 AlphaRank 的产品内部闭环。
 
-![AlphaRank 四层整体架构原图](assets/figures/figure-01-alpharank-layered-architecture.png)
+![AlphaRank 四层整体架构（SVG 重绘）](assets/vector/figure-01-alpharank-layered-architecture.svg)
+
+[查看原始截图证据](assets/figures/figure-01-alpharank-layered-architecture.png)
 
 图中四层及其核心能力：
 
@@ -119,7 +121,9 @@ GEO/AEO：Generative / Answer / Agent Engine Optimization，目标是让品牌�
 
 ### GEO/AEO Architecture
 
-![GEO/AEO Architecture 原图](assets/figures/figure-02-geo-agentic-architecture.png)
+![GEO/AEO Architecture（SVG 重绘）](assets/vector/figure-02-geo-agentic-architecture.svg)
+
+[查看原始截图证据](assets/figures/figure-02-geo-agentic-architecture.png)
 
 该架构图包含：
 
@@ -133,7 +137,9 @@ GEO/AEO：Generative / Answer / Agent Engine Optimization，目标是让品牌�
 
 ### 核心模块流程图
 
-![核心模块流程图原图](assets/figures/figure-03-left-runtime-detail.png)
+![核心模块流程图（SVG 重绘）](assets/vector/figure-03-runtime-detail.svg)
+
+[查看原始截图证据](assets/figures/figure-03-left-runtime-detail.png)
 
 图中从 UI/Bot（AlphaRanker、DingTalk、FeiShu、Discord、Telegram、WhatsApp、Slack、Email 等）进入 Gateway（ChannelAdapter / Router），再进入 GEO-AgenticCluster。CoreAgents 包含 PromptBuilder、DataAnalyst、Strategist（Brand / Industry）、Diagnosor（Content）、Optimizer、Generator；协作类型为 Private / Group / Team，并连接 LLMRouter。Personality 从上方注入，Context（Message / Memory / Tools / Skills）从下方供给。
 
@@ -253,7 +259,9 @@ GEO 本质上不是内容生成，而是一个持续优化过程。因此 AlphaR
 
 典型链路：问题发现 → 内容诊断 → Gap 分析 → 优化建议 → 内容生成 → 发布验证。
 
-![GEO Workflow 原图](assets/figures/figure-04-geo-workflow.png)
+![GEO Workflow（SVG 重绘）](assets/vector/figure-04-geo-workflow.svg)
+
+[查看原始截图证据](assets/figures/figure-04-geo-workflow.png)
 
 | 阶段 | 核心问题 | 具体内容 |
 |---|---|---|
@@ -406,4 +414,3 @@ Agent 的加入增加了规划与决策过程，显著增加系统复杂度：
 1. **GEO 指标体系**：建立统一指标，包括 Visibility、Citation、Share of Voice、Authority、Conversion，但很多指标数据不一定能够获得；
 2. **离在线评估**：评估策略是否有效、内容是否有效等；
 3. **AB Test**：建立从实验设计、效果验证到自动归因的自动化数据闭环链路；在互联网环境中明确哪些策略、内容由系统生成，也是非常大的挑战。
-

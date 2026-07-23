@@ -82,7 +82,9 @@ GEO/AEO（Generative / Answer / Agent Engine Optimization）要提升品牌在 A
 
 ## 2. AlphaRank 四层架构
 
-![AlphaRank 四层整体架构](assets/figures/figure-01-alpharank-layered-architecture.png)
+![AlphaRank 四层整体架构（SVG 重绘）](assets/vector/figure-01-alpharank-layered-architecture.svg)
+
+[查看原始截图证据](assets/figures/figure-01-alpharank-layered-architecture.png)
 
 | 层级 | 核心能力 | 沉淀结果 |
 |---|---|---|
@@ -126,7 +128,9 @@ GEO/AEO（Generative / Answer / Agent Engine Optimization）要提升品牌在 A
 
 ### 2.3 Agentic 架构
 
-![GEO/AEO Agentic 架构](assets/figures/figure-02-geo-agentic-architecture.png)
+![GEO/AEO Agentic 架构（SVG 重绘）](assets/vector/figure-02-geo-agentic-architecture.svg)
+
+[查看原始截图证据](assets/figures/figure-02-geo-agentic-architecture.png)
 
 该架构由 GEO Team、Agent Teams、Personality、Agentic 工作链、ContextEngineering、Asset Supply System 和 Data Flywheel 组成。
 
@@ -134,7 +138,9 @@ GEO/AEO（Generative / Answer / Agent Engine Optimization）要提升品牌在 A
 
 上下文包含 Memory、Message、Skills、Tools；资产供给包含 Context、Knowledge、Content、Agent、Capability / Skills；数据飞轮为 Collection → Analysis → Learning / Insights → Improve。
 
-![多渠道运行时细节](assets/figures/figure-03-left-runtime-detail.png)
+![多渠道运行时细节（SVG 重绘）](assets/vector/figure-03-runtime-detail.svg)
+
+[查看原始截图证据](assets/figures/figure-03-left-runtime-detail.png)
 
 多渠道请求从 UI/Bot 经 Gateway 路由到 GEO-AgenticCluster，由 PromptBuilder、DataAnalyst、Strategist、Diagnosor、Optimizer、Generator 等 Agent 协作，再通过 LLMRouter 调用模型。Personality 与 Context 分别提供角色约束和运行时信息。
 
@@ -153,7 +159,9 @@ Agentic 化要实现 GEO 能力 Agentic 化、流程自动化和经验能力化�
 
 ### 标准 GEO Workflow
 
-![GEO Workflow](assets/figures/figure-04-geo-workflow.png)
+![GEO Workflow（SVG 重绘）](assets/vector/figure-04-geo-workflow.svg)
+
+[查看原始截图证据](assets/figures/figure-04-geo-workflow.png)
 
 | 阶段 | 问题 | 观察或行动 |
 |---|---|---|
@@ -234,4 +242,3 @@ DeepResearch 强调“搜索 → 分析 → 反思 → 再搜索 → 验证”�
 - 本地状态：已重建，等待最终质量门确认；
 - 飞书状态：未发布；
 - 事实核对：以 [[faithful|忠实还原版]] 和 [原始长图](source/Group%20123.png) 为准。
-
