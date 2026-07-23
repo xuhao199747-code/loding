@@ -4,8 +4,9 @@ from pathlib import Path
 
 
 VECTOR_DIR = (
-    Path(__file__).resolve().parents[1]
-    / "knowledge-base"
+    Path(__file__).resolve().parents[2]
+    / "Obsidain"
+    / "GEO知识库"
     / "03-已入库"
     / "group-123"
     / "assets"
