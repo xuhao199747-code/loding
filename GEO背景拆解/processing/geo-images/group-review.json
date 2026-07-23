@@ -1,0 +1,204 @@
+{
+  "reviewed_at": "2026-07-23",
+  "review_method": "8 张顶部联系表 + 标题 OCR 人工复核",
+  "groups": [
+    {
+      "title": "诊断链路梳理",
+      "files": ["Group 29.png", "image 106.png"],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["两张图片标题与主流程图一致，image 106 为同文档补充视图"]
+    },
+    {
+      "title": "FY26S2 诊断指标优化",
+      "files": ["Group 30.png", "Group 31.png"],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["Group 31 从 TPR/FPR 与模型构建继续 Group 30 的诊断指标方案"]
+    },
+    {
+      "title": "Adversarial AI Search Engine",
+      "files": ["image 35.png"],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "纯文字型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["标题完整、单页内容闭合，适合作为纯文字型首批样板"]
+    },
+    {
+      "title": "内容生成优化迭代—图文 Blog",
+      "files": ["Group 38.png", "Group 39.png"],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["Group 39 延续 Group 38 的内容质量维度与多媒体评估表"]
+    },
+    {
+      "title": "Query Expansion 数据集构建",
+      "files": ["Group 40.png", "Group 41.png"],
+      "category_hint": "03-数据与知识工程",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["Group 41 继续说明 Group 40 的变量、采样和数据集构建原理"]
+    },
+    {
+      "title": "Lazada 平台型观测实验",
+      "files": ["Group 43.png", "Group 44.png"],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["两图共享实验组、采样策略和验证结果"]
+    },
+    {
+      "title": "AEO/GEO Gateway 交互协议",
+      "files": ["Group 52.png", "Group 53.png", "Group 54.png"],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["Group 53 为协议 JSON 示例，Group 54 为同协议枚举与字段说明"]
+    },
+    {
+      "title": "FY27 S1 GEO 技术建设与归因系统",
+      "files": ["Group 65.png", "Group 66.png", "Group 67.png", "Group 68.png", "Group 69.png", "Group 70.png", "Group 71.png", "Group 72.png", "Group 73.png", "Group 74.png", "Group 75.png", "Group 76.png", "Group 77.png", "Group 78.png", "Group 79.png"],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["从 OKR 总览连续进入资源、Schema、API、指标、归因和项目规范，章节编号连续"]
+    },
+    {
+      "title": "GEO 内容健康度诊断与评分结构",
+      "files": ["Group 80.png", "Group 81.png", "Group 82.png", "Group 83.png", "Group 84.png", "Group 85.png", "Group 86.png", "Group 122.png", "image 533.png"],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["连续章节覆盖 Product Design、评测项、评分维度和页面元素，Group 122 与 image 533 为同体系补充"]
+    },
+    {
+      "title": "定价策略与成本核算",
+      "files": ["Group 88.png", "Group 89.png"],
+      "category_hint": "02-产品能力与业务流程",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["定价策略与平台成本核算构成同一商业化测算链路"]
+    },
+    {
+      "title": "品牌监测与 AI Citation 运营方案",
+      "files": ["Group 93.png", "Group 94.png", "Group 95.png", "Group 96.png", "Group 97.png", "Group 98.png", "Group 99.png"],
+      "category_hint": "07-案例与竞品",
+      "content_type": "表格型",
+      "confidence": "medium",
+      "review_status": "已确认",
+      "boundary_reasons": ["联系表显示从 GSC 规则、Prompt、Checklist、行业分类延续到品牌监测上线，主题连续"]
+    },
+    {
+      "title": "Agent 能力评测标准",
+      "files": ["Group 102.png", "Group 103.png", "Group 104.png"],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["三图分别为 DataAgent、PromptBuilder 和 Strategy Agent 的同系列评测表"]
+    },
+    {
+      "title": "营销 Agent 与内容生成方案",
+      "files": ["Group 105.png", "Group 106.png", "Group 107.png"],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "表格型",
+      "confidence": "medium",
+      "review_status": "已确认",
+      "boundary_reasons": ["从营销场景进入内容生成 API、策略文档和交付规则，形成完整产品能力链路"]
+    },
+    {
+      "title": "AlphaRanker 产品功能详解",
+      "files": ["Group 111.png", "Group 112.png"],
+      "category_hint": "02-产品能力与业务流程",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["Group 112 延续产品痛点、版本迭代和指标说明"]
+    },
+    {
+      "title": "AlphaRank 技术汇报架构",
+      "files": ["Group 114.png", "image 850.png"],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["image 850 是 Group 114 中整体架构图的清晰独立视图"]
+    },
+    {
+      "title": "品牌诊断 PRD 与技术方案",
+      "files": ["Group 115.png", "Group 116.png", "image 21.png", "image 121.png", "image 122.png"],
+      "category_hint": "02-产品能力与业务流程",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["PRD 评分规则、诊断方案和 Main Agent 流程图共同描述品牌诊断能力"]
+    },
+    {
+      "title": "统一召回与知识图谱处理链路",
+      "files": ["Group 118.png", "Group 119.png", "image 22.png"],
+      "category_hint": "03-数据与知识工程",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["Group 119 继续 Group 118 的节点详解，image 22 提供在线与离线 RAG 总览图"]
+    },
+    {
+      "title": "GEO/AEO 系统架构与图文内容生成",
+      "files": ["Group 120.png", "Group 121.png"],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["Group 121 延续系统架构中的图文生成与内链处理流程"]
+    },
+    {
+      "title": "国内 AI 答案平台接入现状",
+      "files": ["Group 124.png", "image 1089.png"],
+      "category_hint": "02-产品能力与业务流程",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["两图均为国内 AI 平台账号、代理、量级和接入进度记录"]
+    },
+    {
+      "title": "SEO Diagnostic Agent 技术方案",
+      "files": ["image 120.png"],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["标题与系统架构图完整，适合作为复杂流程图型首批样板"]
+    },
+    {
+      "title": "品牌行业库",
+      "files": ["image 264.png"],
+      "category_hint": "03-数据与知识工程",
+      "content_type": "表格型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["单页行业、品牌和域名表完整，适合作为表格型首批样板"]
+    },
+    {
+      "title": "热词数据需求",
+      "files": ["image 1090.png"],
+      "category_hint": "03-数据与知识工程",
+      "content_type": "纯文字型",
+      "confidence": "high",
+      "review_status": "已确认",
+      "boundary_reasons": ["标题与四项数据需求完整，单页闭合"]
+    }
+  ]
+}

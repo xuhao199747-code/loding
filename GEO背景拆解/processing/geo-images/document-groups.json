@@ -1,0 +1,966 @@
+{
+  "source_image_count": 115,
+  "group_count": 65,
+  "groups": [
+    {
+      "group_id": "geo-doc-001",
+      "title": "Agentic（GEO）",
+      "files": [
+        "Group 23.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-002",
+      "title": "坦庆处生 里",
+      "files": [
+        "Group 24.png"
+      ],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-003",
+      "title": "算法链路数据分类",
+      "files": [
+        "Group 25.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-004",
+      "title": "算法设计",
+      "files": [
+        "Group 26.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "表格型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-005",
+      "title": "AI Search仿真环境",
+      "files": [
+        "Group 27.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-006",
+      "title": "架构设计",
+      "files": [
+        "Group 28.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-007",
+      "title": "诊断链路梳理",
+      "files": [
+        "Group 29.png",
+        "image 106.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "两张图片标题与主流程图一致，image 106 为同文档补充视图"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-008",
+      "title": "FY26S2 诊断指标优化",
+      "files": [
+        "Group 30.png",
+        "Group 31.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "Group 31 从 TPR/FPR 与模型构建继续 Group 30 的诊断指标方案"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-009",
+      "title": "芒茶胜及买加维下、实加体八的心，「走一当例丁",
+      "files": [
+        "Group 32.png"
+      ],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "表格型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-010",
+      "title": "Nihao （www.nihaojewelry.com）",
+      "files": [
+        "Group 33.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-011",
+      "title": "数据建设",
+      "files": [
+        "Group 34.png"
+      ],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-012",
+      "title": "优化版本1-协议【20251124】",
+      "files": [
+        "Group 35.png"
+      ],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "表格型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-013",
+      "title": "Al search更喜欢近期发布的内",
+      "files": [
+        "Group 36.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-014",
+      "title": "关键证据锚点",
+      "files": [
+        "Group 37.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "表格型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-015",
+      "title": "内容生成优化迭代—图文 Blog",
+      "files": [
+        "Group 38.png",
+        "Group 39.png"
+      ],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "Group 39 延续 Group 38 的内容质量维度与多媒体评估表"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-016",
+      "title": "Query Expansion 数据集构建",
+      "files": [
+        "Group 40.png",
+        "Group 41.png"
+      ],
+      "category_hint": "03-数据与知识工程",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "Group 41 继续说明 Group 40 的变量、采样和数据集构建原理"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-017",
+      "title": "query的充分条件",
+      "files": [
+        "Group 42.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-018",
+      "title": "Lazada 平台型观测实验",
+      "files": [
+        "Group 43.png",
+        "Group 44.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "两图共享实验组、采样策略和验证结果"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-019",
+      "title": "keyword挖掘-图谱构建",
+      "files": [
+        "Group 45.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-020",
+      "title": "##圊输出要求",
+      "files": [
+        "Group 46.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-021",
+      "title": "品牌诊断-协议",
+      "files": [
+        "Group 47.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-022",
+      "title": "订阅 技术方案",
+      "files": [
+        "Group 48.png"
+      ],
+      "category_hint": "02-产品能力与业务流程",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-023",
+      "title": "业务数据回流展示",
+      "files": [
+        "Group 49.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-024",
+      "title": "d. 腾讯元宝（登录＋未知，yuanbao.tencent.com）",
+      "files": [
+        "Group 50.png"
+      ],
+      "category_hint": "03-数据与知识工程",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-025",
+      "title": "｛\"response\"：（\"id\"：\"8488fe5c-bb0e-4ad5-9421-",
+      "files": [
+        "Group 51.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-026",
+      "title": "AEO/GEO Gateway 交互协议",
+      "files": [
+        "Group 52.png",
+        "Group 53.png",
+        "Group 54.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "Group 53 为协议 JSON 示例，Group 54 为同协议枚举与字段说明"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-027",
+      "title": "Java 内存里过滤。",
+      "files": [
+        "Group 56.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-028",
+      "title": "Prompt 指令",
+      "files": [
+        "Group 57.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-029",
+      "title": "建议的探案性笪询（昙体指辞目行根据天键词调整）",
+      "files": [
+        "Group 58.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "表格型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-030",
+      "title": "这一步决定召回到的知识是否相关、是否有价值，是本技能的核心。目标是：围绕该品牌的真实",
+      "files": [
+        "Group 60.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "表格型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-031",
+      "title": "industry-research-agent 整体方案",
+      "files": [
+        "Group 61.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-032",
+      "title": "AB方案",
+      "files": [
+        "Group 62.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-033",
+      "title": "Grok | MetaAl",
+      "files": [
+        "Group 63.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-034",
+      "title": "ualeWay",
+      "files": [
+        "Group 64.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-035",
+      "title": "FY27 S1 GEO 技术建设与归因系统",
+      "files": [
+        "Group 65.png",
+        "Group 66.png",
+        "Group 67.png",
+        "Group 68.png",
+        "Group 69.png",
+        "Group 70.png",
+        "Group 71.png",
+        "Group 72.png",
+        "Group 73.png",
+        "Group 74.png",
+        "Group 75.png",
+        "Group 76.png",
+        "Group 77.png",
+        "Group 78.png",
+        "Group 79.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "从 OKR 总览连续进入资源、Schema、API、指标、归因和项目规范，章节编号连续"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-036",
+      "title": "GEO 内容健康度诊断与评分结构",
+      "files": [
+        "Group 80.png",
+        "Group 81.png",
+        "Group 82.png",
+        "Group 83.png",
+        "Group 84.png",
+        "Group 85.png",
+        "Group 86.png",
+        "Group 122.png",
+        "image 533.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "连续章节覆盖 Product Design、评测项、评分维度和页面元素，Group 122 与 image 533 为同体系补充"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-037",
+      "title": "【PRD】企业知识库维护",
+      "files": [
+        "Group 87.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-038",
+      "title": "定价策略与成本核算",
+      "files": [
+        "Group 88.png",
+        "Group 89.png"
+      ],
+      "category_hint": "02-产品能力与业务流程",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "定价策略与平台成本核算构成同一商业化测算链路"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-039",
+      "title": "忍看使交獻通義的主请熟（公：人工司說。学融村楼。健煌生。）",
+      "files": [
+        "Group 90.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-040",
+      "title": "Integrator Agent （which assembles the final post）.",
+      "files": [
+        "Group 91.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-041",
+      "title": "【Blog】类型",
+      "files": [
+        "Group 92.png"
+      ],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-042",
+      "title": "品牌监测与 AI Citation 运营方案",
+      "files": [
+        "Group 93.png",
+        "Group 94.png",
+        "Group 95.png",
+        "Group 96.png",
+        "Group 97.png",
+        "Group 98.png",
+        "Group 99.png"
+      ],
+      "category_hint": "07-案例与竞品",
+      "content_type": "表格型",
+      "confidence": "medium",
+      "boundary_reasons": [
+        "联系表显示从 GSC 规则、Prompt、Checklist、行业分类延续到品牌监测上线，主题连续"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-043",
+      "title": "【PRD】品牌诊断",
+      "files": [
+        "Group 100.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-044",
+      "title": "alpharank 关键词列表",
+      "files": [
+        "Group 101.png"
+      ],
+      "category_hint": "07-案例与竞品",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-045",
+      "title": "Agent 能力评测标准",
+      "files": [
+        "Group 102.png",
+        "Group 103.png",
+        "Group 104.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "三图分别为 DataAgent、PromptBuilder 和 Strategy Agent 的同系列评测表"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-046",
+      "title": "营销 Agent 与内容生成方案",
+      "files": [
+        "Group 105.png",
+        "Group 106.png",
+        "Group 107.png"
+      ],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "表格型",
+      "confidence": "medium",
+      "boundary_reasons": [
+        "从营销场景进入内容生成 API、策略文档和交付规则，形成完整产品能力链路"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-047",
+      "title": "行业/知识个性化",
+      "files": [
+        "Group 108.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-048",
+      "title": "/1 泊，",
+      "files": [
+        "Group 109.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-049",
+      "title": "Fnotoroom",
+      "files": [
+        "Group 110.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-050",
+      "title": "AlphaRanker 产品功能详解",
+      "files": [
+        "Group 111.png",
+        "Group 112.png"
+      ],
+      "category_hint": "02-产品能力与业务流程",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "Group 112 延续产品痛点、版本迭代和指标说明"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-051",
+      "title": "～•引用预测：基于web page和因子，判断page是否会被引用。这个方向存在问题",
+      "files": [
+        "Group 113.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-052",
+      "title": "AlphaRank 技术汇报架构",
+      "files": [
+        "Group 114.png",
+        "image 850.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "image 850 是 Group 114 中整体架构图的清晰独立视图"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-053",
+      "title": "品牌诊断 PRD 与技术方案",
+      "files": [
+        "Group 115.png",
+        "Group 116.png",
+        "image 21.png",
+        "image 121.png",
+        "image 122.png"
+      ],
+      "category_hint": "02-产品能力与业务流程",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "PRD 评分规则、诊断方案和 Main Agent 流程图共同描述品牌诊断能力"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-054",
+      "title": "【PRD】品牌诊断",
+      "files": [
+        "Group 117.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-055",
+      "title": "统一召回与知识图谱处理链路",
+      "files": [
+        "Group 118.png",
+        "Group 119.png",
+        "image 22.png"
+      ],
+      "category_hint": "03-数据与知识工程",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "Group 119 继续 Group 118 的节点详解，image 22 提供在线与离线 RAG 总览图"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-056",
+      "title": "GEO/AEO 系统架构与图文内容生成",
+      "files": [
+        "Group 120.png",
+        "Group 121.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "Group 121 延续系统架构中的图文生成与内链处理流程"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-057",
+      "title": "国内 AI 答案平台接入现状",
+      "files": [
+        "Group 124.png",
+        "image 1089.png"
+      ],
+      "category_hint": "02-产品能力与业务流程",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "两图均为国内 AI 平台账号、代理、量级和接入进度记录"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-058",
+      "title": "\"'session_key\"",
+      "files": [
+        "Group 125.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-059",
+      "title": "［信息维度•必须分散覆盖（治本：多元来自这里，不靠后处理去重）］",
+      "files": [
+        "Group 126.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-060",
+      "title": "内容 Agent不应该泛泛改写，而是要围绕目标Factor 改内容。",
+      "files": [
+        "Group 127.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    },
+    {
+      "group_id": "geo-doc-061",
+      "title": "Adversarial AI Search Engine",
+      "files": [
+        "image 35.png"
+      ],
+      "category_hint": "05-内容优化与分发",
+      "content_type": "纯文字型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "标题完整、单页内容闭合，适合作为纯文字型首批样板"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-062",
+      "title": "SEO Diagnostic Agent 技术方案",
+      "files": [
+        "image 120.png"
+      ],
+      "category_hint": "04-Agent与技术架构",
+      "content_type": "复杂流程图型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "标题与系统架构图完整，适合作为复杂流程图型首批样板"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-063",
+      "title": "品牌行业库",
+      "files": [
+        "image 264.png"
+      ],
+      "category_hint": "03-数据与知识工程",
+      "content_type": "表格型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "单页行业、品牌和域名表完整，适合作为表格型首批样板"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-064",
+      "title": "热词数据需求",
+      "files": [
+        "image 1090.png"
+      ],
+      "category_hint": "03-数据与知识工程",
+      "content_type": "纯文字型",
+      "confidence": "high",
+      "boundary_reasons": [
+        "标题与四项数据需求完整，单页闭合"
+      ],
+      "review_status": "已确认"
+    },
+    {
+      "group_id": "geo-doc-065",
+      "title": "模型使用情况～",
+      "files": [
+        "image 1244.png"
+      ],
+      "category_hint": "06-指标实验与评估",
+      "content_type": "纯文字型",
+      "confidence": "low",
+      "boundary_reasons": [
+        "视觉复核未覆盖，保守保持单图分组"
+      ],
+      "review_status": "待确认"
+    }
+  ]
+}
