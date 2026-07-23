@@ -1,0 +1,1157 @@
+{
+  "source_dir": "/Users/mac/Desktop/GEO图",
+  "image_count": 115,
+  "total_bytes": 690172753,
+  "images": [
+    {
+      "filename": "Group 23.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 23.png",
+      "kind": "Group",
+      "number": 23,
+      "width": 2208,
+      "height": 21580,
+      "sha256": "d7d96d28b5e1aa7ed074272ff35fd9057e3618c99b14e21c3eb3f2c3a65dc2f6",
+      "bytes": 12531203
+    },
+    {
+      "filename": "Group 24.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 24.png",
+      "kind": "Group",
+      "number": 24,
+      "width": 2113,
+      "height": 25971,
+      "sha256": "a9275da7b5b052064f49a05464f5ea3b24b9883e04fa7ba43947a7fd05f5646f",
+      "bytes": 11100265
+    },
+    {
+      "filename": "Group 25.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 25.png",
+      "kind": "Group",
+      "number": 25,
+      "width": 1800,
+      "height": 2879,
+      "sha256": "fa5957da5fec421b76abc764c4e6f8f7fb7ed82f09fa2d54aefac991e5394f74",
+      "bytes": 1466940
+    },
+    {
+      "filename": "Group 26.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 26.png",
+      "kind": "Group",
+      "number": 26,
+      "width": 1752,
+      "height": 5082,
+      "sha256": "9f63e75ea2b83d4ab0992d5c8ce3acada258c6d35321e824685158d5a1aa82c9",
+      "bytes": 1603101
+    },
+    {
+      "filename": "Group 27.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 27.png",
+      "kind": "Group",
+      "number": 27,
+      "width": 1918,
+      "height": 1974,
+      "sha256": "8ff6420a095adfc1559b0b3e22eb918a664d6d61e45a9cf09ceb3b3db865feaa",
+      "bytes": 935418
+    },
+    {
+      "filename": "Group 28.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 28.png",
+      "kind": "Group",
+      "number": 28,
+      "width": 1908,
+      "height": 4592,
+      "sha256": "495a16ddfcf49cb226d17870741954a6c8f291a46cb6a69df9dbafe1578838ff",
+      "bytes": 2839777
+    },
+    {
+      "filename": "Group 29.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 29.png",
+      "kind": "Group",
+      "number": 29,
+      "width": 2444,
+      "height": 1585,
+      "sha256": "ad9662f536956a82148731aa6e10224f690d4a31e2b99b7fe99ad2e95726bc83",
+      "bytes": 777386
+    },
+    {
+      "filename": "Group 30.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 30.png",
+      "kind": "Group",
+      "number": 30,
+      "width": 2488,
+      "height": 3239,
+      "sha256": "2b3e2bba3c71fb1e2867c43b78a251fd5a030d9db32f7e87f5ffbf7f26998d8a",
+      "bytes": 2266164
+    },
+    {
+      "filename": "Group 31.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 31.png",
+      "kind": "Group",
+      "number": 31,
+      "width": 2350,
+      "height": 24066,
+      "sha256": "0cf997c8eb7369eb0783a10ace154253e7ae38acc998a64e9a8084a637a87b53",
+      "bytes": 9649246
+    },
+    {
+      "filename": "Group 32.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 32.png",
+      "kind": "Group",
+      "number": 32,
+      "width": 2063,
+      "height": 15859,
+      "sha256": "dfce738d1ea0c8b1cc4c01e7c56da55ad4cf6b7aba405db5bd34e237af24645d",
+      "bytes": 11662186
+    },
+    {
+      "filename": "Group 33.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 33.png",
+      "kind": "Group",
+      "number": 33,
+      "width": 2678,
+      "height": 20338,
+      "sha256": "4949112c1cb778f09054e0b380de3a389b007bd2775b70780c9deaa5d0115405",
+      "bytes": 11613235
+    },
+    {
+      "filename": "Group 34.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 34.png",
+      "kind": "Group",
+      "number": 34,
+      "width": 1710,
+      "height": 2034,
+      "sha256": "28703974a434530f94c60e1ef332c4cd16c24aac603580a0e22be2ea1260daec",
+      "bytes": 700540
+    },
+    {
+      "filename": "Group 35.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 35.png",
+      "kind": "Group",
+      "number": 35,
+      "width": 1738,
+      "height": 3877,
+      "sha256": "341b45af6870f6f9bef41a29eab6eaecf635cd0ba48accaf537ad8421f721506",
+      "bytes": 1553483
+    },
+    {
+      "filename": "Group 36.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 36.png",
+      "kind": "Group",
+      "number": 36,
+      "width": 2400,
+      "height": 20848,
+      "sha256": "8f073dd857c60936a9151ca21e4e7f6aed35dadcaf2a65ba11aaf3a90c8d6d58",
+      "bytes": 12591576
+    },
+    {
+      "filename": "Group 37.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 37.png",
+      "kind": "Group",
+      "number": 37,
+      "width": 2526,
+      "height": 8305,
+      "sha256": "e758130bd9bab21e04fe72f56525c3cc5eab176e31a2c411638f764ddca15366",
+      "bytes": 6198543
+    },
+    {
+      "filename": "Group 38.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 38.png",
+      "kind": "Group",
+      "number": 38,
+      "width": 2436,
+      "height": 2856,
+      "sha256": "532925d55c4a8e2dcab77e7fa8245876a0bc3139d3b225f6698bb9e5af3e4b26",
+      "bytes": 1369750
+    },
+    {
+      "filename": "Group 39.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 39.png",
+      "kind": "Group",
+      "number": 39,
+      "width": 2631,
+      "height": 16960,
+      "sha256": "42989efe876e59a171ff4876cea972dde3a186ebec24f59f4f658455a73c2152",
+      "bytes": 8495687
+    },
+    {
+      "filename": "Group 40.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 40.png",
+      "kind": "Group",
+      "number": 40,
+      "width": 2674,
+      "height": 2260,
+      "sha256": "bc06eea9845326c61e5c4aac04a14d6731687a3b03840db8713e854a93f76122",
+      "bytes": 806924
+    },
+    {
+      "filename": "Group 41.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 41.png",
+      "kind": "Group",
+      "number": 41,
+      "width": 2457,
+      "height": 11761,
+      "sha256": "fdd102c48b2a0b689cdb232de46e2b76a2db80289f18aa96fdbefcb254a5a863",
+      "bytes": 9223580
+    },
+    {
+      "filename": "Group 42.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 42.png",
+      "kind": "Group",
+      "number": 42,
+      "width": 2436,
+      "height": 13222,
+      "sha256": "14b3aca54a42e7eb90d1a302438e984e99f11cee65bf5bd8240194d5a674e4aa",
+      "bytes": 7384852
+    },
+    {
+      "filename": "Group 43.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 43.png",
+      "kind": "Group",
+      "number": 43,
+      "width": 2211,
+      "height": 3888,
+      "sha256": "8624f91fcacaccabda8efa90f36a2958cc6f2f84db5bdc28232b9f052ebc44fb",
+      "bytes": 1683309
+    },
+    {
+      "filename": "Group 44.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 44.png",
+      "kind": "Group",
+      "number": 44,
+      "width": 2493,
+      "height": 6510,
+      "sha256": "285574542cdd386cf666c3aecdc236f0af444a2e1d0fd5409603a93ba0bbbdc9",
+      "bytes": 3085136
+    },
+    {
+      "filename": "Group 45.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 45.png",
+      "kind": "Group",
+      "number": 45,
+      "width": 2426,
+      "height": 1077,
+      "sha256": "3e3eca379d1a668e906048a27f095852c6bc6e588c3adf548b979f6e557752f7",
+      "bytes": 694112
+    },
+    {
+      "filename": "Group 46.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 46.png",
+      "kind": "Group",
+      "number": 46,
+      "width": 4402,
+      "height": 22550,
+      "sha256": "08e7a34c191734088ceb545a66a740125cc028bcd32b861fe5e5b37dd362ab8f",
+      "bytes": 6256833
+    },
+    {
+      "filename": "Group 47.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 47.png",
+      "kind": "Group",
+      "number": 47,
+      "width": 2150,
+      "height": 4028,
+      "sha256": "d3e166d966e84576e55c1aa0be4637fbf85a1224f48fd1919a6e24695495d6ce",
+      "bytes": 2069642
+    },
+    {
+      "filename": "Group 48.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 48.png",
+      "kind": "Group",
+      "number": 48,
+      "width": 1706,
+      "height": 1934,
+      "sha256": "c111b51b46ff5194ceda1daa171a0ecdab50139fa0cc482078bcfd928d83eda7",
+      "bytes": 873444
+    },
+    {
+      "filename": "Group 49.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 49.png",
+      "kind": "Group",
+      "number": 49,
+      "width": 2158,
+      "height": 5146,
+      "sha256": "f2d8a7694701c87b72ea40ecb6c0beed87639d16c10363b6dc3d0f6bf5733375",
+      "bytes": 653308
+    },
+    {
+      "filename": "Group 50.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 50.png",
+      "kind": "Group",
+      "number": 50,
+      "width": 1713,
+      "height": 5774,
+      "sha256": "5be207f89ba771cc018a65d9409f63e9794649f234d34cfb01030c49dbf01435",
+      "bytes": 1749059
+    },
+    {
+      "filename": "Group 51.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 51.png",
+      "kind": "Group",
+      "number": 51,
+      "width": 2916,
+      "height": 26510,
+      "sha256": "b5f6a8b15f3d9d530ce9bdbd26ebda5ff97c6713eae29fa63b346b83127f1b2f",
+      "bytes": 9800320
+    },
+    {
+      "filename": "Group 52.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 52.png",
+      "kind": "Group",
+      "number": 52,
+      "width": 1686,
+      "height": 2490,
+      "sha256": "ec201e2ce33ac163436d3691dceaa24a77c137e6c3a5b56335369620aac08d53",
+      "bytes": 1017283
+    },
+    {
+      "filename": "Group 53.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 53.png",
+      "kind": "Group",
+      "number": 53,
+      "width": 1781,
+      "height": 32768,
+      "sha256": "26c1c586e009ce99ed1b988fc85994820b053ba3e6f46f94b207e255b183510e",
+      "bytes": 15798461
+    },
+    {
+      "filename": "Group 54.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 54.png",
+      "kind": "Group",
+      "number": 54,
+      "width": 2532,
+      "height": 32768,
+      "sha256": "309418a7445e4d73e1b973219412d4279439736496e226ac18f3d2f36431d87c",
+      "bytes": 17741935
+    },
+    {
+      "filename": "Group 56.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 56.png",
+      "kind": "Group",
+      "number": 56,
+      "width": 2684,
+      "height": 20956,
+      "sha256": "9f1fc119fdf550ef3d1ff4a625e6171c1aaee61bdb200f1294af42ac080cab3c",
+      "bytes": 11598772
+    },
+    {
+      "filename": "Group 57.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 57.png",
+      "kind": "Group",
+      "number": 57,
+      "width": 2255,
+      "height": 32768,
+      "sha256": "f93356db8cf6f1101151bbfb6ea42f91f611ea7760a9007fb295a95a0f736904",
+      "bytes": 22977464
+    },
+    {
+      "filename": "Group 58.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 58.png",
+      "kind": "Group",
+      "number": 58,
+      "width": 2220,
+      "height": 9474,
+      "sha256": "179ebc9097657d912546fa107ada646e6acc2c7bbe35dec52277a35481102494",
+      "bytes": 2608700
+    },
+    {
+      "filename": "Group 60.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 60.png",
+      "kind": "Group",
+      "number": 60,
+      "width": 3284,
+      "height": 17546,
+      "sha256": "fc202c085a4630b9665b01a5e37c39ef9cdb964f4cf0a7fc6586d94d179ad84c",
+      "bytes": 8852302
+    },
+    {
+      "filename": "Group 61.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 61.png",
+      "kind": "Group",
+      "number": 61,
+      "width": 1762,
+      "height": 2668,
+      "sha256": "684b43c82119a8e1e5c2424fc6d41f3d0d2dd16a6791dbdd7019e4a05f2c8a12",
+      "bytes": 1403331
+    },
+    {
+      "filename": "Group 62.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 62.png",
+      "kind": "Group",
+      "number": 62,
+      "width": 2114,
+      "height": 4588,
+      "sha256": "f49a10a8ce0af660829b48dc4a3d78b0b54ac9db0abf4f579127c48a17747c81",
+      "bytes": 2011855
+    },
+    {
+      "filename": "Group 63.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 63.png",
+      "kind": "Group",
+      "number": 63,
+      "width": 2378,
+      "height": 7283,
+      "sha256": "b15de65cff91403bd730db7f3d372d9f8feb36f0234b1db567679dda44eebdc1",
+      "bytes": 4841289
+    },
+    {
+      "filename": "Group 64.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 64.png",
+      "kind": "Group",
+      "number": 64,
+      "width": 2058,
+      "height": 11833,
+      "sha256": "e6511c152f7b814d2891db833248afdb46c109fdf0f0d93872a140467e08bca5",
+      "bytes": 7416266
+    },
+    {
+      "filename": "Group 65.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 65.png",
+      "kind": "Group",
+      "number": 65,
+      "width": 1900,
+      "height": 3639,
+      "sha256": "383aa234e46eeb54958f222fa750d818ca964c80417c1a4cb783c5d01bb43233",
+      "bytes": 2589733
+    },
+    {
+      "filename": "Group 66.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 66.png",
+      "kind": "Group",
+      "number": 66,
+      "width": 1748,
+      "height": 2451,
+      "sha256": "70630748944c28f36dc64a6969a19e8cc06a26156ce3acae87efa42c817dbc2b",
+      "bytes": 898672
+    },
+    {
+      "filename": "Group 67.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 67.png",
+      "kind": "Group",
+      "number": 67,
+      "width": 2530,
+      "height": 14051,
+      "sha256": "da9885f6e09435243f40b527b77f8364ade1c5e0d553c6d5f6529044c4a9480a",
+      "bytes": 9509864
+    },
+    {
+      "filename": "Group 68.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 68.png",
+      "kind": "Group",
+      "number": 68,
+      "width": 1939,
+      "height": 24172,
+      "sha256": "916695ece4d951eb1e80be39d43d02c683c2883cb1efd99d5c4295270f6a57e0",
+      "bytes": 7801417
+    },
+    {
+      "filename": "Group 69.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 69.png",
+      "kind": "Group",
+      "number": 69,
+      "width": 1312,
+      "height": 32768,
+      "sha256": "20e119579f7e642c8451c1dbeaa58443afbb32dc60cfc6456e6a03b95861ff44",
+      "bytes": 15085579
+    },
+    {
+      "filename": "Group 70.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 70.png",
+      "kind": "Group",
+      "number": 70,
+      "width": 1800,
+      "height": 12767,
+      "sha256": "d992a3019561cdb217879b72ad62630f7376a78f311057245ad68c36c16ba623",
+      "bytes": 4313212
+    },
+    {
+      "filename": "Group 71.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 71.png",
+      "kind": "Group",
+      "number": 71,
+      "width": 1366,
+      "height": 32768,
+      "sha256": "19cf2d8433aaf1297de89941afc965f48d7ba7cd6233cd03efb48b239d6c4a12",
+      "bytes": 17514340
+    },
+    {
+      "filename": "Group 72.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 72.png",
+      "kind": "Group",
+      "number": 72,
+      "width": 2259,
+      "height": 21535,
+      "sha256": "6bb1c6c17c1ed6b47e4fa29e4d557ba549335c330e700f5fef6bb3bc13cc27db",
+      "bytes": 7621827
+    },
+    {
+      "filename": "Group 73.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 73.png",
+      "kind": "Group",
+      "number": 73,
+      "width": 1956,
+      "height": 18196,
+      "sha256": "78aab518864d536e7063d2eb3f190cd8351268dc1ac514db9d77048a269a8e18",
+      "bytes": 8718333
+    },
+    {
+      "filename": "Group 74.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 74.png",
+      "kind": "Group",
+      "number": 74,
+      "width": 1958,
+      "height": 15924,
+      "sha256": "5e700182700e5f7f637fad5ced36495feed7a4092a45004c26e4bffd1fbe03db",
+      "bytes": 7443014
+    },
+    {
+      "filename": "Group 75.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 75.png",
+      "kind": "Group",
+      "number": 75,
+      "width": 2656,
+      "height": 13842,
+      "sha256": "3a1fcbf56db98a1c6e245132776da65195c2b86743f11e1d21a2c85641831ed5",
+      "bytes": 7011722
+    },
+    {
+      "filename": "Group 76.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 76.png",
+      "kind": "Group",
+      "number": 76,
+      "width": 3106,
+      "height": 32768,
+      "sha256": "918c54b366fd56a1044bcf5506451039f803f4b4a68db7bb363b028d1035bcb0",
+      "bytes": 21641972
+    },
+    {
+      "filename": "Group 77.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 77.png",
+      "kind": "Group",
+      "number": 77,
+      "width": 2654,
+      "height": 20077,
+      "sha256": "9bb41d7b131c3631d1e7ca2e841c8ed1698efd46fd8a1545cf9681d7b2c8daa5",
+      "bytes": 11625362
+    },
+    {
+      "filename": "Group 78.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 78.png",
+      "kind": "Group",
+      "number": 78,
+      "width": 2722,
+      "height": 13201,
+      "sha256": "e5ae9e8f1c13ba6d380bfbce9bdf48175db1856a8473eebd23d876f91b3748d7",
+      "bytes": 7478534
+    },
+    {
+      "filename": "Group 79.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 79.png",
+      "kind": "Group",
+      "number": 79,
+      "width": 2794,
+      "height": 12769,
+      "sha256": "9a843add5818a8d8a6e409b8ce20eac4a5683c56f34f5dbb91160cf4e9bbccf9",
+      "bytes": 9597503
+    },
+    {
+      "filename": "Group 80.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 80.png",
+      "kind": "Group",
+      "number": 80,
+      "width": 2234,
+      "height": 2490,
+      "sha256": "75dc80b0190db0b36554c15af2b1692564a1362f463509b7103ce2670ba8398d",
+      "bytes": 1473174
+    },
+    {
+      "filename": "Group 81.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 81.png",
+      "kind": "Group",
+      "number": 81,
+      "width": 2280,
+      "height": 10420,
+      "sha256": "270ffe8b02560dfab6622475e57981517e375c4f82d8d8db7759ffc0e8c055c3",
+      "bytes": 4635360
+    },
+    {
+      "filename": "Group 82.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 82.png",
+      "kind": "Group",
+      "number": 82,
+      "width": 1835,
+      "height": 10789,
+      "sha256": "590b59623007202171524ef2d4137756cbc4e264abfff7b5f22f1b7f26db88a9",
+      "bytes": 4053981
+    },
+    {
+      "filename": "Group 83.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 83.png",
+      "kind": "Group",
+      "number": 83,
+      "width": 3057,
+      "height": 29593,
+      "sha256": "204df89670179715fca7bf0cbdc9ac2831d1eb661d43a3fa4e8852143c2ab541",
+      "bytes": 13567866
+    },
+    {
+      "filename": "Group 84.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 84.png",
+      "kind": "Group",
+      "number": 84,
+      "width": 1902,
+      "height": 17072,
+      "sha256": "53e220902419f067167702ed7fd80f783819ad8e668f0723c6dc107997d4cfb5",
+      "bytes": 5423185
+    },
+    {
+      "filename": "Group 85.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 85.png",
+      "kind": "Group",
+      "number": 85,
+      "width": 1370,
+      "height": 32768,
+      "sha256": "519d95f0be0493a6d602754705b973aba06f3adfbbe2662cb1838c6c5e248fd0",
+      "bytes": 19569301
+    },
+    {
+      "filename": "Group 86.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 86.png",
+      "kind": "Group",
+      "number": 86,
+      "width": 2049,
+      "height": 32768,
+      "sha256": "8ec2dc9233d8b998c7c79c9c573692af0fd3a01152f3b21c3a1f27db6255bbfb",
+      "bytes": 11568203
+    },
+    {
+      "filename": "Group 87.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 87.png",
+      "kind": "Group",
+      "number": 87,
+      "width": 1830,
+      "height": 4520,
+      "sha256": "b5950f913843cb7581216ee03f43e655c7a516cb15b89b4fbbdbd787f8f5f76f",
+      "bytes": 2272608
+    },
+    {
+      "filename": "Group 88.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 88.png",
+      "kind": "Group",
+      "number": 88,
+      "width": 1772,
+      "height": 3922,
+      "sha256": "840a9ed0c93fecfd5c4d014d298cb424ba4e996dd6ee6fcf93f5a006a8d3f6f9",
+      "bytes": 1473404
+    },
+    {
+      "filename": "Group 89.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 89.png",
+      "kind": "Group",
+      "number": 89,
+      "width": 1804,
+      "height": 4017,
+      "sha256": "f3c939beb75c910f40365a175b035b50493b5eb59752f478ce25e4c5b40fc4c4",
+      "bytes": 1185675
+    },
+    {
+      "filename": "Group 90.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 90.png",
+      "kind": "Group",
+      "number": 90,
+      "width": 1848,
+      "height": 32768,
+      "sha256": "d9d16398e6fcca076a4596dfebded2dc8c2acf1dfcaf60046f64203ffbb928de",
+      "bytes": 20562933
+    },
+    {
+      "filename": "Group 91.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 91.png",
+      "kind": "Group",
+      "number": 91,
+      "width": 2384,
+      "height": 8235,
+      "sha256": "14be56e31e5458ea44203df8d20b74f9d18a9a785ce4b01959c68599fbb396be",
+      "bytes": 1402655
+    },
+    {
+      "filename": "Group 92.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 92.png",
+      "kind": "Group",
+      "number": 92,
+      "width": 2350,
+      "height": 4867,
+      "sha256": "afb1e7c04658cb7d337bd55a2d928c1942baf8dd068f2fd37eacc853f01dd8e2",
+      "bytes": 1178417
+    },
+    {
+      "filename": "Group 93.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 93.png",
+      "kind": "Group",
+      "number": 93,
+      "width": 1984,
+      "height": 9002,
+      "sha256": "bcb622368aaea6437aedf91d44bde6e268ec9966478e204c179083ec1ae3fc93",
+      "bytes": 4242965
+    },
+    {
+      "filename": "Group 94.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 94.png",
+      "kind": "Group",
+      "number": 94,
+      "width": 1794,
+      "height": 1936,
+      "sha256": "76361763f86c0cd964c845acc6852d5ffd4042519bf81b7781cf05e7a83d47e9",
+      "bytes": 872263
+    },
+    {
+      "filename": "Group 95.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 95.png",
+      "kind": "Group",
+      "number": 95,
+      "width": 2580,
+      "height": 12006,
+      "sha256": "4160dcdfdd886e1461e8c7e610b12008762bff1a6694b75fde6987ee45a1a075",
+      "bytes": 5576141
+    },
+    {
+      "filename": "Group 96.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 96.png",
+      "kind": "Group",
+      "number": 96,
+      "width": 2920,
+      "height": 9227,
+      "sha256": "3e05cb5eeef7d4c94aefd195a986d824b4a55a6edc119fa35d32f3c93f18641d",
+      "bytes": 4148087
+    },
+    {
+      "filename": "Group 97.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 97.png",
+      "kind": "Group",
+      "number": 97,
+      "width": 2380,
+      "height": 8433,
+      "sha256": "f286345cecd9516e246892e3632bf7f5a2fedf16ffc96ab232e10bcc2460b479",
+      "bytes": 3173233
+    },
+    {
+      "filename": "Group 98.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 98.png",
+      "kind": "Group",
+      "number": 98,
+      "width": 1594,
+      "height": 5255,
+      "sha256": "d4576e5f833dc9a1a19d227c60fcc2b3a3bbd454df9cc5a91f9ada2a9aabfb25",
+      "bytes": 1562770
+    },
+    {
+      "filename": "Group 99.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 99.png",
+      "kind": "Group",
+      "number": 99,
+      "width": 1851,
+      "height": 29053,
+      "sha256": "ac00bd8032b94e7ece1cc6e48788cdb3b91a78a43fdcf1d4ab6e3262080b7052",
+      "bytes": 12923202
+    },
+    {
+      "filename": "Group 100.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 100.png",
+      "kind": "Group",
+      "number": 100,
+      "width": 2050,
+      "height": 4611,
+      "sha256": "c4bc0ce60fce8df4f1b98f2c9ebf0bf1a83d71e0b015e748e21d7fe33df1632d",
+      "bytes": 2704738
+    },
+    {
+      "filename": "Group 101.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 101.png",
+      "kind": "Group",
+      "number": 101,
+      "width": 1314,
+      "height": 4770,
+      "sha256": "303168a89450041029e88a6919a82bcf734d2f1e078915cbe2b3913d55eb7ce6",
+      "bytes": 3252998
+    },
+    {
+      "filename": "Group 102.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 102.png",
+      "kind": "Group",
+      "number": 102,
+      "width": 2104,
+      "height": 1816,
+      "sha256": "544c907279723b54b7bff96fea0841ed0d8cb5d8a65db611a5cf451c317e79dc",
+      "bytes": 1029927
+    },
+    {
+      "filename": "Group 103.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 103.png",
+      "kind": "Group",
+      "number": 103,
+      "width": 2113,
+      "height": 4969,
+      "sha256": "d17d822ba52b98050c37fe09c500fa3c4d1731b21312042ef5df5ae6d8a4a4d4",
+      "bytes": 2167580
+    },
+    {
+      "filename": "Group 104.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 104.png",
+      "kind": "Group",
+      "number": 104,
+      "width": 3090,
+      "height": 2534,
+      "sha256": "df02310e675272830b891326d1c863bb0fc61197741c6dca77c5b2be4c84e756",
+      "bytes": 4143822
+    },
+    {
+      "filename": "Group 105.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 105.png",
+      "kind": "Group",
+      "number": 105,
+      "width": 1722,
+      "height": 7274,
+      "sha256": "de73d746eef1d15d13c34edf6f4656f32eb4b77ec39a29cde2abb8a95c1bc152",
+      "bytes": 2932457
+    },
+    {
+      "filename": "Group 106.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 106.png",
+      "kind": "Group",
+      "number": 106,
+      "width": 1770,
+      "height": 6488,
+      "sha256": "fd54edfd9b5764187c51d5b2d340721ae53da92ef6fe42552cf75be01a06ddee",
+      "bytes": 2851433
+    },
+    {
+      "filename": "Group 107.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 107.png",
+      "kind": "Group",
+      "number": 107,
+      "width": 2385,
+      "height": 32768,
+      "sha256": "da4d30ec13ad7ef44604bcc88fd3c8edf5fc2da01d965feb0a9adc0ada517dcc",
+      "bytes": 19142442
+    },
+    {
+      "filename": "Group 108.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 108.png",
+      "kind": "Group",
+      "number": 108,
+      "width": 1806,
+      "height": 3272,
+      "sha256": "8f66e1ea2ed3083a820e7419a3961dad46c86185cb28524e87b568862f62923d",
+      "bytes": 1415414
+    },
+    {
+      "filename": "Group 109.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 109.png",
+      "kind": "Group",
+      "number": 109,
+      "width": 1772,
+      "height": 12376,
+      "sha256": "68be1de3ee0f53fcc3de5a0a182642435294a2231836956b528571d7c5b11870",
+      "bytes": 5972461
+    },
+    {
+      "filename": "Group 110.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 110.png",
+      "kind": "Group",
+      "number": 110,
+      "width": 1888,
+      "height": 9754,
+      "sha256": "53ce9d70a0920fc73088255be7214ea2230056beb08b4440c2953404869ee00d",
+      "bytes": 4519679
+    },
+    {
+      "filename": "Group 111.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 111.png",
+      "kind": "Group",
+      "number": 111,
+      "width": 1702,
+      "height": 1815,
+      "sha256": "a4a5451fa3017ad2eea09cf0df4b0333dbe466124e3eeb058e75f94b6ca625f9",
+      "bytes": 931573
+    },
+    {
+      "filename": "Group 112.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 112.png",
+      "kind": "Group",
+      "number": 112,
+      "width": 2770,
+      "height": 10678,
+      "sha256": "2c959f0bf94bcbb6374f196b729c3dace6a1a5eca1cc4ae23b5abd9c0dc27021",
+      "bytes": 6341698
+    },
+    {
+      "filename": "Group 113.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 113.png",
+      "kind": "Group",
+      "number": 113,
+      "width": 2010,
+      "height": 12248,
+      "sha256": "6d2b1394aef61a1e2a356568a6a1efe5a069384da1533e0e9b3976e4e4eebaa7",
+      "bytes": 5500077
+    },
+    {
+      "filename": "Group 114.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 114.png",
+      "kind": "Group",
+      "number": 114,
+      "width": 1772,
+      "height": 2458,
+      "sha256": "90d0ec77ffd8f36b77e920f0a7841c35c7c6b217c34e6ba0296b0b83d6815fc8",
+      "bytes": 1829932
+    },
+    {
+      "filename": "Group 115.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 115.png",
+      "kind": "Group",
+      "number": 115,
+      "width": 2586,
+      "height": 4701,
+      "sha256": "4e9ece24d99f6e29d27b1fbb17ab08bb32fc6ba1333cef54e96f364adcca037d",
+      "bytes": 2762783
+    },
+    {
+      "filename": "Group 116.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 116.png",
+      "kind": "Group",
+      "number": 116,
+      "width": 2069,
+      "height": 10071,
+      "sha256": "b2f3d48b930abcfdb14312df418333497a5751cae4e401e9c27d646a2a0d6ee9",
+      "bytes": 6078909
+    },
+    {
+      "filename": "Group 117.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 117.png",
+      "kind": "Group",
+      "number": 117,
+      "width": 2284,
+      "height": 17377,
+      "sha256": "42030a6098e7dc7bbe6ff97ed5c95d724da0b6a9afa30eb0988b11d6f071751c",
+      "bytes": 7941147
+    },
+    {
+      "filename": "Group 118.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 118.png",
+      "kind": "Group",
+      "number": 118,
+      "width": 1863,
+      "height": 20539,
+      "sha256": "69d3678d8742d79ef4c87815807d2a63df612457ae30de9149f7f3dec43553b7",
+      "bytes": 10065311
+    },
+    {
+      "filename": "Group 119.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 119.png",
+      "kind": "Group",
+      "number": 119,
+      "width": 2248,
+      "height": 32533,
+      "sha256": "374e0b6988a9dac8809b61ef9517a2e6429b022dcefe48cc3f71c3a438b858f2",
+      "bytes": 16395452
+    },
+    {
+      "filename": "Group 120.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 120.png",
+      "kind": "Group",
+      "number": 120,
+      "width": 3789,
+      "height": 3753,
+      "sha256": "748438696fe592c4d6e810b27335e8519f33a082727616e006e47acbf08f6231",
+      "bytes": 5446553
+    },
+    {
+      "filename": "Group 121.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 121.png",
+      "kind": "Group",
+      "number": 121,
+      "width": 5160,
+      "height": 5909,
+      "sha256": "96ea14cd19fe13685234898b43d3c56d8cae0e28498bcf4957a15464b453c43c",
+      "bytes": 5722857
+    },
+    {
+      "filename": "Group 122.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 122.png",
+      "kind": "Group",
+      "number": 122,
+      "width": 7373,
+      "height": 29345,
+      "sha256": "dfb0c0a31309c65e78a5371b45c82db83e15f8761caf56a3fb23bf5ed40939f0",
+      "bytes": 29912890
+    },
+    {
+      "filename": "Group 124.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 124.png",
+      "kind": "Group",
+      "number": 124,
+      "width": 1316,
+      "height": 1934,
+      "sha256": "41baaeb98a8ad28cbd78a4a331884ae826ebb3e2ce1393a5072662789cb3988a",
+      "bytes": 531950
+    },
+    {
+      "filename": "Group 125.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 125.png",
+      "kind": "Group",
+      "number": 125,
+      "width": 2619,
+      "height": 18531,
+      "sha256": "906a21401efa00e5399b60cad269d622328bde5f715cd5a029f2f9478f62366d",
+      "bytes": 8513888
+    },
+    {
+      "filename": "Group 126.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 126.png",
+      "kind": "Group",
+      "number": 126,
+      "width": 2928,
+      "height": 28148,
+      "sha256": "a759c4593ee9ef15a319d941345e21fbc2b70ca1f1777c295db83500c6c8f6f1",
+      "bytes": 9795366
+    },
+    {
+      "filename": "Group 127.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/Group 127.png",
+      "kind": "Group",
+      "number": 127,
+      "width": 5162,
+      "height": 21968,
+      "sha256": "5e1ce65b4192d8c6ea38770660b0ffa6311d6fd2460f67d60851746b0c4e55f2",
+      "bytes": 10426503
+    },
+    {
+      "filename": "image 21.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 21.png",
+      "kind": "image",
+      "number": 21,
+      "width": 4066,
+      "height": 2602,
+      "sha256": "4cc7ada2a21f36a75083a1bf5d32914b9e695c38098a644597f03ef5635b53b1",
+      "bytes": 1541995
+    },
+    {
+      "filename": "image 22.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 22.png",
+      "kind": "image",
+      "number": 22,
+      "width": 4958,
+      "height": 4132,
+      "sha256": "4536893b7999a0c5349f001d1cfa4f61de53dfc2b3ee06be7be1bdcb9b8c5fd4",
+      "bytes": 2453986
+    },
+    {
+      "filename": "image 35.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 35.png",
+      "kind": "image",
+      "number": 35,
+      "width": 5409,
+      "height": 3858,
+      "sha256": "6a8508cdc31fdc5c02fb4866b5495945f951063b2896199e562726dbeae80cc9",
+      "bytes": 3782307
+    },
+    {
+      "filename": "image 106.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 106.png",
+      "kind": "image",
+      "number": 106,
+      "width": 1838,
+      "height": 1276,
+      "sha256": "33bbafacb8528d701ec81dc432b6a34c58e84c82fdf7ee9f38c854becff9f26d",
+      "bytes": 583990
+    },
+    {
+      "filename": "image 120.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 120.png",
+      "kind": "image",
+      "number": 120,
+      "width": 1756,
+      "height": 1126,
+      "sha256": "2098d44a3d20406f69d67afc54a1b8282eb717a2c421fb20835ef3ac06f92048",
+      "bytes": 667825
+    },
+    {
+      "filename": "image 121.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 121.png",
+      "kind": "image",
+      "number": 121,
+      "width": 1706,
+      "height": 1532,
+      "sha256": "4e7513af8fc0e77d7976dbaf1770ee6f9a28bd1e0fe979805d872ea6de11a8e9",
+      "bytes": 631418
+    },
+    {
+      "filename": "image 122.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 122.png",
+      "kind": "image",
+      "number": 122,
+      "width": 1468,
+      "height": 1244,
+      "sha256": "551bfe5e8d29b0a5b7999584504ef4f49ec4e4565275aab2e3ddce338ca7a32a",
+      "bytes": 262918
+    },
+    {
+      "filename": "image 264.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 264.png",
+      "kind": "image",
+      "number": 264,
+      "width": 1454,
+      "height": 1412,
+      "sha256": "1a819ba68cf94500ee1aab03d1278bdb68371d6d4171c92076e9b54cecf2b23e",
+      "bytes": 473887
+    },
+    {
+      "filename": "image 533.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 533.png",
+      "kind": "image",
+      "number": 533,
+      "width": 2544,
+      "height": 1096,
+      "sha256": "afc9a636a6455b2dc67188b3781b3570214d82c808e3032a1a66597200b2ea5b",
+      "bytes": 1345890
+    },
+    {
+      "filename": "image 850.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 850.png",
+      "kind": "image",
+      "number": 850,
+      "width": 2112,
+      "height": 1542,
+      "sha256": "3d182650a450e8b8d95e4264a13435183f92a7bb71231c3671159a484cf6ca4a",
+      "bytes": 1355886
+    },
+    {
+      "filename": "image 1089.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 1089.png",
+      "kind": "image",
+      "number": 1089,
+      "width": 1776,
+      "height": 1390,
+      "sha256": "a8c7a22718d52991fd255363cb0849aa6e34780233ebda8b74843b8d12b6eaaf",
+      "bytes": 513479
+    },
+    {
+      "filename": "image 1090.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 1090.png",
+      "kind": "image",
+      "number": 1090,
+      "width": 1150,
+      "height": 816,
+      "sha256": "4f60f97c2d09c3bad3781209420899aacfdfe7ce838a808a842d1d4cad740adb",
+      "bytes": 241422
+    },
+    {
+      "filename": "image 1244.png",
+      "absolute_path": "/Users/mac/Desktop/GEO图/image 1244.png",
+      "kind": "image",
+      "number": 1244,
+      "width": 2144,
+      "height": 1106,
+      "sha256": "1f3ba7e8a5d0e595d4f8593c8dabadf8f667f654fd308525d1a36c568b58b21a",
+      "bytes": 368726
+    }
+  ]
+}
