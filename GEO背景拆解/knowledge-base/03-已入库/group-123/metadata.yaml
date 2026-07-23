@@ -1,0 +1,20 @@
+document_id: group-123
+title: AlphaRank GEO 全景说明
+source_file: Group 123.png
+source_original_path: /Users/mac/Desktop/GEO图/Group 123.png
+source_width: 7370
+source_height: 32768
+source_format: PNG
+source_sha256: f385a4f7c1a942e94921d2e6fca94490f28cd3c7998fd39ca1e86a72a081bd0c
+processed_at: 2026-07-23T12:32:35+08:00
+ocr_engine: Apple Vision VNRecognizeTextRequest
+ocr_languages:
+  - zh-Hans
+  - en-US
+ocr_line_count: 389
+ocr_low_confidence_count: 48
+faithful_document: faithful.md
+readable_document: readable.md
+quality_report: quality-report.md
+feishu_status: 未发布
+status: 处理中

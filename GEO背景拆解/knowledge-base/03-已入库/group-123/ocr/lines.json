@@ -1,0 +1,3508 @@
+{
+  "height" : 32768,
+  "image" : "knowledge-base/03-已入库/group-123/source/Group 123.png",
+  "lines" : [
+    {
+      "confidence" : 0.5,
+      "height" : 101,
+      "text" : "1.为什么 GEO 会成为新的增长入口",
+      "tile" : 0,
+      "width" : 1270,
+      "x" : 2280,
+      "y" : 29
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "出现信号/催化剂：",
+      "tile" : 0,
+      "width" : 360,
+      "x" : 2340,
+      "y" : 149
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "Perplexity 首次将 “LLM +实时搜索+引用来源＋直接回答”组合成完整产品形态，这也是当前 Al Search 的标准范式。",
+      "tile" : 0,
+      "width" : 2330,
+      "x" : 2340,
+      "y" : 209
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "大约从 2023年 Q2/Q3 开始，Al Search 开始快速爆发，随后 Google 与 OpenAI 相继跟进：",
+      "tile" : 0,
+      "width" : 1800,
+      "x" : 2340,
+      "y" : 290
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 52,
+      "text" : "• Perplexity（2023）——验证 AI Search 产品形态可行；",
+      "tile" : 0,
+      "width" : 1171,
+      "x" : 2330,
+      "y" : 449
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Google Al Overview （2024）-一验证搜索巨头开始全面转向 Al Search；",
+      "tile" : 0,
+      "width" : 1450,
+      "x" : 2410,
+      "y" : 529
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 30,
+      "text" : "。",
+      "tile" : 0,
+      "width" : 70,
+      "x" : 2330,
+      "y" : 550
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• ChatGPT Search（2024）-一验证 Al Answer 正在成为新的信息入口。",
+      "tile" : 0,
+      "width" : 1500,
+      "x" : 2330,
+      "y" : 610
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "从行业发展来看，搜索正在从 Search Engine（搜索引擎）向 Answer Engine（答案引擎）演进。",
+      "tile" : 0,
+      "width" : 1951,
+      "x" : 2310,
+      "y" : 690
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "1.1 搜索范式变革（Search Engine -> Answer Engine）| 用户获取信息的行为发生变化",
+      "tile" : 0,
+      "width" : 2421,
+      "x" : 2289,
+      "y" : 849
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "传统 SEO 优化的是搜索排序（Ranking）。",
+      "tile" : 0,
+      "width" : 810,
+      "x" : 2350,
+      "y" : 969
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "搜索引擎通过爬取、索引、召回和排序机制，为用户返回最相关的网页结果。SEO 的核心目标是提升网页在搜索结果中的排",
+      "tile" : 0,
+      "width" : 2421,
+      "x" : 2339,
+      "y" : 1039
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "名，从而获取更多曝光和点击流量。因此企业主要围绕关键词、内容质量、网站权重和技术 SEO 等方面进行优化。然而在",
+      "tile" : 0,
+      "width" : 2381,
+      "x" : 2339,
+      "y" : 1110
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "Al Search时代，用户越来越多直接获取答案而非点击网页，优化目标也逐渐从“提升排名”转向“影响模型生成与引用”。",
+      "tile" : 0,
+      "width" : 2330,
+      "x" : 2340,
+      "y" : 1179
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "当前的GEO （Generative Engine Optimization）优化的是 AI 的生成与引用过程（Generation & Citation）。",
+      "tile" : 0,
+      "width" : 2060,
+      "x" : 2350,
+      "y" : 1329
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "帮助品牌在 Al Search 场景中被发现 （Discover）、被理解（Understand）、被引用（Citation）、被推荐（Recommend）。",
+      "tile" : 0,
+      "width" : 2411,
+      "x" : 2340,
+      "y" : 1399
+    },
+    {
+      "confidence" : 1,
+      "height" : 52,
+      "text" : "传统搜索链路：",
+      "tile" : 0,
+      "width" : 301,
+      "x" : 2289,
+      "y" : 1519
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "网页发现-＞网页爬取->页面解析->索引构建->Query理解->召回->排序-> SERP展示",
+      "tile" : 0,
+      "width" : 1840,
+      "x" : 2290,
+      "y" : 1629
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "核心目标：索引覆盖->排名提升->点击增长",
+      "tile" : 0,
+      "width" : 910,
+      "x" : 2280,
+      "y" : 1740
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 52,
+      "text" : "AI Search 链路：",
+      "tile" : 0,
+      "width" : 340,
+      "x" : 2290,
+      "y" : 1859
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "内容采集->知识索引-> Query理解-> 检索召回-> Context构建-> LLM推理-> Answer生成-> Citation展示",
+      "tile" : 0,
+      "width" : 2170,
+      "x" : 2300,
+      "y" : 1970
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "核心目标：内容被检索->内容被理解->内容被引用->品牌被推荐",
+      "tile" : 0,
+      "width" : 1320,
+      "x" : 2290,
+      "y" : 2080
+    },
+    {
+      "confidence" : 1,
+      "height" : 65,
+      "text" : "核心变化：",
+      "tile" : 0,
+      "width" : 222,
+      "x" : 2289,
+      "y" : 2187
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "1. 用户行为从「搜索结果点击」逐渐转向「直接获取答案」；",
+      "tile" : 0,
+      "width" : 1221,
+      "x" : 2290,
+      "y" : 2299
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 41,
+      "text" : "2． Al Answer 成为新的流童人口机决策人口；",
+      "tile" : 1,
+      "width" : 940,
+      "x" : 2270,
+      "y" : 2400
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "3. 品牌竞争从 SEO Ranking 演进为 AI Citation Competition；",
+      "tile" : 1,
+      "width" : 1250,
+      "x" : 2290,
+      "y" : 2469
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "4. 企业缺少 AI Search 场景下的可观测与优化能力；",
+      "tile" : 1,
+      "width" : 1060,
+      "x" : 2290,
+      "y" : 2549
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "5． 内容优化目标从「获取点击」扩展为「影响模型认知」；",
+      "tile" : 1,
+      "width" : 1190,
+      "x" : 2280,
+      "y" : 2639
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "1.2 GEO 的本质",
+      "tile" : 1,
+      "width" : 471,
+      "x" : 2289,
+      "y" : 2799
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "GEO/AEO:Generative/Answer/Agent Engine Optimization，如何让品牌在 AI Search 中获得更高的可见度与影响力。",
+      "tile" : 1,
+      "width" : 2380,
+      "x" : 2320,
+      "y" : 2909
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "提升品牌在 Al Answer 中的：",
+      "tile" : 1,
+      "width" : 580,
+      "x" : 2290,
+      "y" : 3030
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "1. Visibility（曝光）；",
+      "tile" : 1,
+      "width" : 440,
+      "x" : 2289,
+      "y" : 3139
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 52,
+      "text" : "2. Citation（引用）；",
+      "tile" : 1,
+      "width" : 440,
+      "x" : 2279,
+      "y" : 3229
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "3. Authority（权威度）；",
+      "tile" : 1,
+      "width" : 510,
+      "x" : 2280,
+      "y" : 3309
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "4. Conversion（转化）；",
+      "tile" : 1,
+      "width" : 500,
+      "x" : 2290,
+      "y" : 3399
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "简单用一句话总结：",
+      "tile" : 1,
+      "width" : 400,
+      "x" : 2290,
+      "y" : 3510
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "SEO 优化的是网页排名，GEO 优化的是 AI 对品牌的认知与推荐。",
+      "tile" : 1,
+      "width" : 1370,
+      "x" : 2290,
+      "y" : 3619
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 80,
+      "text" : "1.3 AlphaRank 解决什么问题",
+      "tile" : 1,
+      "width" : 860,
+      "x" : 2290,
+      "y" : 3779
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "企业/品牌最关心：",
+      "tile" : 1,
+      "width" : 410,
+      "x" : 2290,
+      "y" : 3910
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "1. 目标用户关注什么问题？",
+      "tile" : 1,
+      "width" : 620,
+      "x" : 2290,
+      "y" : 4029
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "2. 哪些 Topic 和 Prompt 具有增长机会？",
+      "tile" : 1,
+      "width" : 930,
+      "x" : 2280,
+      "y" : 4120
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "3. GEO 指标怎么衡量？",
+      "tile" : 1,
+      "width" : 540,
+      "x" : 2290,
+      "y" : 4200
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "4. 为什么竞品被引用/为什么我没被引用？",
+      "tile" : 1,
+      "width" : 941,
+      "x" : 2289,
+      "y" : 4279
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "5. 如何提升引用率？",
+      "tile" : 1,
+      "width" : 471,
+      "x" : 2289,
+      "y" : 4370
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "1.3 AlphaRank 解决什么问题",
+      "tile" : 1,
+      "width" : 930,
+      "x" : 2270,
+      "y" : 4489
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "企业/品牌最关心：",
+      "tile" : 1,
+      "width" : 430,
+      "x" : 2280,
+      "y" : 4619
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 41,
+      "text" : "1 日标用户关注什么问题？",
+      "tile" : 1,
+      "width" : 681,
+      "x" : 2249,
+      "y" : 4750
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "2. 哪些 Topic 和 Prompt 具有增长机会？",
+      "tile" : 2,
+      "width" : 981,
+      "x" : 2279,
+      "y" : 4829
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "3. GEO 指标怎么衡量？",
+      "tile" : 2,
+      "width" : 580,
+      "x" : 2270,
+      "y" : 4929
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "4. 为什么竞品被引用/为什么我没被引用？",
+      "tile" : 2,
+      "width" : 1010,
+      "x" : 2269,
+      "y" : 5019
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 70,
+      "text" : "5． 如何提升引用率？",
+      "tile" : 2,
+      "width" : 510,
+      "x" : 2270,
+      "y" : 5110
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 80,
+      "text" : "6． 哪些内容应该生成？",
+      "tile" : 2,
+      "width" : 560,
+      "x" : 2270,
+      "y" : 5189
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "7. 哪些平台应该投放？",
+      "tile" : 2,
+      "width" : 560,
+      "x" : 2270,
+      "y" : 5289
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "8. ..",
+      "tile" : 2,
+      "width" : 210,
+      "x" : 2270,
+      "y" : 5389
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "这些问题本质上可以归纳为四类：",
+      "tile" : 2,
+      "width" : 780,
+      "x" : 2280,
+      "y" : 5510
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "1． 机会发现；",
+      "tile" : 2,
+      "width" : 350,
+      "x" : 2270,
+      "y" : 5629
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "2. 问题诊断；",
+      "tile" : 2,
+      "width" : 340,
+      "x" : 2280,
+      "y" : 5720
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "3． 内容优化；",
+      "tile" : 2,
+      "width" : 350,
+      "x" : 2270,
+      "y" : 5810
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 74,
+      "text" : "4. 效果验证",
+      "tile" : 2,
+      "width" : 311,
+      "x" : 2269,
+      "y" : 5898
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "结合上述的问题 AlphaRank 会从如下7个环节中进行产品逻辑，从而形成一个可持续优化的数据闭环产品：",
+      "tile" : 2,
+      "width" : 2530,
+      "x" : 2280,
+      "y" : 6029
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "数据监测->发现问题->分析问题->生成方案-＞执行优化->验证效果->持续优化",
+      "tile" : 2,
+      "width" : 2030,
+      "x" : 2299,
+      "y" : 6149
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 121,
+      "text" : "2. AlphaRank 整体架构",
+      "tile" : 2,
+      "width" : 1080,
+      "x" : 2230,
+      "y" : 6319
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "整体架构：Data Layer -> Knowledge Layer -> Agent Layer -> Application Layer，数据沉淀资产-> 知识沉淀认知-",
+      "tile" : 2,
+      "width" : 3130,
+      "x" : 2240,
+      "y" : 6499
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 80,
+      "text" : ">Agent沉淀能力->产品沉淀价值，最终形成 AlphaRank 的产品内部闭环。",
+      "tile" : 2,
+      "width" : 2090,
+      "x" : 2230,
+      "y" : 6600
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "严品沉淀价自",
+      "tile" : 2,
+      "width" : 210,
+      "x" : 4560,
+      "y" : 6849
+    },
+    {
+      "confidence" : 1,
+      "height" : 50,
+      "text" : "将能力产品化、可视化、",
+      "tile" : 2,
+      "width" : 301,
+      "x" : 4510,
+      "y" : 6899
+    },
+    {
+      "confidence" : 1,
+      "height" : 50,
+      "text" : "可交付，帮助品牌在",
+      "tile" : 2,
+      "width" : 270,
+      "x" : 4530,
+      "y" : 6939
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "Application Layer",
+      "tile" : 2,
+      "width" : 310,
+      "x" : 2309,
+      "y" : 6960
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 20,
+      "text" : "GEO 数据齊柄",
+      "tile" : 2,
+      "width" : 170,
+      "x" : 2810,
+      "y" : 6980
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 20,
+      "text" : "岁布验证与逭彩",
+      "tile" : 2,
+      "width" : 170,
+      "x" : 4220,
+      "y" : 6979
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 20,
+      "text" : "Alveaich 中村头指饭",
+      "tile" : 2,
+      "width" : 280,
+      "x" : 4530,
+      "y" : 7000
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 50,
+      "text" : "产品层",
+      "tile" : 2,
+      "width" : 130,
+      "x" : 2400,
+      "y" : 7029
+    },
+    {
+      "confidence" : 1,
+      "height" : 54,
+      "text" : "Agent沉淀能力",
+      "tile" : 3,
+      "width" : 241,
+      "x" : 4549,
+      "y" : 7238
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "校心配力",
+      "tile" : 3,
+      "width" : 140,
+      "x" : 3450,
+      "y" : 7249
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "通过多个专业 Agent协同，",
+      "tile" : 3,
+      "width" : 340,
+      "x" : 4500,
+      "y" : 7289
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "将知识转化为可执行的",
+      "tile" : 3,
+      "width" : 290,
+      "x" : 4530,
+      "y" : 7339
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "Agent Layer",
+      "tile" : 3,
+      "width" : 270,
+      "x" : 2330,
+      "y" : 7359
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 20,
+      "text" : "问题发现 Agent",
+      "tile" : 3,
+      "width" : 180,
+      "x" : 2810,
+      "y" : 7380
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 20,
+      "text" : "“酪胡扒 Aaen",
+      "tile" : 3,
+      "width" : 190,
+      "x" : 3490,
+      "y" : 7380
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 31,
+      "text" : "分析、决策与优化能力",
+      "tile" : 3,
+      "width" : 290,
+      "x" : 4520,
+      "y" : 7389
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "智能体层",
+      "tile" : 3,
+      "width" : 190,
+      "x" : 2370,
+      "y" : 7419
+    },
+    {
+      "confidence" : 1,
+      "height" : 52,
+      "text" : "核心能力",
+      "tile" : 3,
+      "width" : 151,
+      "x" : 3450,
+      "y" : 7629
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "将双据装化刀结码化規识与",
+      "tile" : 3,
+      "width" : 350,
+      "x" : 4490,
+      "y" : 7709
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "Knowledge Layer",
+      "tile" : 3,
+      "width" : 350,
+      "x" : 2290,
+      "y" : 7740
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 101,
+      "text" : "28",
+      "tile" : 3,
+      "width" : 91,
+      "x" : 3379,
+      "y" : 7739
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 21,
+      "text" : "Causal Graph 冰水",
+      "tile" : 3,
+      "width" : 230,
+      "x" : 3469,
+      "y" : 7749
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 21,
+      "text" : "GraphRA（",
+      "tile" : 3,
+      "width" : 120,
+      "x" : 3860,
+      "y" : 7749
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "的双住史莉",
+      "tile" : 3,
+      "width" : 130,
+      "x" : 4210,
+      "y" : 7749
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "支撑深度分析与决策",
+      "tile" : 3,
+      "width" : 260,
+      "x" : 4540,
+      "y" : 7769
+    },
+    {
+      "confidence" : 1,
+      "height" : 53,
+      "text" : "知识层",
+      "tile" : 3,
+      "width" : 151,
+      "x" : 2389,
+      "y" : 7818
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "核心能力",
+      "tile" : 3,
+      "width" : 151,
+      "x" : 3450,
+      "y" : 7999
+    },
+    {
+      "confidence" : 1,
+      "height" : 55,
+      "text" : "数据沉淀资产",
+      "tile" : 3,
+      "width" : 212,
+      "x" : 4569,
+      "y" : 7997
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "01",
+      "tile" : 3,
+      "width" : 70,
+      "x" : 2430,
+      "y" : 8019
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "，持续米来、处理与氿征多源",
+      "tile" : 3,
+      "width" : 350,
+      "x" : 4490,
+      "y" : 8080
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Data Layer",
+      "tile" : 3,
+      "width" : 251,
+      "x" : 2339,
+      "y" : 8099
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "数抿监挖与重雜",
+      "tile" : 3,
+      "width" : 170,
+      "x" : 3850,
+      "y" : 8099
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "数据治理与合颊",
+      "tile" : 3,
+      "width" : 181,
+      "x" : 4199,
+      "y" : 8100
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "双篮仔荫彐官驻",
+      "tile" : 3,
+      "width" : 180,
+      "x" : 3479,
+      "y" : 8109
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "效据，形成口用、叮信",
+      "tile" : 3,
+      "width" : 290,
+      "x" : 4510,
+      "y" : 8120
+    },
+    {
+      "confidence" : 1,
+      "height" : 41,
+      "text" : "可扩展的数据资产",
+      "tile" : 3,
+      "width" : 241,
+      "x" : 4549,
+      "y" : 8149
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "数据层",
+      "tile" : 3,
+      "width" : 140,
+      "x" : 2390,
+      "y" : 8169
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "AlphaRank 产品内部闭环",
+      "tile" : 3,
+      "width" : 471,
+      "x" : 3329,
+      "y" : 8359
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 80,
+      "text" : "岔",
+      "tile" : 3,
+      "width" : 91,
+      "x" : 2760,
+      "y" : 8380
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 50,
+      "text" : "数据沉淀资产 -知识沉淀认知 -Agent沉淀能力 -产品沉淀价值-持续优化与选代",
+      "tile" : 3,
+      "width" : 1211,
+      "x" : 2959,
+      "y" : 8420
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "GEO/AEO Architecture",
+      "tile" : 3,
+      "width" : 690,
+      "x" : 3690,
+      "y" : 8670
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Productization（GEO Team）",
+      "tile" : 3,
+      "width" : 711,
+      "x" : 3680,
+      "y" : 8809
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 62,
+      "text" : "DataAnlyst",
+      "tile" : 3,
+      "width" : 251,
+      "x" : 3069,
+      "y" : 8989
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Strategist",
+      "tile" : 3,
+      "width" : 230,
+      "x" : 3640,
+      "y" : 8989
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Opitimizer",
+      "tile" : 3,
+      "width" : 241,
+      "x" : 4209,
+      "y" : 8989
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "Dispatcher",
+      "tile" : 3,
+      "width" : 241,
+      "x" : 4769,
+      "y" : 8989
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "Collecter",
+      "tile" : 3,
+      "width" : 210,
+      "x" : 5350,
+      "y" : 8989
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "PromptEngineer",
+      "tile" : 3,
+      "width" : 370,
+      "x" : 2439,
+      "y" : 9000
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "Agent Teams",
+      "tile" : 3,
+      "width" : 361,
+      "x" : 3860,
+      "y" : 9260
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 52,
+      "text" : "Private Chat | Group Chat | Team Coordination | Proactive Team",
+      "tile" : 3,
+      "width" : 1270,
+      "x" : 3410,
+      "y" : 9329
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "核心惧吠狐荏鬯",
+      "tile" : 3,
+      "width" : 241,
+      "x" : 29,
+      "y" : 9490
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Agent Personality",
+      "tile" : 3,
+      "width" : 481,
+      "x" : 3800,
+      "y" : 9490
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 52,
+      "text" : "U/Bot",
+      "tile" : 3,
+      "width" : 90,
+      "x" : 80,
+      "y" : 9539
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 41,
+      "text" : "geo.md | industry.md | brand.md | team.md |system/agent.md",
+      "tile" : 3,
+      "width" : 1221,
+      "x" : 3429,
+      "y" : 9550
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 21,
+      "text" : "GEO-AaenticCluste",
+      "tile" : 4,
+      "width" : 220,
+      "x" : 710,
+      "y" : 9700
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "Agentic（GEO）",
+      "tile" : 4,
+      "width" : 361,
+      "x" : 3849,
+      "y" : 9799
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "PromptBuild -> Crawl -> Analysis -> Diagnose -> Optimize/Generate -> Dispatch",
+      "tile" : 4,
+      "width" : 1931,
+      "x" : 3070,
+      "y" : 9870
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "ContextEngineering",
+      "tile" : 4,
+      "width" : 530,
+      "x" : 3770,
+      "y" : 10040
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 51,
+      "text" : "Memory | Message | Skills | Tools",
+      "tile" : 4,
+      "width" : 680,
+      "x" : 3690,
+      "y" : 10100
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "Asset Supply System",
+      "tile" : 4,
+      "width" : 570,
+      "x" : 3750,
+      "y" : 10350
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "IAgent | Capability/Skills",
+      "tile" : 4,
+      "width" : 520,
+      "x" : 4090,
+      "y" : 10409
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 50,
+      "text" : "Context|Knowledge|Content",
+      "tile" : 4,
+      "width" : 630,
+      "x" : 3459,
+      "y" : 10420
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "Data Flywheel （ETLA）",
+      "tile" : 4,
+      "width" : 570,
+      "x" : 3750,
+      "y" : 10580
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "Analysis -> Learning/Insights -> Improve",
+      "tile" : 4,
+      "width" : 860,
+      "x" : 3740,
+      "y" : 10650
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 21,
+      "text" : "colectlon",
+      "tile" : 4,
+      "width" : 223,
+      "x" : 3470,
+      "y" : 10659
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "2.1 数据层（Data Flywheel Layer）",
+      "tile" : 4,
+      "width" : 1110,
+      "x" : 2300,
+      "y" : 10989
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "数据层是整个 AlphaRank 的基础设施层，负责构建 GEO 领域的数据资产与数据飞轮。核心目标：",
+      "tile" : 4,
+      "width" : 2290,
+      "x" : 2360,
+      "y" : 11110
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "1. 建立 Al Search 数据资产；",
+      "tile" : 4,
+      "width" : 680,
+      "x" : 2360,
+      "y" : 11190
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "2. 建立 GEO 数据飞轮；",
+      "tile" : 4,
+      "width" : 570,
+      "x" : 2350,
+      "y" : 11269
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "3.建立统一的数据分析与观测体系；",
+      "tile" : 4,
+      "width" : 860,
+      "x" : 2350,
+      "y" : 11349
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "主要数据来源：",
+      "tile" : 4,
+      "width" : 350,
+      "x" : 2300,
+      "y" : 11479
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "1. AI Search:ChatGPT/Google Al Overview/Gemini/Perplexity/豆包/千问/DeepSeek 等；",
+      "tile" : 4,
+      "width" : 2150,
+      "x" : 2290,
+      "y" : 11599
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "2. 品牌数据：官网/Blog/Product Page/FAQ/Help Center；",
+      "tile" : 4,
+      "width" : 1400,
+      "x" : 2290,
+      "y" : 11689
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "3. 行业数据：Agent/挖掘/行业网站/行业报告/社区内容；",
+      "tile" : 4,
+      "width" : 1360,
+      "x" : 2290,
+      "y" : 11780
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "4. 竞品数据：竞品官网/竞品内容/AI Search 表现；",
+      "tile" : 4,
+      "width" : 1211,
+      "x" : 2289,
+      "y" : 11870
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 76,
+      "text" : "核心能力：",
+      "tile" : 5,
+      "width" : 262,
+      "x" : 2289,
+      "y" : 11997
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "1． 品牌数据采集；",
+      "tile" : 5,
+      "width" : 450,
+      "x" : 2289,
+      "y" : 12120
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "2． 竞品数据采集；",
+      "tile" : 5,
+      "width" : 450,
+      "x" : 2289,
+      "y" : 12210
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "3. 行业数据采集；",
+      "tile" : 5,
+      "width" : 450,
+      "x" : 2290,
+      "y" : 12299
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "4． 数据清洗与结构化；",
+      "tile" : 5,
+      "width" : 560,
+      "x" : 2290,
+      "y" : 12390
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "5． 数据分析与归因；",
+      "tile" : 5,
+      "width" : 510,
+      "x" : 2289,
+      "y" : 12480
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "6. GEO 指标计算；",
+      "tile" : 5,
+      "width" : 471,
+      "x" : 2289,
+      "y" : 12569
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "7. AB 实验与效果评估；",
+      "tile" : 5,
+      "width" : 580,
+      "x" : 2300,
+      "y" : 12659
+    },
+    {
+      "confidence" : 1,
+      "height" : 81,
+      "text" : "数据飞轮",
+      "tile" : 5,
+      "width" : 270,
+      "x" : 2290,
+      "y" : 12820
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Collect -> Clean -> Analyze -> Insight -> Optimize -> Feedback -> Train/SelfEvolution",
+      "tile" : 5,
+      "width" : 2060,
+      "x" : 2350,
+      "y" : 12949
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "构建 ETAL 闭环，最终实现 数据->洞察->优化->数据 的持续增强循环链路；",
+      "tile" : 5,
+      "width" : 1860,
+      "x" : 2300,
+      "y" : 13069
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "2.2知识层（Knowledge Layer）",
+      "tile" : 5,
+      "width" : 981,
+      "x" : 2290,
+      "y" : 13309
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "知识层是 AlphaRank 的认知中枢，负责将离散数据沉淀为可检索、可推理、可复用的知识资产",
+      "tile" : 5,
+      "width" : 2130,
+      "x" : 2350,
+      "y" : 13419
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "（企业/品牌/行",
+      "tile" : 5,
+      "width" : 340,
+      "x" : 4470,
+      "y" : 13419
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 74,
+      "text" : "业/Prompt/Strategy）。",
+      "tile" : 5,
+      "width" : 533,
+      "x" : 2348,
+      "y" : 13498
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "以传统 RAG + GraphRAG 的方式进行构建整套知识体系；核心提供3 个能力：",
+      "tile" : 5,
+      "width" : 1750,
+      "x" : 2360,
+      "y" : 13579
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "1.构建多层次 GEO 知识底座；",
+      "tile" : 5,
+      "width" : 700,
+      "x" : 2350,
+      "y" : 13660
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "2. 实现数据到知识的转化；",
+      "tile" : 5,
+      "width" : 601,
+      "x" : 2350,
+      "y" : 13729
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "3. 支撑 Agent 推理与决策；",
+      "tile" : 5,
+      "width" : 620,
+      "x" : 2349,
+      "y" : 13810
+    },
+    {
+      "confidence" : 1,
+      "height" : 82,
+      "text" : "知识分层",
+      "tile" : 5,
+      "width" : 261,
+      "x" : 2289,
+      "y" : 13959
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Raw -> Processed -> Insights",
+      "tile" : 5,
+      "width" : 690,
+      "x" : 2350,
+      "y" : 14080
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "1. RawData | 原始数据层：",
+      "tile" : 5,
+      "width" : 640,
+      "x" : 2289,
+      "y" : 14160
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• Al Answer；",
+      "tile" : 5,
+      "width" : 360,
+      "x" : 2400,
+      "y" : 14250
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 52,
+      "text" : "• 网页内容；",
+      "tile" : 5,
+      "width" : 331,
+      "x" : 2399,
+      "y" : 14339
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 63,
+      "text" : "• 行业数据；",
+      "tile" : 6,
+      "width" : 331,
+      "x" : 2399,
+      "y" : 14418
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 63,
+      "text" : "• 用户数据；",
+      "tile" : 6,
+      "width" : 331,
+      "x" : 2399,
+      "y" : 14508
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "2．Processed|结构化知识层：",
+      "tile" : 6,
+      "width" : 731,
+      "x" : 2289,
+      "y" : 14600
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• Topic（主题）；",
+      "tile" : 6,
+      "width" : 430,
+      "x" : 2400,
+      "y" : 14679
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "• Keyword（关键词）；",
+      "tile" : 6,
+      "width" : 560,
+      "x" : 2400,
+      "y" : 14759
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• Entity（实体）；",
+      "tile" : 6,
+      "width" : 430,
+      "x" : 2400,
+      "y" : 14849
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "• Relation（关系）；",
+      "tile" : 6,
+      "width" : 491,
+      "x" : 2400,
+      "y" : 14940
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• Citation（引用关系）；",
+      "tile" : 6,
+      "width" : 581,
+      "x" : 2399,
+      "y" : 15019
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• Strategy（使用策略）；",
+      "tile" : 6,
+      "width" : 601,
+      "x" : 2400,
+      "y" : 15110
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "3. Insights | 洞察资产层：",
+      "tile" : 6,
+      "width" : 620,
+      "x" : 2290,
+      "y" : 15190
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 62,
+      "text" : "• 品牌洞察；",
+      "tile" : 6,
+      "width" : 331,
+      "x" : 2399,
+      "y" : 15279
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 62,
+      "text" : "• 行业洞察；",
+      "tile" : 6,
+      "width" : 331,
+      "x" : 2399,
+      "y" : 15369
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "• 竞品洞察；",
+      "tile" : 6,
+      "width" : 331,
+      "x" : 2399,
+      "y" : 15449
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• GEO 策略知识；",
+      "tile" : 6,
+      "width" : 450,
+      "x" : 2400,
+      "y" : 15539
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• 最佳实践知识；",
+      "tile" : 6,
+      "width" : 430,
+      "x" : 2400,
+      "y" : 15620
+    },
+    {
+      "confidence" : 1,
+      "height" : 91,
+      "text" : "知识图谱",
+      "tile" : 6,
+      "width" : 280,
+      "x" : 2250,
+      "y" : 15709
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "在传统 RAG 基础上进一步引入知识图谱能力。帮助系统去理解 品牌与产品关系、品牌与竞品关系、Prompt 与",
+      "tile" : 6,
+      "width" : 2520,
+      "x" : 2329,
+      "y" : 15830
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "Topic 关系、行业趋势关联关系；",
+      "tile" : 6,
+      "width" : 750,
+      "x" : 2330,
+      "y" : 15910
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "Raw Data -> Entity/Relation Extraction -> Knowledge Graph -> GraphRAG -> Agent Reasoning；",
+      "tile" : 6,
+      "width" : 2240,
+      "x" : 2330,
+      "y" : 15990
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "1. Knowledge Graph：负责沉淀品牌、产品、行业、竞品、Topic、Prompt、Citation 之间的关系；",
+      "tile" : 6,
+      "width" : 2280,
+      "x" : 2270,
+      "y" : 16069
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 80,
+      "text" : "2.GraphRAG：负责在图谱关系基础上做检索增强，提升长尾问题发现、引用原因分析、趋势推理能力；",
+      "tile" : 6,
+      "width" : 2401,
+      "x" : 2270,
+      "y" : 16160
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "3. 后续会进一步结合 Causal Graph，从“关系分析”演进到“因果分析”。",
+      "tile" : 6,
+      "width" : 1670,
+      "x" : 2260,
+      "y" : 16250
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 101,
+      "text" : "3. Agent 如何驱动 GEO 持续优化",
+      "tile" : 6,
+      "width" : 1171,
+      "x" : 2249,
+      "y" : 16339
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "如果说 Data Layer解决的是数据问题，Knowledge Layer 解决的是认知问题，那么 Agent Layer 解决的是行动问",
+      "tile" : 6,
+      "width" : 2330,
+      "x" : 2320,
+      "y" : 16469
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "题。AlphaRank 希望将 GEO 从“人工分析+人工执行”升级为“Agent 持续分析+ Agent持续优化”。",
+      "tile" : 6,
+      "width" : 2080,
+      "x" : 2310,
+      "y" : 16540
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "3.1 为什么需要 Agent",
+      "tile" : 6,
+      "width" : 630,
+      "x" : 2259,
+      "y" : 16699
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "传统 Saas 产品：",
+      "tile" : 7,
+      "width" : 370,
+      "x" : 2259,
+      "y" : 16820
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "用户提需求->用户分析-＞用户执行；",
+      "tile" : 7,
+      "width" : 851,
+      "x" : 2269,
+      "y" : 16929
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "用户需要自己完成：数据查看-＞问题分析->内容规划-＞内容生成-＞效果验证，SaaS 工具提供基础能力，但不提",
+      "tile" : 7,
+      "width" : 2421,
+      "x" : 2250,
+      "y" : 17039
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "供行动。",
+      "tile" : 7,
+      "width" : 180,
+      "x" : 2260,
+      "y" : 17110
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Agentic SaaS：",
+      "tile" : 7,
+      "width" : 350,
+      "x" : 2250,
+      "y" : 17229
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "用户提目标-> Agent分析-> Agent规划->Agent执行-> Agent验证",
+      "tile" : 7,
+      "width" : 1451,
+      "x" : 2280,
+      "y" : 17329
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "用户只需要关注目标。Agent 会自动把目标拆解，将目标落地为比如 数据分析->问题诊断->内容优化->效果验",
+      "tile" : 7,
+      "width" : 2391,
+      "x" : 2260,
+      "y" : 17439
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "证 等环节进行执行；",
+      "tile" : 7,
+      "width" : 430,
+      "x" : 2270,
+      "y" : 17510
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "核心目标：",
+      "tile" : 7,
+      "width" : 230,
+      "x" : 2260,
+      "y" : 17620
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "• 将GEO 能力 Agentic 化；",
+      "tile" : 7,
+      "width" : 630,
+      "x" : 2250,
+      "y" : 17729
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• 将GEO 流程自动化；",
+      "tile" : 7,
+      "width" : 550,
+      "x" : 2240,
+      "y" : 17810
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• 将GEO 经验沉淀为可复用能力；",
+      "tile" : 7,
+      "width" : 800,
+      "x" : 2230,
+      "y" : 17890
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "当前主要能力：",
+      "tile" : 7,
+      "width" : 340,
+      "x" : 2250,
+      "y" : 18000
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 65,
+      "text" : "• 数据分析；",
+      "tile" : 7,
+      "width" : 331,
+      "x" : 2239,
+      "y" : 18107
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "• 内容诊断；",
+      "tile" : 7,
+      "width" : 330,
+      "x" : 2240,
+      "y" : 18189
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 63,
+      "text" : "• 内容生成；",
+      "tile" : 7,
+      "width" : 311,
+      "x" : 2249,
+      "y" : 18268
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 62,
+      "text" : "• 趋势分析；",
+      "tile" : 7,
+      "width" : 321,
+      "x" : 2249,
+      "y" : 18349
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• 自动优化（建设中）；",
+      "tile" : 7,
+      "width" : 530,
+      "x" : 2250,
+      "y" : 18429
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "3.2 GEO Workflow",
+      "tile" : 7,
+      "width" : 570,
+      "x" : 2330,
+      "y" : 18500
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "GEO 本质上不是内容生成，而是一个持续优化过程。因此 AlphaRank 首先需要定义一套标准化 GEO Workflow",
+      "tile" : 7,
+      "width" : 2401,
+      "x" : 2390,
+      "y" : 18610
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "（发现->分析->优化->验证）的数据闭环链路。",
+      "tile" : 7,
+      "width" : 1080,
+      "x" : 2420,
+      "y" : 18690
+    },
+    {
+      "confidence" : 1,
+      "height" : 91,
+      "text" : "优化建议",
+      "tile" : 7,
+      "width" : 271,
+      "x" : 5049,
+      "y" : 18789
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 91,
+      "text" : "内容生成",
+      "tile" : 7,
+      "width" : 270,
+      "x" : 5800,
+      "y" : 18790
+    },
+    {
+      "confidence" : 1,
+      "height" : 91,
+      "text" : "发布验证",
+      "tile" : 7,
+      "width" : 290,
+      "x" : 6570,
+      "y" : 18790
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "典型链路：问题发现->内容诊断->Gap分析->优化建议->内容生成->发布验证；",
+      "tile" : 7,
+      "width" : 1830,
+      "x" : 2340,
+      "y" : 18800
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 82,
+      "text" : "应该怎么优化？",
+      "tile" : 7,
+      "width" : 401,
+      "x" : 5049,
+      "y" : 18919
+    },
+    {
+      "confidence" : 1,
+      "height" : 80,
+      "text" : "具体优化什么？",
+      "tile" : 7,
+      "width" : 410,
+      "x" : 5790,
+      "y" : 18920
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 87,
+      "text" : "优化是否有效？",
+      "tile" : 7,
+      "width" : 402,
+      "x" : 6569,
+      "y" : 18916
+    },
+    {
+      "confidence" : 1,
+      "height" : 60,
+      "text" : "问题发现",
+      "tile" : 7,
+      "width" : 190,
+      "x" : 2359,
+      "y" : 19000
+    },
+    {
+      "confidence" : 1,
+      "height" : 60,
+      "text" : "内容诊断",
+      "tile" : 7,
+      "width" : 190,
+      "x" : 2869,
+      "y" : 19000
+    },
+    {
+      "confidence" : 1,
+      "height" : 60,
+      "text" : "Gap分析",
+      "tile" : 7,
+      "width" : 190,
+      "x" : 3220,
+      "y" : 19000
+    },
+    {
+      "confidence" : 1,
+      "height" : 63,
+      "text" : "优化建议",
+      "tile" : 7,
+      "width" : 181,
+      "x" : 3749,
+      "y" : 18998
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "内容生成",
+      "tile" : 7,
+      "width" : 190,
+      "x" : 4260,
+      "y" : 19000
+    },
+    {
+      "confidence" : 1,
+      "height" : 62,
+      "text" : "发生了什么？",
+      "tile" : 7,
+      "width" : 251,
+      "x" : 2359,
+      "y" : 19079
+    },
+    {
+      "confidence" : 1,
+      "height" : 62,
+      "text" : "具体优化什么？",
+      "tile" : 7,
+      "width" : 281,
+      "x" : 4259,
+      "y" : 19079
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 52,
+      "text" : "问题在哪里？",
+      "tile" : 7,
+      "width" : 241,
+      "x" : 2869,
+      "y" : 19089
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "差距在哪里？",
+      "tile" : 7,
+      "width" : 241,
+      "x" : 3219,
+      "y" : 19089
+    },
+    {
+      "confidence" : 1,
+      "height" : 50,
+      "text" : "应该怎么优化？",
+      "tile" : 7,
+      "width" : 280,
+      "x" : 3740,
+      "y" : 19090
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "优先优化哪些 Topic",
+      "tile" : 7,
+      "width" : 581,
+      "x" : 5049,
+      "y" : 19119
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 73,
+      "text" : "Blog 内容生成",
+      "tile" : 7,
+      "width" : 431,
+      "x" : 5789,
+      "y" : 19118
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "Citation 是否提升",
+      "tile" : 7,
+      "width" : 520,
+      "x" : 6570,
+      "y" : 19119
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Visibility 是否下降",
+      "tile" : 8,
+      "width" : 361,
+      "x" : 2359,
+      "y" : 19220
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "内容覆盖度",
+      "tile" : 8,
+      "width" : 231,
+      "x" : 2869,
+      "y" : 19219
+    },
+    {
+      "confidence" : 1,
+      "height" : 62,
+      "text" : "与竞品差异",
+      "tile" : 8,
+      "width" : 231,
+      "x" : 3219,
+      "y" : 19219
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "优先优化哪些 Topic",
+      "tile" : 8,
+      "width" : 400,
+      "x" : 3750,
+      "y" : 19220
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 63,
+      "text" : "Blog 内容生成",
+      "tile" : 8,
+      "width" : 301,
+      "x" : 4249,
+      "y" : 19218
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "优先覆盖哪些 Prompt",
+      "tile" : 8,
+      "width" : 650,
+      "x" : 5050,
+      "y" : 19240
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 83,
+      "text" : "FAQ 内容生成",
+      "tile" : 8,
+      "width" : 421,
+      "x" : 5789,
+      "y" : 19238
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 90,
+      "text" : "Visibility 是否提升",
+      "tile" : 8,
+      "width" : 520,
+      "x" : 6570,
+      "y" : 19240
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Citation 是否下降",
+      "tile" : 8,
+      "width" : 361,
+      "x" : 2359,
+      "y" : 19300
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "信息完整度",
+      "tile" : 8,
+      "width" : 231,
+      "x" : 2869,
+      "y" : 19299
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "与行业最佳实践差异",
+      "tile" : 8,
+      "width" : 410,
+      "x" : 3220,
+      "y" : 19300
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "优先覆盖哪些 Prompt",
+      "tile" : 8,
+      "width" : 440,
+      "x" : 3750,
+      "y" : 19300
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 63,
+      "text" : "FAQ 内容生成",
+      "tile" : 8,
+      "width" : 291,
+      "x" : 4249,
+      "y" : 19298
+    },
+    {
+      "confidence" : 1,
+      "height" : 91,
+      "text" : "优先补充哪些内容",
+      "tile" : 8,
+      "width" : 530,
+      "x" : 5050,
+      "y" : 19360
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 91,
+      "text" : "Product Page 生成",
+      "tile" : 8,
+      "width" : 570,
+      "x" : 5790,
+      "y" : 19360
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 80,
+      "text" : "Share of Voice 是否提升",
+      "tile" : 8,
+      "width" : 711,
+      "x" : 6569,
+      "y" : 19360
+    },
+    {
+      "confidence" : 1,
+      "height" : 60,
+      "text" : "是否出现新的竞争对手",
+      "tile" : 8,
+      "width" : 460,
+      "x" : 2359,
+      "y" : 19380
+    },
+    {
+      "confidence" : 1,
+      "height" : 52,
+      "text" : "引用友好度",
+      "tile" : 8,
+      "width" : 231,
+      "x" : 2869,
+      "y" : 19389
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "与 Al Search 偏好差异",
+      "tile" : 8,
+      "width" : 450,
+      "x" : 3219,
+      "y" : 19389
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "优先补充哪些内容",
+      "tile" : 8,
+      "width" : 361,
+      "x" : 3750,
+      "y" : 19389
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Product Page 生成",
+      "tile" : 8,
+      "width" : 400,
+      "x" : 4250,
+      "y" : 19389
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "是否出现新的机会点",
+      "tile" : 8,
+      "width" : 410,
+      "x" : 2360,
+      "y" : 19470
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "权威性分析",
+      "tile" : 8,
+      "width" : 231,
+      "x" : 2869,
+      "y" : 19469
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "优先布局哪些平台",
+      "tile" : 8,
+      "width" : 361,
+      "x" : 3750,
+      "y" : 19469
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Comparison Page 生成",
+      "tile" : 8,
+      "width" : 481,
+      "x" : 4249,
+      "y" : 19470
+    },
+    {
+      "confidence" : 1,
+      "height" : 60,
+      "text" : "优",
+      "tile" : 8,
+      "width" : 61,
+      "x" : 4780,
+      "y" : 19470
+    },
+    {
+      "confidence" : 1,
+      "height" : 81,
+      "text" : "优先布局哪些平台",
+      "tile" : 8,
+      "width" : 520,
+      "x" : 5050,
+      "y" : 19479
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 92,
+      "text" : "Comparison Page 生成",
+      "tile" : 8,
+      "width" : 690,
+      "x" : 5790,
+      "y" : 19479
+    },
+    {
+      "confidence" : 1,
+      "height" : 81,
+      "text" : "优化策略是否有效",
+      "tile" : 8,
+      "width" : 530,
+      "x" : 6570,
+      "y" : 19479
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "Al Answer Friendly 内容",
+      "tile" : 8,
+      "width" : 481,
+      "x" : 4260,
+      "y" : 19550
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 90,
+      "text" : "Al Answer Friendly 内容",
+      "tile" : 8,
+      "width" : 711,
+      "x" : 5789,
+      "y" : 19599
+    },
+    {
+      "confidence" : 1,
+      "height" : 52,
+      "text" : "生成",
+      "tile" : 8,
+      "width" : 100,
+      "x" : 4260,
+      "y" : 19629
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "生成",
+      "tile" : 8,
+      "width" : 140,
+      "x" : 5800,
+      "y" : 19709
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "3.3 Agent Team | 建设中",
+      "tile" : 8,
+      "width" : 750,
+      "x" : 2169,
+      "y" : 19850
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "Workflow 定义了事情怎么做，而Agent Team 负责把 Workflow 自动执行出来。不同 Agent 对应 Workflow 中不",
+      "tile" : 8,
+      "width" : 2490,
+      "x" : 2230,
+      "y" : 19970
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "同阶段的职责，通过协作完成完整 GEO 优化流程。",
+      "tile" : 8,
+      "width" : 1140,
+      "x" : 2230,
+      "y" : 20039
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "整体协作模式：目标输入->Agent Team 协同->优化方案输出，未来希望形成：发现问题-＞分析问题-＞制定策",
+      "tile" : 8,
+      "width" : 2520,
+      "x" : 2180,
+      "y" : 20160
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "略->生成内容->发布验证-＞持续优化 的Agent Team 协作模式。",
+      "tile" : 8,
+      "width" : 1490,
+      "x" : 2180,
+      "y" : 20229
+    },
+    {
+      "confidence" : 1,
+      "height" : 71,
+      "text" : "当前已有/规划核心能力：",
+      "tile" : 8,
+      "width" : 560,
+      "x" : 2180,
+      "y" : 20349
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 80,
+      "text" : "Agent 能力",
+      "tile" : 8,
+      "width" : 280,
+      "x" : 2190,
+      "y" : 20560
+    },
+    {
+      "confidence" : 1,
+      "height" : 60,
+      "text" : "责任",
+      "tile" : 8,
+      "width" : 110,
+      "x" : 3500,
+      "y" : 20560
+    },
+    {
+      "confidence" : 1,
+      "height" : 72,
+      "text" : "PromptBuilder",
+      "tile" : 8,
+      "width" : 351,
+      "x" : 2199,
+      "y" : 20699
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "热词发现、Prompt 构建、需求扩展",
+      "tile" : 8,
+      "width" : 790,
+      "x" : 3500,
+      "y" : 20699
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Data Analyst",
+      "tile" : 8,
+      "width" : 310,
+      "x" : 2200,
+      "y" : 20840
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "数据获取、数据分析、问题发现",
+      "tile" : 8,
+      "width" : 711,
+      "x" : 3499,
+      "y" : 20840
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "Strategist",
+      "tile" : 8,
+      "width" : 241,
+      "x" : 2200,
+      "y" : 20969
+    },
+    {
+      "confidence" : 1,
+      "height" : 71,
+      "text" : "策略分析、优化规划",
+      "tile" : 8,
+      "width" : 460,
+      "x" : 3500,
+      "y" : 20969
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 75,
+      "text" : "Brand Analyst",
+      "tile" : 8,
+      "width" : 341,
+      "x" : 2199,
+      "y" : 21097
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "品牌分析、竞品分析",
+      "tile" : 8,
+      "width" : 460,
+      "x" : 3500,
+      "y" : 21110
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Content Expert",
+      "tile" : 8,
+      "width" : 350,
+      "x" : 2210,
+      "y" : 21240
+    },
+    {
+      "confidence" : 1,
+      "height" : 70,
+      "text" : "内容诊断、内容生成、内容优化",
+      "tile" : 8,
+      "width" : 710,
+      "x" : 3500,
+      "y" : 21240
+    },
+    {
+      "confidence" : 1,
+      "height" : 71,
+      "text" : "趋势发现、热点预测",
+      "tile" : 8,
+      "width" : 460,
+      "x" : 3500,
+      "y" : 21369
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "Trend Analyst",
+      "tile" : 8,
+      "width" : 330,
+      "x" : 2200,
+      "y" : 21379
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "Distribution Expert",
+      "tile" : 8,
+      "width" : 440,
+      "x" : 2199,
+      "y" : 21510
+    },
+    {
+      "confidence" : 1,
+      "height" : 71,
+      "text" : "多平台发布、渠道策略",
+      "tile" : 8,
+      "width" : 510,
+      "x" : 3500,
+      "y" : 21509
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "3.4 DeepResearch|建设中",
+      "tile" : 9,
+      "width" : 880,
+      "x" : 2290,
+      "y" : 21749
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "GEO 并不是简单的信息检索问题，而是一个需要持续探索、推理与验证的问题。因此 Agent 不仅需要获取信息，",
+      "tile" : 9,
+      "width" : 2620,
+      "x" : 2350,
+      "y" : 21870
+    },
+    {
+      "confidence" : 1,
+      "height" : 80,
+      "text" : "更需要具备研究与推理能力。",
+      "tile" : 9,
+      "width" : 670,
+      "x" : 2360,
+      "y" : 21950
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 61,
+      "text" : "DeepResearch 的典型过程：搜索->分析->反思->再搜索->验证",
+      "tile" : 9,
+      "width" : 1600,
+      "x" : 2290,
+      "y" : 22080
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "相比传统 Workflow 输入->工具调用->输出，DeepResearch 显然更强调 探索->推理->验证 的能力；",
+      "tile" : 9,
+      "width" : 2441,
+      "x" : 2289,
+      "y" : 22200
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "在当前的场景下主要应用于：",
+      "tile" : 9,
+      "width" : 670,
+      "x" : 2300,
+      "y" : 22319
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• Citation 原因分析；",
+      "tile" : 9,
+      "width" : 540,
+      "x" : 2290,
+      "y" : 22449
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 71,
+      "text" : "• 竞品策略分析；",
+      "tile" : 9,
+      "width" : 450,
+      "x" : 2290,
+      "y" : 22529
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 72,
+      "text" : "• 行业趋势分析；",
+      "tile" : 9,
+      "width" : 450,
+      "x" : 2290,
+      "y" : 22619
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• Prompt 挖掘；",
+      "tile" : 9,
+      "width" : 440,
+      "x" : 2280,
+      "y" : 22710
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• 内容优化策略生成；",
+      "tile" : 9,
+      "width" : 580,
+      "x" : 2260,
+      "y" : 22800
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 101,
+      "text" : "4.AlphaRank 产品能力",
+      "tile" : 9,
+      "width" : 990,
+      "x" : 2239,
+      "y" : 23000
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "AlphaRank 将 Data、Knowledge、Agent 能力产品化，帮助企业建立 GEO 持续优化体系。",
+      "tile" : 9,
+      "width" : 2260,
+      "x" : 2320,
+      "y" : 23129
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "4.1 Answer Visibility",
+      "tile" : 9,
+      "width" : 731,
+      "x" : 2240,
+      "y" : 23319
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "回答「品牌当前在 AI Search 中表现如何」的问题。品牌是否被看见/在哪里被看见/为什么被看见",
+      "tile" : 9,
+      "width" : 2401,
+      "x" : 2329,
+      "y" : 23439
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "核心能力：",
+      "tile" : 9,
+      "width" : 280,
+      "x" : 2240,
+      "y" : 23579
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "1. Al Visibility 监测；",
+      "tile" : 9,
+      "width" : 550,
+      "x" : 2240,
+      "y" : 23709
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "2. Citation 监测；",
+      "tile" : 9,
+      "width" : 460,
+      "x" : 2250,
+      "y" : 23799
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "3. Share of Voice 分析；",
+      "tile" : 9,
+      "width" : 640,
+      "x" : 2239,
+      "y" : 23899
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "4． 品牌曝光趋势分析；",
+      "tile" : 10,
+      "width" : 620,
+      "x" : 2219,
+      "y" : 23999
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 91,
+      "text" : "4.2 Content Diagnosis | 部分能力建设中",
+      "tile" : 10,
+      "width" : 1400,
+      "x" : 2220,
+      "y" : 24180
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "|回答「为什么被引用/为什么没有被引用」的问题。在内容侧是否有内容缺少、短板、机会等；",
+      "tile" : 10,
+      "width" : 2391,
+      "x" : 2259,
+      "y" : 24310
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 73,
+      "text" : "核心能力：",
+      "tile" : 10,
+      "width" : 281,
+      "x" : 2239,
+      "y" : 24438
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 81,
+      "text" : "1． 内容覆盖度分析；",
+      "tile" : 10,
+      "width" : 540,
+      "x" : 2240,
+      "y" : 24569
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "2． 信息完整度分析；",
+      "tile" : 10,
+      "width" : 540,
+      "x" : 2240,
+      "y" : 24670
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "3. 引用友好度分析；",
+      "tile" : 10,
+      "width" : 530,
+      "x" : 2250,
+      "y" : 24759
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "4. 品牌权威度分析；",
+      "tile" : 10,
+      "width" : 540,
+      "x" : 2240,
+      "y" : 24860
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "4.3 Content Optimization",
+      "tile" : 10,
+      "width" : 900,
+      "x" : 2250,
+      "y" : 25050
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "回答「如何提升 Al Search 表现」的问题。提升 Visibility、Citation、Authority；",
+      "tile" : 10,
+      "width" : 2020,
+      "x" : 2279,
+      "y" : 25179
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 84,
+      "text" : "核心能力：",
+      "tile" : 10,
+      "width" : 321,
+      "x" : 2219,
+      "y" : 25338
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 81,
+      "text" : "1. 内容优化建议；",
+      "tile" : 10,
+      "width" : 530,
+      "x" : 2220,
+      "y" : 25479
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 60,
+      "text" : "2． 优质内容生成；",
+      "tile" : 10,
+      "width" : 530,
+      "x" : 2230,
+      "y" : 25590
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "3. Prompt 驱动内容生成；",
+      "tile" : 10,
+      "width" : 750,
+      "x" : 2229,
+      "y" : 25689
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "4. 多场景内容生成",
+      "tile" : 10,
+      "width" : 570,
+      "x" : 2220,
+      "y" : 25789
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 114,
+      "text" : "4.4 Competitive Intelligence",
+      "tile" : 10,
+      "width" : 1103,
+      "x" : 2228,
+      "y" : 25987
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 80,
+      "text" : "回答「竞品为什么表现更好」的问题。帮助品牌发现竞品优势、内容差距、机会市场 等；",
+      "tile" : 10,
+      "width" : 2431,
+      "x" : 2300,
+      "y" : 26140
+    },
+    {
+      "confidence" : 1,
+      "height" : 81,
+      "text" : "核心能力：",
+      "tile" : 10,
+      "width" : 310,
+      "x" : 2229,
+      "y" : 26279
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 80,
+      "text" : "1. 竞品监测；",
+      "tile" : 11,
+      "width" : 412,
+      "x" : 2229,
+      "y" : 26425
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "2. Citation 对比分析；",
+      "tile" : 11,
+      "width" : 640,
+      "x" : 2229,
+      "y" : 26529
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "3. Topic Gap 分析；",
+      "tile" : 11,
+      "width" : 580,
+      "x" : 2230,
+      "y" : 26639
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 81,
+      "text" : "4. Content Gap 分析；",
+      "tile" : 11,
+      "width" : 660,
+      "x" : 2230,
+      "y" : 26739
+    },
+    {
+      "confidence" : 0.3,
+      "height" : 81,
+      "text" : "5. GEO 策略分析；",
+      "tile" : 11,
+      "width" : 560,
+      "x" : 2230,
+      "y" : 26839
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "4.5 Trend Predictor",
+      "tile" : 11,
+      "width" : 611,
+      "x" : 2190,
+      "y" : 27019
+    },
+    {
+      "confidence" : 1,
+      "height" : 80,
+      "text" : "回答「未来应该做什么」的问题。主动发现机会、布局内容、获取流量等；",
+      "tile" : 11,
+      "width" : 1670,
+      "x" : 2230,
+      "y" : 27130
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "核心能力：",
+      "tile" : 11,
+      "width" : 251,
+      "x" : 2179,
+      "y" : 27249
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "• 行业热点发现",
+      "tile" : 11,
+      "width" : 401,
+      "x" : 2179,
+      "y" : 27369
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• Prompt 趋势分析",
+      "tile" : 11,
+      "width" : 481,
+      "x" : 2179,
+      "y" : 27459
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "• Al Search 趋势分析",
+      "tile" : 11,
+      "width" : 530,
+      "x" : 2180,
+      "y" : 27539
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 74,
+      "text" : "• 新兴机会发现",
+      "tile" : 11,
+      "width" : 401,
+      "x" : 2179,
+      "y" : 27618
+    },
+    {
+      "confidence" : 1,
+      "height" : 91,
+      "text" : "总结",
+      "tile" : 11,
+      "width" : 151,
+      "x" : 2190,
+      "y" : 27780
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "Answer Visibility",
+      "tile" : 11,
+      "width" : 380,
+      "x" : 2210,
+      "y" : 27999
+    },
+    {
+      "confidence" : 1,
+      "height" : 51,
+      "text" : "Content Diagnosis",
+      "tile" : 11,
+      "width" : 420,
+      "x" : 2670,
+      "y" : 27999
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "Content Optimization",
+      "tile" : 11,
+      "width" : 491,
+      "x" : 3190,
+      "y" : 27999
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "Competitive Intelligence",
+      "tile" : 11,
+      "width" : 550,
+      "x" : 3730,
+      "y" : 27999
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 51,
+      "text" : "Trend Predictor",
+      "tile" : 11,
+      "width" : 350,
+      "x" : 4350,
+      "y" : 27999
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "看得见",
+      "tile" : 11,
+      "width" : 151,
+      "x" : 2220,
+      "y" : 28210
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "看得懂",
+      "tile" : 11,
+      "width" : 140,
+      "x" : 2670,
+      "y" : 28210
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "做得好",
+      "tile" : 11,
+      "width" : 151,
+      "x" : 3200,
+      "y" : 28210
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "追得上",
+      "tile" : 11,
+      "width" : 140,
+      "x" : 3740,
+      "y" : 28210
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "看得远",
+      "tile" : 11,
+      "width" : 151,
+      "x" : 4350,
+      "y" : 28210
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 102,
+      "text" : "5. 核心挑战",
+      "tile" : 11,
+      "width" : 441,
+      "x" : 2219,
+      "y" : 28409
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "GEO 并不是简单的内容生成或搜索优化问题，而是一个融合数据、知识、推理与评测的复杂系统工程。",
+      "tile" : 11,
+      "width" : 2250,
+      "x" : 2300,
+      "y" : 28549
+    },
+    {
+      "confidence" : 1,
+      "height" : 71,
+      "text" : "AlphaRank 在建设过程中主要面临四类核心挑战。",
+      "tile" : 11,
+      "width" : 1090,
+      "x" : 2300,
+      "y" : 28629
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "5.1 数据挑战",
+      "tile" : 12,
+      "width" : 401,
+      "x" : 2219,
+      "y" : 28799
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "数据量巨大，平台众多，实时变化，结合 GEO 场景中天然具有的来源分散、格式不统一、更新频繁、噪声较高",
+      "tile" : 12,
+      "width" : 2431,
+      "x" : 2299,
+      "y" : 28909
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "等特点；",
+      "tile" : 12,
+      "width" : 190,
+      "x" : 2299,
+      "y" : 28980
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "1. 数据采集",
+      "tile" : 12,
+      "width" : 301,
+      "x" : 2230,
+      "y" : 29070
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "当前数据采集平台覆盖国内外主流的 AI Answer 引擎，不同的引擎在获取方式、内容结构、风控策略上有不同的",
+      "tile" : 12,
+      "width" : 2441,
+      "x" : 2310,
+      "y" : 29149
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "差异，如何提升数据采集的稳定性是我们最底层需要解决的问题；",
+      "tile" : 12,
+      "width" : 1430,
+      "x" : 2300,
+      "y" : 29229
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "2. 数据质量",
+      "tile" : 12,
+      "width" : 301,
+      "x" : 2229,
+      "y" : 29309
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "由于各种 原因，比如数据采集稳定性、内容天然质量低导致的数据重复、噪声、无效信息等",
+      "tile" : 12,
+      "width" : 2020,
+      "x" : 2289,
+      "y" : 29400
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "3. 数据归因",
+      "tile" : 12,
+      "width" : 301,
+      "x" : 2230,
+      "y" : 29479
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "如何构建起一套可解释的GEO 指标（比如为什么被引用、没有引用、怎么提升）是我们一直在探索、解决的核心",
+      "tile" : 12,
+      "width" : 2480,
+      "x" : 2299,
+      "y" : 29570
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "挑战；",
+      "tile" : 12,
+      "width" : 140,
+      "x" : 2300,
+      "y" : 29640
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "4. 数据一致性",
+      "tile" : 12,
+      "width" : 350,
+      "x" : 2230,
+      "y" : 29729
+    },
+    {
+      "confidence" : 1,
+      "height" : 70,
+      "text" : "整体数据的清晰、展示、使用需要使用统一的数据口径；",
+      "tile" : 12,
+      "width" : 1250,
+      "x" : 2279,
+      "y" : 29810
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "5.2 Knowledge 挑战",
+      "tile" : 12,
+      "width" : 591,
+      "x" : 2319,
+      "y" : 30049
+    },
+    {
+      "confidence" : 1,
+      "height" : 71,
+      "text" : "整体的知识体系不是一层不变的，是持续变化的，我们需要去寻找知识之间的复杂关联和存在知识背后隐含的因",
+      "tile" : 12,
+      "width" : 2361,
+      "x" : 2369,
+      "y" : 30160
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "果关系，传统的 RAG 只能帮助我们解决得到知识的问题，但是我们需要去理解知识、关联知识、推理知识；",
+      "tile" : 12,
+      "width" : 2280,
+      "x" : 2370,
+      "y" : 30230
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "1. Knowledge Base：我们需要持续沉底/更新底层知识库信息，持续更新企业、品牌、行业、GEO 策略等知识；",
+      "tile" : 12,
+      "width" : 2411,
+      "x" : 2320,
+      "y" : 30319
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 70,
+      "text" : "2. Knowledge Graph：持续动态的更新沉淀的关系网络，帮助系统理解 品牌、产品、竞对、Topic、Citation 之间",
+      "tile" : 12,
+      "width" : 2431,
+      "x" : 2319,
+      "y" : 30400
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "的关联关系；",
+      "tile" : 12,
+      "width" : 280,
+      "x" : 2400,
+      "y" : 30469
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "3. Causal Graph |探索中：在关系图基础上进一步引入因果关系，比如 内容覆盖度提升-> Citation 提升->",
+      "tile" : 12,
+      "width" : 2310,
+      "x" : 2310,
+      "y" : 30549
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "Visibility提升-> Conversion提升，从简单的相关性分析演化到因果分析，帮助品牌可以对一些发生的问题进行归",
+      "tile" : 12,
+      "width" : 2380,
+      "x" : 2390,
+      "y" : 30619
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "因（比如为什么发生、什么因素导致、应该优化什么），而不是简单的告知品牌发生了什么；",
+      "tile" : 12,
+      "width" : 1931,
+      "x" : 2400,
+      "y" : 30699
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 71,
+      "text" : "4. GraphRAG： 结合 Knowledge Graph、Vector Retrieval 与 LLM Reasoning，构建图谱增强检索能力。帮助系统",
+      "tile" : 12,
+      "width" : 2451,
+      "x" : 2310,
+      "y" : 30779
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "发现长尾机会、行业趋势、理解 Citation 原因和支持Agent 深度推理，从而实现从检索知识到 理解知识->关联",
+      "tile" : 12,
+      "width" : 2361,
+      "x" : 2400,
+      "y" : 30849
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 61,
+      "text" : "知识-＞推理知识的能力升级；",
+      "tile" : 12,
+      "width" : 650,
+      "x" : 2389,
+      "y" : 30929
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 77,
+      "text" : "5.3 Agent 挑战",
+      "tile" : 13,
+      "width" : 432,
+      "x" : 2319,
+      "y" : 31197
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 74,
+      "text" : "Agent的加入增加了规划与决策过程，显著增加了系统的复杂度；",
+      "tile" : 13,
+      "width" : 1373,
+      "x" : 2371,
+      "y" : 31304
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 66,
+      "text" : "1. Agent 成功率；",
+      "tile" : 13,
+      "width" : 406,
+      "x" : 2319,
+      "y" : 31389
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 60,
+      "text" : "2. Tool/Skill 的选择；",
+      "tile" : 13,
+      "width" : 477,
+      "x" : 2319,
+      "y" : 31474
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "3. Memory 管理：我们需要同时管理用户、品牌、行业、历史偏好等上线问题，在长链路的任务执行过程中需要保",
+      "tile" : 13,
+      "width" : 2451,
+      "x" : 2312,
+      "y" : 31552
+    },
+    {
+      "confidence" : 1,
+      "height" : 61,
+      "text" : "持这些信息不丢失；",
+      "tile" : 13,
+      "width" : 419,
+      "x" : 2397,
+      "y" : 31623
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 67,
+      "text" : "4. Workflow Planning/Agent 协作：复杂的GEO 的任务往往涉及任务拆解、角色协同等，比如 数据分析-＞策略",
+      "tile" : 13,
+      "width" : 2438,
+      "x" : 2312,
+      "y" : 31709
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 66,
+      "text" : "规划->内容生成-＞效果验证，如何动态规划执行路径应该是一个 Agent 的通用问题；",
+      "tile" : 13,
+      "width" : 1823,
+      "x" : 2397,
+      "y" : 31781
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 80,
+      "text" : "5.4 Evaluation 挑战 |探索中",
+      "tile" : 13,
+      "width" : 909,
+      "x" : 2260,
+      "y" : 32068
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "如何证明 GEO 优化不是“看起来变好了”",
+      "tile" : 13,
+      "width" : 961,
+      "x" : 2325,
+      "y" : 32186
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "’，而是在真实 AI Search 场景中可量化、可归因、可持续验证地变好了。",
+      "tile" : 13,
+      "width" : 1712,
+      "x" : 3266,
+      "y" : 32199
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "1. GEO 指标体系：建立统一的指标，Visibility、Citation、Share of Voice、Authority、Conversion，但是很多指标",
+      "tile" : 13,
+      "width" : 2738,
+      "x" : 2260,
+      "y" : 32291
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 66,
+      "text" : "数据我们不一定能够获得；",
+      "tile" : 13,
+      "width" : 628,
+      "x" : 2352,
+      "y" : 32369
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "2. 离在线评估：策略是否有效、内容是否有效等；",
+      "tile" : 13,
+      "width" : 1216,
+      "x" : 2260,
+      "y" : 32460
+    },
+    {
+      "confidence" : 0.5,
+      "height" : 72,
+      "text" : "3. AB Test：需要建立一套从 实验设计、效果验证、自动归因的的自动化数据闭环链路；在互联网中如果明确哪些",
+      "tile" : 13,
+      "width" : 2725,
+      "x" : 2260,
+      "y" : 32552
+    },
+    {
+      "confidence" : 1,
+      "height" : 66,
+      "text" : "策略、内容是我们生成的也是一个非常大的挑战；",
+      "tile" : 13,
+      "width" : 1163,
+      "x" : 2352,
+      "y" : 32637
+    }
+  ],
+  "width" : 7370
+}
