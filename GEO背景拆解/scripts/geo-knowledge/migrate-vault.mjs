@@ -239,14 +239,15 @@ function countPreMigrationResources(plan, sourceImageDir) {
   return { full, pm, ocr, originals, svg, shapeErrors, hashMismatches }
 }
 
-function findBrokenResourceLinks(articleDir, markdown) {
+export function findBrokenResourceLinks(articleDir, markdown) {
   const broken = []
-  for (const match of markdown.matchAll(/\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]/gu)) {
+  const visibleMarkdown = markdown.replace(/```[\s\S]*?```/gu, '')
+  for (const match of visibleMarkdown.matchAll(/\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]/gu)) {
     const target = decodeURIComponent(match[1].trim())
     if (!target.startsWith('资源/')) continue
     if (!fs.existsSync(path.join(articleDir, target))) broken.push(target)
   }
-  for (const match of markdown.matchAll(/\[[^\]]*\]\(([^)]+)\)/gu)) {
+  for (const match of visibleMarkdown.matchAll(/\[[^\]]*\]\(([^)]+)\)/gu)) {
     const target = decodeURIComponent(match[1].trim().replace(/^<|>$/gu, ''))
     if (/^(?:https?:|mailto:|#|data:)/u.test(target)) continue
     if (!fs.existsSync(path.resolve(articleDir, target))) broken.push(target)

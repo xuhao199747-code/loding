@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 import {
   buildMigrationPlan,
+  findBrokenResourceLinks,
   loadInventory,
   parseCategoryMap,
   parseTitleMap,
@@ -62,4 +63,9 @@ test('rewrites links without replacing prose', () => {
   const source = '参见 [[RAG检索方案-22/全文]]。正文提到 RAG检索方案-22。'
   const pathMap = new Map([['RAG检索方案-22/全文', '数据与知识库/RAG架构设计/全文']])
   assert.equal(rewriteInternalLinks(source, pathMap), '参见 [[数据与知识库/RAG架构设计/全文]]。正文提到 RAG检索方案-22。')
+})
+
+test('ignores illustrative links inside fenced code blocks', () => {
+  const source = '```markdown\n![示例](img_1 "iPhone 14")\n```\n'
+  assert.deepEqual(findBrokenResourceLinks('/tmp/article', source), [])
 })
