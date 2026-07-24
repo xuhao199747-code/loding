@@ -61,152 +61,152 @@
 
 ### GEO 产品 Agent 方案｜23 篇
 
-- AEO-GEO Gateway交互协议
-- AlphaRanker技术架构
-- AlphaRanker整体系统架构-850
-- AlphaRanker系统架构演进
-- AlphaRank产品整体方案
-- AlphaRank：面向 AI Search 时代的 Agentic 营销平台
-- FY27 S1 OKR
-- GEO Agent架构方案
-- GEO-AEO思考
-- GEO-AEO整体技术演进
-- GEO产品Agent方案总PRD
-- GEO内部Agent交互协议
+- Agent Gateway协议
+- Agent个性化方案
+- Agent归因闭环
+- Agent数据回流方案
+- AlphaRank Agentic营销平台
+- AlphaRank产品架构
+- AlphaRank技术架构
+- AlphaRank架构演进
+- AlphaRank系统架构
+- FY27 S1 Agentic产品OKR
+- GEO Agent交互协议
+- GEO Agent产品PRD
+- GEO Agent架构
+- GEO Agent路由架构
+- GEO-AEO产品架构
+- GEO-AEO技术架构
+- GEO评测Agent架构
 - StrategyAgent PRD
-- StrategyAgent评测任务集
-- industry-research-agent整体方案
-- 业务数据回流与Agent应用
-- 归因结果的Agent消费与评估闭环
-- 架构设计
-- 统一入口四路分流Agent架构
-- 营销Agent Team产品V2
-- 营销Agent主要场景与技术依赖
-- 行业与知识个性化
-- 行业知识采集Agent方案
+- StrategyAgent评测集
+- 营销Agent Team PRD
+- 营销Agent场景地图
+- 行业知识Agent方案
+- 行业调研Agent方案
 
 ### 品牌诊断｜9 篇
 
-- Citation引用分析
-- 品牌诊断
-- 品牌诊断-协议
-- 品牌诊断PRD
-- 品牌诊断评分模型
+- Citation分析PRD
 - 品牌诊断-技术方案
-- 品牌诊断技术流程
-- 品牌诊断方案-122
-- 品牌诊断方案-21
+- 品牌诊断PRD
+- 品牌诊断Prompt方案
+- 品牌诊断产品链路
+- 品牌诊断任务流程
+- 品牌诊断信息链路
+- 品牌诊断接口协议
+- 品牌诊断评分模型
 
 ### 网页诊断与 SEO｜9 篇
 
-- Google Search Console可获取数据说明
-- SEO指标项整理
-- SEO诊断报告样例
-- SEO诊断链路指标实现详解
-- WebPage 因子第一版设计
-- 技术SEO诊断
-- SEO诊断Agent技术方案评审
+- Google Search Console数据说明
+- SEO指标体系
+- SEO诊断Agent方案
 - SEO诊断Agent架构
-- 网页诊断-技术方案
+- SEO诊断报告样例
+- SEO诊断指标实现
+- WebPage因子模型
+- 技术SEO诊断方案
+- 网页诊断技术方案
 
 ### 指标与评测｜8 篇
 
-- GEO内容评测示例
+- DataAgent评测标准
+- GEO A-B实验方案
+- GEO Benchmark设计
 - GEO内容人工评测标准
-- 诊断链路梳理
-- 诊断指标最新版
-- AB方案
-- Benchmark 参照系设计
-- DataAgent单点能力评测标准
-- Prompt生成能力评测
+- GEO内容评测示例
+- GEO诊断指标体系
+- GEO诊断数据链路
+- Prompt生成评测标准
 
 ### Prompt 与关键词｜7 篇
 
 - AlphaRank关键词列表
-- Prompt生成优化方案-一阶段
-- Prompt构建与优化业务需求
-- 关键词挖掘-图谱构建
+- Prompt产品需求
+- Prompt生成算法
+- 关键词图谱设计
+- 内容生成Prompt设计
 - 热词数据需求
-- 各版本Prompt调试迭代
 - 竞对提取Prompt
 
 ### 内容生成与优化｜7 篇
 
 - Blog类型
-- GEO内容准出结构
-- 图文Blog内容生成优化
-- 优化版本1-协议【20251124】
-- 内容生成优化迭代-图文Blog
-- 品牌库驱动内容创作
-- 站内文本内容页面优化
+- GEO内容准出标准
+- 内容优化接口协议
+- 品牌内容创作方案
+- 图文Blog生成方案
+- 图文Blog生成流程
+- 站内内容生成方案
 
 ### 数据与知识库｜14 篇
 
-- 企业知识库维护
-- 向量检索召回方案（原位于产品功能）
-- 国内数据渠道拓展
-- Claim 定义、使用与计算方式
-- GEO图谱构建方案设计
-- GEO知识图谱构建方案
-- RAG检索方案-22
-- 向量检索召回方案（原位于GEO 产品 Agent 方案）
-- 品牌内容资产设计
-- 品牌库功能设计方案
+- Claim数据模型
+- GEO知识图谱架构
+- LightRAG图谱构建方案
+- RAG架构设计
+- 企业知识库管理
+- 向量召回产品架构
+- 向量检索技术架构
+- 品牌内容资产模型
+- 品牌库产品设计
+- 品牌库平台架构
 - 品牌库数据模型
-- 品牌识别与归一链路
-- 平台侧品牌库功能设计
-- 平台品牌库建设方案
+- 品牌库运营设计
+- 品牌归一流程
+- 国内GEO数据渠道
 
 ### 电商与行业场景｜5 篇
 
-- Lazada平台型观测实验初版
-- 代表性行业品牌库
-- 行业细分字典
-- 电商业务关键词搜索意图聚类
+- Lazada观测实验方案
+- 电商搜索意图聚类
+- 行业分类字典
+- 行业品牌库
 - 行业知识推荐方案
 
 ### 产品规划与商业化｜9 篇
 
-- 2026-03-09需求拆分与排期
-- Alpharanker工作原理
-- Alpharanker产品模块与能力进展
-- GEO API需求
-- V1.1.0功能整体优化
+- AlphaRank V1.1.0产品优化
+- AlphaRank产品原理
+- AlphaRank产品能力进展
+- AlphaRank营销能力地图
+- GEO API PRD
+- GEO需求排期
 - 定价策略
 - 成本核算
-- 订阅技术方案
-- AlphaRank品牌营销能力图
+- 订阅系统设计
 
 ### 算法与模型｜19 篇
 
-- AI Search仿真环境
-- FY26S2-诊断指标优化
-- FY26S2-诊断模型设计
-- Prompt声量预测
-- Reverse Reasoning-综合分析
-- 数据建设
-- 数据构造-20260115
-- 内容诊断-基于因子的模型方案
-- 数据集构建
-- 算法链路数据分类
-- AI引用判断数据构造Prompt
-- AI Answer 归因引擎设计输入
-- AI引用诊断与内容优化算法
-- AlphaRank：归因引擎设计
-- FY26S2-SearchQueryValidation规划
-- FY26S2-优化算法规划
-- 离在线诊断链路
-- 诊断优化与Judge模型方案
-- 诊断优化算法链路-20251214
+- AI Answer归因指标
+- AI Search仿真方案
+- AI引用优化算法
+- AI引用判断Prompt
+- AI引用推理数据
+- AI引用数据集
+- AI引用行为分析
+- AlphaRank归因引擎
+- GEO内容优化算法
+- GEO诊断优化算法
+- GEO诊断数据模型
+- GEO诊断算法链路
+- Judge诊断模型
+- Prompt声量预测模型
+- 内容诊断因子模型
+- 引用偏好数据工程
+- 引用偏好诊断模型
+- 搜索查询验证算法
+- 诊断指标决策树
 
 ### 工程、接口与运维｜6 篇
 
-- GAIO国内搜索替代方案
-- GEO安全研究-对抗性AI搜索
-- AI站点扩容与监控
-- 国内AI回答渠道现状
+- AI站点运维方案
+- GAIO国内搜索方案
 - 云资源使用规范
-- 诊断模型调用情况
+- 国内AI回答渠道
+- 对抗性AI搜索研究
+- 诊断模型调用链路
 
 ## 迁移方法
 

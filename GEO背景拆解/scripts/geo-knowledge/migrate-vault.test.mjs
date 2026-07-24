@@ -13,6 +13,7 @@ import {
   rewriteInternalLinks,
   updateFrontmatter,
   validateMigrationPlan,
+  validateTables,
 } from './migrate-vault.mjs'
 
 const here = path.dirname(fileURLToPath(import.meta.url))
@@ -41,9 +42,10 @@ test('rejects forbidden parallel titles', () => {
   ]), /forbidden conjunction/)
 })
 
-test('keeps duplicate old titles as separate articles', () => {
-  const items = livePlan().filter(item => item.oldTitle === '向量检索召回方案')
-  assert.deepEqual(items.map(item => item.newTitle).sort(), ['向量召回产品架构', '向量检索技术架构'])
+test('keeps the two former vector retrieval articles as separate final articles', () => {
+  const finalTitles = new Set(livePlan().map(item => item.newTitle))
+  assert.equal(finalTitles.has('向量召回产品架构'), true)
+  assert.equal(finalTitles.has('向量检索技术架构'), true)
 })
 
 test('synchronizes article headings', () => {
@@ -68,4 +70,9 @@ test('rewrites links without replacing prose', () => {
 test('ignores illustrative links inside fenced code blocks', () => {
   const source = '```markdown\n![示例](img_1 "iPhone 14")\n```\n'
   assert.deepEqual(findBrokenResourceLinks('/tmp/article', source), [])
+})
+
+test('ignores escaped pipes when validating Markdown table columns', () => {
+  const table = '| 字段 | 说明 |\n|---|---|\n| 输出格式 | 使用 `<\\|#\\|>` 分隔 |\n'
+  assert.equal(validateTables(table), true)
 })

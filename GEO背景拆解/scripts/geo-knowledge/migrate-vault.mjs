@@ -255,14 +255,14 @@ export function findBrokenResourceLinks(articleDir, markdown) {
   return broken
 }
 
-function validateTables(markdown) {
+export function validateTables(markdown) {
   let inFence = false
   let expected = null
   for (const line of markdown.split(/\r?\n/u)) {
     if (/^```/u.test(line.trim())) { inFence = !inFence; expected = null; continue }
     if (inFence) continue
     if (/^\s*\|.*\|\s*$/u.test(line)) {
-      const cells = line.split('|').length - 2
+      const cells = line.replace(/\\\|/gu, '').split('|').length - 2
       if (expected === null) expected = cells
       else if (cells !== expected) return false
     } else expected = null
