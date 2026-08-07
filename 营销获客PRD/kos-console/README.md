@@ -25,5 +25,9 @@ npm run build
 - `src/components/overview`：经营驾驶舱
 - `src/components/monitor`：破冰/意向热聊及五阶段看板
 - `src/components/dialog`：游客对话与推进交互
+- `src/components/advisor`：旅行顾问 1v1 工作台
+- `src/components/content`：旅游内容中心
+- `src/components/schedule`：跟进调度中心
+- `src/components/report`：今日经营报告
 
-当前版本包含：经营概览、渠道筛选、游客卡片详情、对话输入、推进下一阶段、今日报告入口和响应式布局。
+当前版本包含：经营概览、渠道筛选、游客卡片详情、对话输入、推进下一阶段、旅行顾问工作台、旅游内容中心、跟进调度中心、今日报告和响应式布局。

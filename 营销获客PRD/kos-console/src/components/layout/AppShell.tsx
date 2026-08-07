@@ -1,10 +1,10 @@
-import { BarChart3, Eye, FileText, LayoutDashboard, MessageSquare, Sparkles } from "lucide-react";
+import { CalendarClock, Eye, FileText, LayoutDashboard, MessageSquare, PenLine, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { routes, type ViewId } from "@/app/routes";
 
 type AppShellProps = { view: ViewId; onViewChange: (view: ViewId) => void; children: React.ReactNode; onReport: () => void };
-const icons = { overview: LayoutDashboard, monitor: Eye };
+const icons = { overview: LayoutDashboard, monitor: Eye, advisor: MessageSquare, content: PenLine, schedule: CalendarClock };
 
 export function AppShell({ view, onViewChange, children, onReport }: AppShellProps) {
   return <div className="app-grid">
