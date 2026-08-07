@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 33% 97%; --foreground: 222 47% 11%;
+    --card: 0 0% 100%; --card-foreground: 222 47% 11%;
+    --primary: 221 83% 53%; --primary-foreground: 0 0% 100%;
+    --secondary: 214 32% 91%; --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%; --muted-foreground: 215 16% 47%;
+    --accent: 210 40% 96%; --accent-foreground: 222 47% 11%;
+    --border: 214 32% 91%; --input: 214 32% 91%; --ring: 221 83% 53%;
+    --radius: 0.625rem;
+  }
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground antialiased; font-family: "PingFang SC", "Microsoft YaHei", Inter, system-ui, sans-serif; }
+  button, input, textarea { font: inherit; }
+}
+
+@layer components {
+  .app-grid { display: grid; grid-template-columns: 72px minmax(0, 1fr); min-height: 100vh; }
+  .content-grid { display: grid; gap: 1rem; min-width: 0; }
+  .soft-panel { @apply rounded-lg border bg-card shadow-sm; }
+}
+
+@media (max-width: 760px) {
+  .app-grid { grid-template-columns: 56px minmax(0, 1fr); }
+}

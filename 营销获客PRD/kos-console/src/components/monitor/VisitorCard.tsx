@@ -1,0 +1,8 @@
+import { Clock3, MessageCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import type { Visitor } from "@/data/tourism";
+
+export function VisitorCard({ visitor, onOpen }: { visitor: Visitor; onOpen: (visitor: Visitor) => void }) {
+  return <Card tabIndex={0} role="button" onClick={() => onOpen(visitor)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") onOpen(visitor); }} className="cursor-pointer border-border/80 p-3 transition-[transform,box-shadow,background-color] hover:bg-slate-50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><div className="flex items-start gap-3"><div className={`grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br text-sm font-semibold text-white ${visitor.avatarTone ?? "from-slate-300 to-slate-500"}`}>{visitor.name.slice(0, 1)}</div><div className="min-w-0 flex-1"><div className="flex items-center justify-between gap-2"><p className="truncate font-medium">{visitor.name}</p><span className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground"><Clock3 className="h-3 w-3" />{visitor.time}</span></div><p className="mt-0.5 truncate text-xs text-muted-foreground">{visitor.subtitle}</p><p className="mt-3 line-clamp-1 text-sm text-slate-700">“{visitor.lastMessage}”</p><div className="mt-3 flex flex-wrap gap-1.5"><Badge variant="muted"><MessageCircle className="mr-1 h-3 w-3" />{visitor.status}</Badge>{visitor.tags?.map((tag) => <Badge key={tag} variant={tag.includes("高意向") ? "success" : "muted"}>{tag}</Badge>)}</div></div></div></Card>;
+}
