@@ -25,5 +25,7 @@ describe("KOS feature surfaces", () => {
     await user.click(screen.getByRole("button", { name: "今日报告" }));
     expect(screen.getByRole("dialog", { name: "今日报告" })).toBeInTheDocument();
     expect(screen.getByText("经营健康度")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "查看跟进队列" }));
+    expect(screen.getByText("让报价、支付、出发提醒和复购跟进按时发生。")).toBeInTheDocument();
   });
 });

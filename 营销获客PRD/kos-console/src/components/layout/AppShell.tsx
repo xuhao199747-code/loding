@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { routes, type ViewId } from "@/app/routes";
 
-type AppShellProps = { view: ViewId; onViewChange: (view: ViewId) => void; children: React.ReactNode; onReport: () => void };
+type AppShellProps = { view: ViewId; onViewChange: (view: ViewId) => void; children: React.ReactNode; onReport: () => void; feedback?: string };
 const icons = { overview: LayoutDashboard, monitor: Eye, advisor: MessageSquare, content: PenLine, schedule: CalendarClock };
 
-export function AppShell({ view, onViewChange, children, onReport }: AppShellProps) {
+export function AppShell({ view, onViewChange, children, onReport, feedback }: AppShellProps) {
   return <div className="app-grid">
     <aside className="flex min-h-screen flex-col items-center border-r bg-white py-4">
       <div className="mb-7 grid h-10 w-10 place-items-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-sm">KOS</div>
@@ -20,7 +20,7 @@ export function AppShell({ view, onViewChange, children, onReport }: AppShellPro
         <div className="min-w-0"><div className="flex items-center gap-2"><Sparkles className="h-4 w-4 text-primary" /><h1 className="truncate text-lg font-semibold tracking-tight">今日旅游经营驾驶舱</h1></div><p className="mt-0.5 text-xs text-muted-foreground">游客 · 线路 · 订单 · 出行服务</p></div>
         <div className="flex items-center gap-2"><div className="hidden items-center gap-2 text-xs text-muted-foreground sm:flex"><span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />实时同步 · 30s</div><Button variant="outline" size="sm" onClick={onReport}><FileText className="h-4 w-4" />今日报告</Button></div>
       </header>
-      <div className="p-4 md:p-6 lg:p-8">{children}</div>
+      <div className="relative p-4 md:p-6 lg:p-8">{feedback && <div role="status" className="fixed bottom-5 right-5 z-40 rounded-lg bg-foreground px-4 py-3 text-sm text-background shadow-lg">{feedback}</div>}{children}</div>
     </main>
   </div>;
 }

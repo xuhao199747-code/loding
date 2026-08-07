@@ -26,4 +26,14 @@ describe("KOS monitor", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByText("推进下一阶段")).toBeInTheDocument();
   });
+
+  it("records visitor actions in the detail timeline", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: /游客监控/ }));
+    await user.click(screen.getByRole("button", { name: /奶茶不加糖/ }));
+    await user.click(screen.getByRole("button", { name: "加企微" }));
+    expect(screen.getAllByText(/加企微/).length).toBeGreaterThan(1);
+    expect(screen.getByText(/奶茶不加糖：加企微成功/)).toBeInTheDocument();
+  });
 });
