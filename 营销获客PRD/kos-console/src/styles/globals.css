@@ -19,11 +19,16 @@
 }
 
 @layer components {
-  .app-grid { display: grid; grid-template-columns: 72px minmax(0, 1fr); min-height: 100vh; }
+  .app-grid { display: grid; grid-template-columns: 76px minmax(0, 1fr); min-height: 100vh; background: #f4f6fb; }
   .content-grid { display: grid; gap: 1rem; min-width: 0; }
   .soft-panel { @apply rounded-lg border bg-card shadow-sm; }
+  .app-grid > aside { padding-top: 16px; padding-bottom: 16px; }
+  .app-grid > aside > div:first-child { border-radius: 12px; background: linear-gradient(135deg,#1677ff,#0a5fff); box-shadow: 0 4px 12px rgba(22,119,255,.35); }
+  .app-grid > aside nav button { transition: background .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease; }
+  .app-grid > aside nav button:hover { background: #eef5ff; color: #2563eb; transform: translateY(-1px); box-shadow: 0 5px 12px rgba(37,99,235,.1); }
+  .app-grid > aside nav button[aria-current="page"] { background: #eaf2ff; color: #165dff; box-shadow: 0 4px 12px rgba(37,99,235,.12); }
 }
 
 @media (max-width: 760px) {
-  .app-grid { grid-template-columns: 56px minmax(0, 1fr); }
+  .app-grid { grid-template-columns: 60px minmax(0, 1fr); }
 }

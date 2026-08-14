@@ -13,7 +13,7 @@ describe("KOS monitor", () => {
     expect(screen.getByText("行程方案")).toBeInTheDocument();
     expect(screen.getByText("预订促成")).toBeInTheDocument();
     expect(screen.getByText("成交跟进")).toBeInTheDocument();
-    expect(screen.getAllByRole("tab", { name: "全部" })).toHaveLength(2);
+    expect(screen.getAllByRole("tab", { name: "全部" })).toHaveLength(6);
   });
 
   it("filters a workflow column by channel and opens a visitor dialog", async () => {

@@ -44,6 +44,15 @@ export const visitors: Visitor[] = [
   { id: "v5", name: "向日葵姐姐", subtitle: "企业微信 · 方案报价", channel: "wx", stage: "plan", status: "超时 8h", time: "今 08:30", lastMessage: "好的我先看看", tags: ["待跟进", "方案未读"], avatarTone: "from-amber-300 to-orange-500" },
   { id: "v6", name: "赵女士", subtitle: "抖音 · 预订咨询", channel: "dy", stage: "booking", status: "资料确认", time: "10 分钟前", lastMessage: "那我现在要提交什么资料？", tags: ["待预订"], avatarTone: "from-violet-300 to-purple-500" },
   { id: "v7", name: "云端漫游者", subtitle: "企业微信 · 已成交", channel: "wx", stage: "deal", status: "出行服务", time: "昨天", lastMessage: "等订单下来麻烦提醒下", tags: ["已成交", "复购潜力"], avatarTone: "from-emerald-300 to-green-500" },
+  { id: "v8", name: "山野慢慢", subtitle: "抖音 · 川西路线", channel: "dy", stage: "breakthrough", status: "新咨询", time: "5 分钟前", lastMessage: "第一次去川西适合怎么玩？", tags: ["待回复"], avatarTone: "from-sky-300 to-cyan-500" },
+  { id: "v9", name: "橘子海", subtitle: "小红书 · 海岛度假", channel: "xhs", stage: "breakthrough", status: "已读未回", time: "8 分钟前", lastMessage: "想找一个人少一点的海岛", tags: ["待跟进"], avatarTone: "from-orange-300 to-rose-400" },
+  { id: "v10", name: "北漂小鱼", subtitle: "抖音 · 长线旅行", channel: "dy", stage: "intent", status: "需求确认", time: "12 分钟前", lastMessage: "预算两万，想去西北环线", tags: ["高意向"], avatarTone: "from-blue-300 to-indigo-500" },
+  { id: "v11", name: "葡萄汽水", subtitle: "小红书 · 闺蜜旅行", channel: "xhs", stage: "intent", status: "需求确认", time: "18 分钟前", lastMessage: "我们两个人想看自然风景", tags: ["高意向"], avatarTone: "from-fuchsia-300 to-pink-500" },
+  { id: "v12", name: "小岛日记", subtitle: "企业微信 · 亲子旅行", channel: "wx", stage: "intent", status: "确认中", time: "23 分钟前", lastMessage: "孩子六岁，不能太赶", tags: ["需求确认 4/8 题"], avatarTone: "from-teal-300 to-emerald-500" },
+  { id: "v13", name: "风从山来", subtitle: "抖音 · 自驾旅行", channel: "dy", stage: "intent", status: "需求确认", time: "31 分钟前", lastMessage: "车辆和住宿怎么安排？", tags: ["待确认"], avatarTone: "from-violet-300 to-blue-500" },
+  { id: "v14", name: "晚风有信", subtitle: "企业微信 · 银发旅行", channel: "wx", stage: "intent", status: "确认中", time: "42 分钟前", lastMessage: "希望安排轻松一点的行程", tags: ["高意向"], avatarTone: "from-amber-300 to-yellow-500" },
+  { id: "v15", name: "林女士", subtitle: "小红书 · 亲子长线", channel: "xhs", stage: "plan", status: "方案已读", time: "1 小时前", lastMessage: "两套路线我更喜欢第二套", tags: ["待报价"], avatarTone: "from-rose-300 to-red-500" },
+  { id: "v16", name: "阿哲去旅行", subtitle: "抖音 · 西北环线", channel: "dy", stage: "plan", status: "超时 2h", time: "2 小时前", lastMessage: "可以再优化一下住宿吗？", tags: ["待跟进", "高风险"], avatarTone: "from-slate-300 to-slate-500" },
 ];
 
 export const overviewMetrics = [
