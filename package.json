@@ -1,6 +1,7 @@
 {
   "name": "loding",
   "version": "1.0.0",
+  "description": "光流动画编辑器：一个用于创建、编辑和预览光流动画画布的静态网页工具。",
   "private": true,
   "scripts": {
     "build": "rm -rf dist && mkdir -p dist && cp -R app/. dist/"
